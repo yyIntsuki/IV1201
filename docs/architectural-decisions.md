@@ -6,7 +6,7 @@ This is a documentation of some of the architectural decisions made in the team,
 
 ### How to take decisions
 
-The team decides to take decisions together through communication in various means as long as a valid discussion can be held.
+The team decides to take decisions together through communication in various means as long as a valid discussion can be held, currently over Discord.
 
 ### Requirements
 
@@ -26,7 +26,7 @@ Version control is done using Git on GitHub.
 
 ### Deployment
 
-One consideration for deployment is on Heroku. If possible we want to use a solution where the backend API is on the same domain but with a /api slug in the URL ready to use.
+One consideration for deployment is on Heroku. The frontend will use API calls that'll require a proper setup of CORS to communicate with backend.
 
 ### IDE
 
@@ -36,6 +36,8 @@ Visual Studio Code will be used by both members in the team.
 
 The backend server will be built with FastAPI, in Python.
 
+The database that is used for this project is a relational database, with PostgreSQL.
+
 ## Decisions regarding code style
 
-Since each of the two team members are responsible separately for frontend and backend, the code styles are mainly up to each individual.
+Since each of the two team members are responsible separately for frontend and backend, the code styles are mainly up to each individual. Stick to the common coding styles that are used in each language. For variable names that are used on both ends, like when it comes to API calls, and data structure, if possible it should use the same variable names to avoid confusion.
