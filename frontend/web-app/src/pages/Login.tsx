@@ -19,9 +19,7 @@ const Login: React.FC = () => {
 
             window.location.href =
                 accountType === "applicant" ? "/applicant" : "/recruiter";
-        } else {
-            setError("Invalid username or password");
-        }
+        } else setError("Invalid username or password");
     };
 
     return (
@@ -59,8 +57,7 @@ const Login: React.FC = () => {
                         Account Type:
                         <select
                             value={accountType}
-                            onChange={(e) => setAccountType(e.target.value)}
-                        >
+                            onChange={(e) => setAccountType(e.target.value)}>
                             <option value="applicant">Applicant</option>
                             <option value="recruiter">Recruiter</option>
                         </select>
