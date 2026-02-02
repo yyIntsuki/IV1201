@@ -15,13 +15,11 @@ const ProtectedRoute: React.FC = () => {
 
     const currentPath = location.pathname;
 
-    if (accountType === "applicant" && currentPath === "/recruiter") {
+    if (accountType === "applicant" && currentPath === "/recruiter")
         return <Navigate to="/applicant" replace />;
-    }
 
-    if (accountType === "recruiter" && currentPath === "/applicant") {
+    if (accountType === "recruiter" && currentPath === "/applicant")
         return <Navigate to="/recruiter" replace />;
-    }
 
     return <Outlet />;
 };

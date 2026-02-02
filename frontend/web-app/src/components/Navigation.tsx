@@ -1,7 +1,7 @@
 import React from "react";
 
 /**
- * Currently only used as a debug feature to navigate between pages when logged in.
+ * Navigation component with logout button positioned at top right using only positioning.
  */
 const Navigation: React.FC = () => {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -14,7 +14,17 @@ const Navigation: React.FC = () => {
 
     if (!isLoggedIn) return null;
 
-    return <button onClick={handleLogout}>Logout</button>;
+    return (
+        <div
+            style={{
+                position: "fixed",
+                top: "0",
+                right: "0",
+                padding: "10px",
+            }}>
+            <button onClick={handleLogout}>Logout</button>
+        </div>
+    );
 };
 
 export default Navigation;

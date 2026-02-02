@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -10,9 +10,9 @@ import Navigation from "./components/Navigation";
 /**
  * The root component that sets up routing for the application.
  */
-function Root() {
+function Router() {
     return (
-        <Router>
+        <BrowserRouter>
             <Navigation />
             <Routes>
                 <Route path="/" element={<Home />} />
@@ -23,8 +23,8 @@ function Root() {
                     <Route path="/recruiter" element={<Recruiter />} />
                 </Route>
             </Routes>
-        </Router>
+        </BrowserRouter>
     );
 }
 
-export default Root;
+export default Router;
