@@ -41,3 +41,5 @@ The database that is used for this project is a relational database, with Postgr
 ## Decisions regarding code style
 
 Since each of the two team members are responsible separately for frontend and backend, the code styles are mainly up to each individual. Stick to the common coding styles that are used in each language. For variable names that are used on both ends, like when it comes to API calls, and data structure, if possible it should use the same variable names to avoid confusion.
+
+In frontend, prettier is used to ensure consistent formatting is used throughout the main source code.
