@@ -1,12 +1,15 @@
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
 /**
  * The page for applicants to submit the job application form.
  */
 const Applicant = () => {
     return (
-        <div>
-            <h1>Applicant Page</h1>
-            <p>Applicant dashboard content will go here.</p>
-        </div>
+        <Box>
+            <Typography variant="h1">Applicant Page</Typography>
+            <Typography variant="body1">Applicant dashboard content will go here.</Typography>
+        </Box>
     );
 };
 

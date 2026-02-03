@@ -14,14 +14,8 @@ const ProtectedRoute = ({ allowedRoles }: Props) => {
 
     if (!isLoggedIn) return <Navigate to="/login" replace />;
 
-    if (allowedRoles && !allowedRoles.includes(accountType!)) {
-        return (
-            <Navigate
-                to={accountType === "recruiter" ? "/recruiter" : "/applicant"}
-                replace
-            />
-        );
-    }
+    if (allowedRoles && !allowedRoles.includes(accountType!))
+        return <Navigate to={accountType === "recruiter" ? "/recruiter" : "/applicant"} replace />;
 
     return <Outlet />;
 };

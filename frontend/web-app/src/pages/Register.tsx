@@ -4,6 +4,12 @@ import { useNavigate } from "react-router";
 import { accountService } from "../services/account.service";
 import type { Account } from "../types/accountTypes";
 
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
+
 /**
  * The page for applicants to register for the job application system.
  */
@@ -25,14 +31,7 @@ const Register = () => {
         setError("");
         setSuccess(false);
 
-        if (
-            !firstName ||
-            !lastName ||
-            !email ||
-            !personNumber ||
-            !username ||
-            !password
-        ) {
+        if (!firstName || !lastName || !email || !personNumber || !username || !password) {
             setError("All fields are required.");
             return;
         }
@@ -70,93 +69,35 @@ const Register = () => {
         return (
             <div>
                 <h1>Registration Successful!</h1>
-                <p>
-                    You are now logged in as an applicant and redirected to your
-                    dashboard.
-                </p>
+                <p>You are now logged in as an applicant and redirected to your dashboard.</p>
             </div>
         );
     }
 
     return (
-        <div>
-            <h1>Register</h1>
-            {error && <div style={{ color: "red" }}>{error}</div>}
+        <Box>
+            <Typography variant="h1">Register</Typography>
+            <Typography variant="subtitle1">Please register an account to apply for job application</Typography>
 
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>
-                        First Name:
-                        <input
-                            type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                    </label>
-                </div>
+            <Box component="form" sx={{ display: "flex", flexDirection: "column", gap: 1 }} onSubmit={handleSubmit}>
+                <TextField required label="First Name" defaultValue="" onChange={(e) => setFirstName(e.target.value)} />
+                <TextField required label="Last Name" defaultValue="" onChange={(e) => setLastName(e.target.value)} />
+                <TextField required label="Email" type="email" onChange={(e) => setEmail(e.target.value)} />
+                <TextField required label="Personal Number" onChange={(e) => setPersonNumber(e.target.value)} />
+                <TextField required label="Username" defaultValue="" onChange={(e) => setUsername(e.target.value)} />
+                <TextField required label="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
 
-                <div>
-                    <label>
-                        Last Name:
-                        <input
-                            type="text"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                        />
-                    </label>
-                </div>
+                <Button variant="contained" type="submit">
+                    Register
+                </Button>
 
-                <div>
-                    <label>
-                        Email:
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </label>
-                </div>
+                {error && <Box style={{ color: "red" }}>{error}</Box>}
+            </Box>
 
-                <div>
-                    <label>
-                        Personal Number:
-                        <input
-                            type="text"
-                            value={personNumber}
-                            onChange={(e) => setPersonNumber(e.target.value)}
-                        />
-                    </label>
-                </div>
-
-                <div>
-                    <label>
-                        Username:
-                        <input
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                    </label>
-                </div>
-
-                <div>
-                    <label>
-                        Password:
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </label>
-                </div>
-
-                <button type="submit">Register</button>
-            </form>
-
-            <div>
-                Already have an account? <a href="/login">Log in here</a>.
-            </div>
-        </div>
+            <Typography variant="subtitle1">
+                Already have an account? <Link href="/login">Log in</Link>.
+            </Typography>
+        </Box>
     );
 };
 

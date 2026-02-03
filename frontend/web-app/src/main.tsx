@@ -1,8 +1,14 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./style.css";
 import Router from "./Router";
 import AuthProvider from "./auth/AuthProvider";
+
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { theme } from "./theme";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
 /**
  * The main entry point of the React application.
@@ -10,8 +16,11 @@ import AuthProvider from "./auth/AuthProvider";
  */
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <AuthProvider>
-            <Router />
-        </AuthProvider>
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <AuthProvider>
+                <Router />
+            </AuthProvider>
+        </ThemeProvider>
     </StrictMode>,
 );

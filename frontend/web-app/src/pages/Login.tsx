@@ -3,6 +3,12 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 import { accountService } from "../services/account.service";
 
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
+
 /**
  * The page for handling login.
  * Currently only a dummy page with some minor authentication logic.
@@ -28,60 +34,44 @@ const Login = () => {
 
         login(account.accountType);
 
-        navigate(
-            account.accountType === "recruiter" ? "/recruiter" : "/applicant",
-            { replace: true },
-        );
+        navigate(account.accountType === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
     };
 
     return (
-        <div>
-            <h1>Login</h1>
-            <p>Please log in to access the application</p>
+        <Box>
+            <Typography variant="h1">Login</Typography>
+            <Typography variant="subtitle1">Please log in to access the application</Typography>
 
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>
-                        Username:
-                        <input
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                        />
-                    </label>
-                </div>
+            <Box
+                component="form"
+                sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                autoComplete="off"
+                noValidate
+                onSubmit={handleSubmit}>
+                <TextField required label="Username" defaultValue="" onChange={(e) => setUsername(e.target.value)} />
+                <TextField required label="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
 
-                <div>
-                    <label>
-                        Password:
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </label>
-                </div>
+                <Button variant="contained" type="submit">
+                    Log in
+                </Button>
 
-                <button type="submit">Login</button>
-                {error && <div style={{ color: "red" }}>{error}</div>}
-            </form>
+                {error && <Box style={{ color: "red" }}>{error}</Box>}
+            </Box>
 
-            <div>
-                Don't have an account? <a href="/register">Register here</a>.
-            </div>
+            <Typography variant="subtitle1">
+                Don't have an account? <Link href="/register">Register</Link>.
+            </Typography>
 
-            <div>
-                <h3>Sample accounts for testing:</h3>
-                <p>
+            <Box>
+                <Typography variant="h6">Sample accounts for testing:</Typography>
+                <Typography variant="body1">
                     username: <b>app</b>; password: <b>licant</b>
-                </p>
-                <p>
+                </Typography>
+                <Typography variant="body1">
                     username: <b>rec</b>; password: <b>ruiter</b>
-                </p>
-            </div>
-        </div>
+                </Typography>
+            </Box>
+        </Box>
     );
 };
 

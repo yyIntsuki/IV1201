@@ -4,14 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 const PublicRoute = () => {
     const { isLoggedIn, accountType } = useAuth();
 
-    if (isLoggedIn) {
-        return (
-            <Navigate
-                to={accountType === "recruiter" ? "/recruiter" : "/applicant"}
-                replace
-            />
-        );
-    }
+    if (isLoggedIn) return <Navigate to={accountType === "recruiter" ? "/recruiter" : "/applicant"} replace />;
 
     return <Outlet />;
 };

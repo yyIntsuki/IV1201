@@ -24,13 +24,11 @@ function Router() {
                     <Route path="/register" element={<Register />} />
                 </Route>
 
-                <Route
-                    element={<ProtectedRoute allowedRoles={["applicant"]} />}>
+                <Route element={<ProtectedRoute allowedRoles={["applicant"]} />}>
                     <Route path="/applicant" element={<Applicant />} />
                 </Route>
 
-                <Route
-                    element={<ProtectedRoute allowedRoles={["recruiter"]} />}>
+                <Route element={<ProtectedRoute allowedRoles={["recruiter"]} />}>
                     <Route path="/recruiter" element={<Recruiter />} />
                 </Route>
             </Routes>

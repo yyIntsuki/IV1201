@@ -7,18 +7,14 @@ import { STORAGE_KEYS } from "../constants/storageKeys";
 
 /* Initialize default recruiter account. */
 const initAccounts = () => {
-    const accounts: Account[] = JSON.parse(
-        localStorage.getItem(STORAGE_KEYS.ACCOUNTS) || "[]",
-    );
+    const accounts: Account[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.ACCOUNTS) || "[]");
 
     const defaults: Account[] = [DEFAULT_RECRUITER, DEFAULT_APPLICANT];
 
     const mergedAccounts = [...accounts];
 
     defaults.forEach((defaultAccount) => {
-        const exists = mergedAccounts.some(
-            (acc) => acc.username === defaultAccount.username,
-        );
+        const exists = mergedAccounts.some((acc) => acc.username === defaultAccount.username);
 
         if (!exists) mergedAccounts.push(defaultAccount);
     });
@@ -36,9 +32,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const session = authService.getSession();
 
     const [isLoggedIn, setIsLoggedIn] = useState(session.isLoggedIn);
-    const [accountType, setAccountType] = useState<AccountType | null>(
-        session.accountType,
-    );
+    const [accountType, setAccountType] = useState<AccountType | null>(session.accountType);
 
     const login = (type: AccountType) => {
         authService.login(type);
@@ -52,12 +46,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setAccountType(null);
     };
 
-    return (
-        <AuthContext.Provider
-            value={{ isLoggedIn, accountType, login, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+    return <AuthContext.Provider value={{ isLoggedIn, accountType, login, logout }}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

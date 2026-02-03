@@ -3,5 +3,6 @@
 	"semi": true,
 	"experimentalTernaries": true,
 	"bracketSameLine": true,
-	"objectWrap": "collapse"
+	"objectWrap": "collapse",
+	"printWidth": 120
 }

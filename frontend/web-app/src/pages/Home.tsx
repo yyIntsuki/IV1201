@@ -1,9 +1,24 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { healthCheck } from "../api/health.api";
+
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 const Home = () => {
     const [corsResult, setCorsResult] = useState<string | null>(null);
     const [corsError, setCorsError] = useState<string | null>(null);
+
+    const navigate = useNavigate();
+
+    const login = () => {
+        navigate("/login");
+    };
+
+    const register = () => {
+        navigate("/register");
+    };
 
     const testCors = async () => {
         setCorsResult(null);
@@ -19,24 +34,24 @@ const Home = () => {
 
     return (
         <div>
-            <h1>Amusement Park</h1>
-            <h3>Recruitement Application</h3>
-            <p>Login or register to continue.</p>
-            <div>
-                <button onClick={() => (window.location.href = "/login")}>
-                    Login
-                </button>
-                <button onClick={() => (window.location.href = "/register")}>
-                    Register
-                </button>
-            </div>
+            <Typography variant="h1">Amusement Park</Typography>
+            <Typography variant="h2" gutterBottom>
+                Recruitement Application
+            </Typography>
+            <Typography variant="subtitle1">Log in or register to continue</Typography>
+
+            <ButtonGroup variant="outlined">
+                <Button onClick={login}>Log in</Button>
+                <Button onClick={register}>Register</Button>
+            </ButtonGroup>
 
             <div>
-                <h2>CORS Test</h2>
-                <button onClick={testCors}>Test backend connection</button>
+                <Typography variant="h6">CORS Test</Typography>
+                <Button variant="outlined" onClick={testCors}>
+                    Test CORS
+                </Button>
 
                 {corsResult && <p style={{ color: "green" }}>{corsResult}</p>}
-
                 {corsError && <p style={{ color: "red" }}>{corsError}</p>}
             </div>
         </div>
