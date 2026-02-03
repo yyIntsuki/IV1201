@@ -152,6 +152,10 @@ const Register = () => {
 
                 <button type="submit">Register</button>
             </form>
+
+            <div>
+                Already have an account? <a href="/login">Log in here</a>.
+            </div>
         </div>
     );
 };
