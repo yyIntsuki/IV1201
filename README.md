@@ -63,13 +63,17 @@ IV1201/
 │   │       └── repositories/ # Data access objects
 │   └── README.md
 │
-├── frontend/                  # React frontend
+├── frontend/                 # React frontend
 │   └── web-app/
 │       ├── src/
-│       │   ├── App.tsx       # Main component
-│       │   ├── UserManagement.tsx  # User interface
+│       │   ├── auth/         # AuthContext
+│       │   ├── components/   # Components used in pages
+│       │   ├── pages/        # UI pages view
+│       │   ├── routes/       # URL routing
+│       │   ├── main.tsx      # Main component
+│       │   ├── Router.tsx    # Main router
 │       │   └── services/
-│       │       └── api.ts    # Backend API client
+│       │       └── api.ts    # Backend API client (tentative)
 │       ├── package.json
 │       └── README.md
 │
@@ -86,7 +90,7 @@ IV1201/
 - **Pydantic** - Data validation
 
 ### Frontend
-- **React 19** - UI library
+- **React** - UI library
 - **TypeScript** - Type-safe JavaScript
 - **Vite** - Build tool and development server
 
