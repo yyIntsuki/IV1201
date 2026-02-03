@@ -4,7 +4,7 @@ import React, { useState } from "react";
  * The page for handling login.
  * Currently only a dummy page with some minor authentication logic.
  */
-const Login: React.FC = () => {
+const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [accountType, setAccountType] = useState("applicant");

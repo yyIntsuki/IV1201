@@ -1,9 +1,7 @@
-import React from "react";
-
 /**
  * The page for applicants to submit the job application form.
  */
-const Applicant: React.FC = () => {
+const Applicant = () => {
     return (
         <div>
             <h1>Applicant Page</h1>

@@ -1,9 +1,7 @@
-import React from "react";
-
 /**
  * The page for recruiters to manage and view job applicantions.
  */
-const Recruiter: React.FC = () => {
+const Recruiter = () => {
     return (
         <div>
             <h1>Recruiter Page</h1>
