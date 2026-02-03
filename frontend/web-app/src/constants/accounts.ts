@@ -19,9 +19,3 @@ export const DEFAULT_APPLICANT: Account = {
 	email: "app@licant.com",
 	personNumber: "101010-1010",
 };
-
-export const STORAGE_KEYS = {
-	ACCOUNTS: "accounts",
-	IS_LOGGED_IN: "isLoggedIn",
-	ACCOUNT_TYPE: "accountType",
-};

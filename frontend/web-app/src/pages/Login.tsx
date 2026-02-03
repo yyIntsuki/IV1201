@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { useAuth } from "../auth/useAuth";
-import type { Account } from "../types/accountTypes";
-import { STORAGE_KEYS } from "../constants/accounts";
+import { useAuth } from "../hooks/useAuth";
+import { accountService } from "../services/account.service";
 
 /**
  * The page for handling login.
@@ -20,13 +19,7 @@ const Login = () => {
         e.preventDefault();
         setError("");
 
-        const accounts: Account[] = JSON.parse(
-            localStorage.getItem(STORAGE_KEYS.ACCOUNTS) || "[]",
-        );
-
-        const account = accounts.find(
-            (acc) => acc.username === username && acc.password === password,
-        );
+        const account = accountService.findByCredentials(username, password);
 
         if (!account) {
             setError("Invalid username or password");

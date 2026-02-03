@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router";
+import { accountService } from "../services/account.service";
 import type { Account } from "../types/accountTypes";
-import { STORAGE_KEYS } from "../constants/accounts";
 
 /**
  * The page for applicants to register for the job application system.
@@ -37,11 +37,7 @@ const Register = () => {
             return;
         }
 
-        const accounts: Account[] = JSON.parse(
-            localStorage.getItem(STORAGE_KEYS.ACCOUNTS) || "[]",
-        );
-
-        if (accounts.find((acc) => acc.username === username)) {
+        if (accountService.usernameExists(username)) {
             setError("Username already exists");
             return;
         }
@@ -56,10 +52,7 @@ const Register = () => {
             accountType: "applicant",
         };
 
-        localStorage.setItem(
-            STORAGE_KEYS.ACCOUNTS,
-            JSON.stringify([...accounts, newAccount]),
-        );
+        accountService.create(newAccount);
 
         login("applicant");
         navigate("/applicant", { replace: true });

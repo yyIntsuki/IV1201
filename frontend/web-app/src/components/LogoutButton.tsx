@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { useAuth } from "../auth/useAuth";
+import { useAuth } from "../hooks/useAuth";
 
 /**
  * LogoutButton component with logout button positioned at top right using only positioning.

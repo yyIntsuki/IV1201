@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { AuthContext } from "./AuthContext";
+import { authService } from "../services/auth.service";
 import type { Account, AccountType } from "../types/accountTypes";
-import {
-    DEFAULT_RECRUITER,
-    DEFAULT_APPLICANT,
-    STORAGE_KEYS,
-} from "../constants/accounts";
+import { DEFAULT_RECRUITER, DEFAULT_APPLICANT } from "../constants/accounts";
+import { STORAGE_KEYS } from "../constants/storageKeys";
 
 /* Initialize default recruiter account. */
 const initAccounts = () => {
@@ -35,24 +33,21 @@ initAccounts();
  * @returns The AuthContext.Provider component with the authentication state and functions.
  */
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(
-        localStorage.getItem(STORAGE_KEYS.IS_LOGGED_IN) === "true",
-    );
+    const session = authService.getSession();
+
+    const [isLoggedIn, setIsLoggedIn] = useState(session.isLoggedIn);
     const [accountType, setAccountType] = useState<AccountType | null>(
-        (localStorage.getItem(STORAGE_KEYS.ACCOUNT_TYPE) as AccountType) ||
-            null,
+        session.accountType,
     );
 
     const login = (type: AccountType) => {
-        localStorage.setItem(STORAGE_KEYS.IS_LOGGED_IN, "true");
-        localStorage.setItem(STORAGE_KEYS.ACCOUNT_TYPE, type);
+        authService.login(type);
         setIsLoggedIn(true);
         setAccountType(type);
     };
 
     const logout = () => {
-        localStorage.removeItem(STORAGE_KEYS.IS_LOGGED_IN);
-        localStorage.removeItem(STORAGE_KEYS.ACCOUNT_TYPE);
+        authService.logout();
         setIsLoggedIn(false);
         setAccountType(null);
     };
