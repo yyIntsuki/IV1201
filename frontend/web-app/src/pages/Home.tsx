@@ -1,7 +1,9 @@
 const Home = () => {
     return (
         <div>
-            <h1>Welcome</h1>
+            <h1>Amusement Park</h1>
+            <h3>Recruitement Application</h3>
+            <p>Login or register to continue.</p>
             <div>
                 <button onClick={() => (window.location.href = "/login")}>
                     Login

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import { useAuth } from "../auth/useAuth";
 
 /**
  * The page for handling login.
@@ -7,18 +9,24 @@ import React, { useState } from "react";
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [accountType, setAccountType] = useState("applicant");
+    const [accountType, setAccountType] = useState<"applicant" | "recruiter">(
+        "applicant",
+    );
     const [error, setError] = useState("");
+
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         if (username === "admin" && password === "password") {
-            localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("accountType", accountType);
+            login(accountType);
 
-            window.location.href =
-                accountType === "applicant" ? "/applicant" : "/recruiter";
+            navigate(
+                accountType === "applicant" ? "/applicant" : "/recruiter",
+                { replace: true },
+            );
         } else setError("Invalid username or password");
     };
 
@@ -57,7 +65,11 @@ const Login = () => {
                         Account Type:
                         <select
                             value={accountType}
-                            onChange={(e) => setAccountType(e.target.value)}>
+                            onChange={(e) =>
+                                setAccountType(
+                                    e.target.value as "applicant" | "recruiter",
+                                )
+                            }>
                             <option value="applicant">Applicant</option>
                             <option value="recruiter">Recruiter</option>
                         </select>
@@ -65,7 +77,7 @@ const Login = () => {
                 </div>
 
                 <button type="submit">Login</button>
-                <div>{error && error}</div>
+                {error && <div style={{ color: "red" }}>{error}</div>}
             </form>
 
             <div>Demo credentials: username: admin, password: password</div>
