@@ -1,8 +1,8 @@
-export type AccountType = "applicant" | "recruiter" | null;
+import type { AccountType } from "./accountTypes";
 
 export interface AuthContextType {
 	isLoggedIn: boolean;
-	accountType: AccountType;
+	accountType: AccountType | null;
 	login: (type: AccountType) => void;
 	logout: () => void;
 }

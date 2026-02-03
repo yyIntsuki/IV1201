@@ -10,7 +10,7 @@ const LogoutButton = () => {
 
     const handleLogout = () => {
         logout();
-        setTimeout(() => navigate("/", { replace: true }), 0);
+        navigate("/", { replace: true });
     };
 
     if (!isLoggedIn) return null;

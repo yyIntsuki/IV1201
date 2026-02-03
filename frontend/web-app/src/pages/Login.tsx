@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../auth/useAuth";
+import type { Account } from "../types/accountTypes";
+import { STORAGE_KEYS } from "../constants/accounts";
 
 /**
  * The page for handling login.
@@ -9,9 +11,6 @@ import { useAuth } from "../auth/useAuth";
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [accountType, setAccountType] = useState<"applicant" | "recruiter">(
-        "applicant",
-    );
     const [error, setError] = useState("");
 
     const { login } = useAuth();
@@ -19,15 +18,27 @@ const Login = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setError("");
 
-        if (username === "admin" && password === "password") {
-            login(accountType);
+        const accounts: Account[] = JSON.parse(
+            localStorage.getItem(STORAGE_KEYS.ACCOUNTS) || "[]",
+        );
 
-            navigate(
-                accountType === "applicant" ? "/applicant" : "/recruiter",
-                { replace: true },
-            );
-        } else setError("Invalid username or password");
+        const account = accounts.find(
+            (acc) => acc.username === username && acc.password === password,
+        );
+
+        if (!account) {
+            setError("Invalid username or password");
+            return;
+        }
+
+        login(account.accountType);
+
+        navigate(
+            account.accountType === "recruiter" ? "/recruiter" : "/applicant",
+            { replace: true },
+        );
     };
 
     return (
@@ -60,27 +71,23 @@ const Login = () => {
                     </label>
                 </div>
 
-                <div>
-                    <label>
-                        Account Type:
-                        <select
-                            value={accountType}
-                            onChange={(e) =>
-                                setAccountType(
-                                    e.target.value as "applicant" | "recruiter",
-                                )
-                            }>
-                            <option value="applicant">Applicant</option>
-                            <option value="recruiter">Recruiter</option>
-                        </select>
-                    </label>
-                </div>
-
                 <button type="submit">Login</button>
                 {error && <div style={{ color: "red" }}>{error}</div>}
             </form>
 
-            <div>Demo credentials: username: admin, password: password</div>
+            <div>
+                Don't have an account? <a href="/register">Register here</a>.
+            </div>
+
+            <div>
+                <h3>Sample accounts for testing:</h3>
+                <p>
+                    username: <b>app</b>; password: <b>licant</b>
+                </p>
+                <p>
+                    username: <b>rec</b>; password: <b>ruiter</b>
+                </p>
+            </div>
         </div>
     );
 };
