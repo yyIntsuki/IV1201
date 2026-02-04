@@ -2,9 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { healthCheck } from "../api/health.api";
 
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
+import { Box, Typography, Button, ButtonGroup } from "@mui/material";
 
 const Home = () => {
     const [corsResult, setCorsResult] = useState<string | null>(null);
@@ -33,7 +31,7 @@ const Home = () => {
     };
 
     return (
-        <div>
+        <Box>
             <Typography variant="h1">Amusement Park</Typography>
             <Typography variant="h2" gutterBottom>
                 Recruitement Application
@@ -45,7 +43,7 @@ const Home = () => {
                 <Button onClick={register}>Register</Button>
             </ButtonGroup>
 
-            <div>
+            <Box>
                 <Typography variant="h6">CORS Test</Typography>
                 <Button variant="outlined" onClick={testCors}>
                     Test CORS
@@ -53,8 +51,8 @@ const Home = () => {
 
                 {corsResult && <p style={{ color: "green" }}>{corsResult}</p>}
                 {corsError && <p style={{ color: "red" }}>{corsError}</p>}
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 };
 
