@@ -191,3 +191,23 @@ class UserService:
         # Additional business logic could be added here
         # For example: check if user has related records, soft delete, etc.
         return await self.repository.delete(user_id)
+
+    async def authenticate_user(self, username: str, password: str) -> bool:
+        """
+        Authenticate a user by username and password.
+        
+        Args:
+            username: User's username
+            password: Plain text password
+        Returns:
+            Authenticated user or None if credentials are invalid
+        """
+        user = await self.repository.get_by_username(username)
+        if not user:
+            return False
+        
+        hashed_input_password = self._hash_password(password)
+        if user['password'] != hashed_input_password:
+            return False
+        
+        return True

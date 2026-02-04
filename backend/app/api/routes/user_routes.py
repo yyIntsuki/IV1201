@@ -98,3 +98,20 @@ async def delete_user(user_id: int):
         raise
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
+
+@router.post("/users/login", response_model=UserResponse)
+async def login_user(username: str, password: str):    
+    """
+    User login endpoint.
+    
+    Demonstrates authentication flow through all layers.
+    """
+    try:
+        user = await user_service.authenticate_user(username=username, password=password)
+        if not user:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+        return user
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")

@@ -26,7 +26,7 @@ HTTP Response ← API Routes ← Business Logic Service ← Repository ← Postg
 
 ### Prerequisites
 
-- Python 3.9 or higher
+- Python version between 3.10 and 3.13
 - PostgreSQL 12 or higher
 
 ### 1. Install Dependencies
