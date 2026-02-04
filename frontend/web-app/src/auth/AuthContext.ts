@@ -1,4 +1,4 @@
 import { createContext } from "react";
-import type { AuthContextType } from "../types/authTypes";
+import type { Session } from "../types/session";
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<Session | undefined>(undefined);

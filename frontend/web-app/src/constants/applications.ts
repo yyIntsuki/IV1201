@@ -1,4 +1,4 @@
-import type { JobApplication } from "../types/applicationTypes";
+import type { JobApplication } from "../types/application";
 
 export const dummyApplications: JobApplication[] = [
 	{

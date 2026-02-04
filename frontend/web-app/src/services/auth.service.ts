@@ -1,25 +1,31 @@
+import { login as loginApi } from "../api/login.api";
+import { parseRole } from "../utils/roleParser";
+
 import { STORAGE_KEYS } from "../constants/storageKeys";
-import type { AccountType } from "../types/accountTypes";
+import type { Role } from "../types/role";
 
 export const authService = {
 	getSession() {
 		return {
-			isLoggedIn:
-				localStorage.getItem(STORAGE_KEYS.IS_LOGGED_IN) === "true",
-			accountType:
-				(localStorage.getItem(
-					STORAGE_KEYS.ACCOUNT_TYPE,
-				) as AccountType) || null,
+			isLoggedIn: localStorage.getItem(STORAGE_KEYS.IS_LOGGED_IN) === "true",
+			role: (localStorage.getItem(STORAGE_KEYS.ROLE) as Role) || null,
 		};
 	},
 
-	login(accountType: AccountType) {
-		localStorage.setItem(STORAGE_KEYS.IS_LOGGED_IN, "true");
-		localStorage.setItem(STORAGE_KEYS.ACCOUNT_TYPE, accountType);
+	async login(username: string, password: string): Promise<void> {
+		try {
+			const roleId = await loginApi(username, password);
+			const role = parseRole(roleId);
+
+			localStorage.setItem(STORAGE_KEYS.IS_LOGGED_IN, "true");
+			localStorage.setItem(STORAGE_KEYS.ROLE, role);
+		} catch {
+			throw new Error("Login failed");
+		}
 	},
 
 	logout() {
 		localStorage.removeItem(STORAGE_KEYS.IS_LOGGED_IN);
-		localStorage.removeItem(STORAGE_KEYS.ACCOUNT_TYPE);
-	},
+		localStorage.removeItem(STORAGE_KEYS.ROLE);
+	}
 };

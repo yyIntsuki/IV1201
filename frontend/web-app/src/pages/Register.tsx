@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router";
 import { accountService } from "../services/account.service";
-import type { Account } from "../types/accountTypes";
+import type { Account } from "../types/account";
 
 import { Box, Typography, TextField, Button, Link } from "@mui/material";
 
@@ -27,30 +27,22 @@ const Register = () => {
         setError("");
         setSuccess(false);
 
-        if (!firstName || !lastName || !email || !personNumber || !username || !password) {
-            setError("All fields are required.");
-            return;
-        }
+        // if (!firstName || !lastName || !email || !personNumber || !username || !password) {
+        //     setError("All fields are required.");
+        //     return;
+        // }
 
-        if (accountService.usernameExists(username)) {
-            setError("Username already exists");
-            return;
-        }
+        // if (accountService.usernameExists(username)) {
+        //     setError("Username already exists");
+        //     return;
+        // }
 
-        const newAccount: Account = {
-            firstName,
-            lastName,
-            email,
-            personNumber,
-            username,
-            password,
-            accountType: "applicant",
-        };
+        // const newAccount: Account = { firstName, lastName, email, personNumber, username, password, role: "applicant" };
 
-        accountService.create(newAccount);
+        // accountService.create(newAccount);
 
-        login("applicant");
-        navigate("/applicant", { replace: true });
+        // login("applicant");
+        // navigate("/applicant", { replace: true });
 
         setSuccess(true);
         setFirstName("");

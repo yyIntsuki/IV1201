@@ -1,9 +1,9 @@
-export type AccountType = "applicant" | "recruiter";
+import type { Role } from "./role";
 
 export interface Account {
 	username: string;
 	password: string;
-	accountType: AccountType;
+	role: Role;
 	firstName?: string;
 	lastName?: string;
 	email?: string;

@@ -10,12 +10,12 @@ interface Props {
  * Also handles authorization based on account type.
  */
 const ProtectedRoute = ({ allowedRoles }: Props) => {
-    const { isLoggedIn, accountType } = useAuth();
+    const { isLoggedIn, role } = useAuth();
 
     if (!isLoggedIn) return <Navigate to="/login" replace />;
 
-    if (allowedRoles && !allowedRoles.includes(accountType!))
-        return <Navigate to={accountType === "recruiter" ? "/recruiter" : "/applicant"} replace />;
+    if (allowedRoles && !allowedRoles.includes(role!))
+        return <Navigate to={role === "recruiter" ? "/recruiter" : "/applicant"} replace />;
 
     return <Outlet />;
 };

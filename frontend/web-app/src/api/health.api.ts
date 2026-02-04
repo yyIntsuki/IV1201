@@ -1,5 +1,3 @@
 import { apiFetch } from "./client";
 
-export const healthCheck = () => {
-	return apiFetch("/health");
-};
+export const healthCheck = () => { return apiFetch("/health"); };

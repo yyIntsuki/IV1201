@@ -2,9 +2,9 @@ import { Navigate, Outlet } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 
 const PublicRoute = () => {
-    const { isLoggedIn, accountType } = useAuth();
+    const { isLoggedIn, role } = useAuth();
 
-    if (isLoggedIn) return <Navigate to={accountType === "recruiter" ? "/recruiter" : "/applicant"} replace />;
+    if (isLoggedIn) return <Navigate to={role === "recruiter" ? "/recruiter" : "/applicant"} replace />;
 
     return <Outlet />;
 };

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
-import { accountService } from "../services/account.service";
-
 import { Box, Typography, TextField, Button, Link } from "@mui/material";
 
 /**
@@ -14,23 +12,19 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const { login } = useAuth();
+    const { role, login } = useAuth();
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
 
-        const account = accountService.findByCredentials(username, password);
-
-        if (!account) {
+        try {
+            await login(username, password);
+            navigate(role === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
+        } catch {
             setError("Invalid username or password");
-            return;
         }
-
-        login(account.accountType);
-
-        navigate(account.accountType === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
     };
 
     return (
@@ -61,10 +55,10 @@ const Login = () => {
             <Box>
                 <Typography variant="h6">Sample accounts for testing:</Typography>
                 <Typography variant="body1">
-                    username: <b>app</b>; password: <b>licant</b>
+                    Recruiter: <b>test1</b> | <b>test</b>
                 </Typography>
                 <Typography variant="body1">
-                    username: <b>rec</b>; password: <b>ruiter</b>
+                    Applicant: <b>test</b>; <b>test</b>
                 </Typography>
             </Box>
         </Box>

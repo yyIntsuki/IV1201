@@ -1,27 +1,7 @@
 import { useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { authService } from "../services/auth.service";
-import type { Account, AccountType } from "../types/accountTypes";
-import { DEFAULT_RECRUITER, DEFAULT_APPLICANT } from "../constants/accounts";
-import { STORAGE_KEYS } from "../constants/storageKeys";
-
-/* Initialize default recruiter account. */
-const initAccounts = () => {
-    const accounts: Account[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.ACCOUNTS) || "[]");
-
-    const defaults: Account[] = [DEFAULT_RECRUITER, DEFAULT_APPLICANT];
-
-    const mergedAccounts = [...accounts];
-
-    defaults.forEach((defaultAccount) => {
-        const exists = mergedAccounts.some((acc) => acc.username === defaultAccount.username);
-
-        if (!exists) mergedAccounts.push(defaultAccount);
-    });
-
-    localStorage.setItem(STORAGE_KEYS.ACCOUNTS, JSON.stringify(mergedAccounts));
-};
-initAccounts();
+import type { Role } from "../types/role";
 
 /**
  * AuthProvider component that provides authentication context to its children.
@@ -32,21 +12,21 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const session = authService.getSession();
 
     const [isLoggedIn, setIsLoggedIn] = useState(session.isLoggedIn);
-    const [accountType, setAccountType] = useState<AccountType | null>(session.accountType);
+    const [role, setRole] = useState<Role | null>(session.role);
 
-    const login = (type: AccountType) => {
-        authService.login(type);
+    const login = async (username: string, password: string) => {
+        await authService.login(username, password);
         setIsLoggedIn(true);
-        setAccountType(type);
+        setRole(authService.getSession().role);
     };
 
     const logout = () => {
         authService.logout();
         setIsLoggedIn(false);
-        setAccountType(null);
+        setRole(null);
     };
 
-    return <AuthContext.Provider value={{ isLoggedIn, accountType, login, logout }}>{children}</AuthContext.Provider>;
+    return <AuthContext.Provider value={{ isLoggedIn, role, login, logout }}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
