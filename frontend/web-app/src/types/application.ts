@@ -1,3 +1,6 @@
+/**
+ * Types related to job applications.
+ */
 type ApplicationStatus = "accepted" | "rejected" | "unhandled";
 
 export interface JobApplication {

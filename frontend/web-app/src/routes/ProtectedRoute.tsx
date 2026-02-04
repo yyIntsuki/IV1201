@@ -1,15 +1,12 @@
 import { Navigate, Outlet } from "react-router";
 import { useAuth } from "../hooks/useAuth";
-
-interface Props {
-    allowedRoles?: ("applicant" | "recruiter")[];
-}
+import type { Role } from "../types/role";
 
 /**
  * ProtectedRoute component to guard routes that require authentication.
  * Also handles authorization based on account type.
  */
-const ProtectedRoute = ({ allowedRoles }: Props) => {
+const ProtectedRoute = ({ allowedRoles }: { allowedRoles?: Role[] }) => {
     const { isLoggedIn, role } = useAuth();
 
     if (!isLoggedIn) return <Navigate to="/login" replace />;

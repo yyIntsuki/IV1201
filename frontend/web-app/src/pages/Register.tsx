@@ -1,14 +1,10 @@
 import React, { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router";
-import { accountService } from "../services/account.service";
-import type { Account } from "../types/account";
+import { registerService } from "../services/register.service";
 
 import { Box, Typography, TextField, Button, Link } from "@mui/material";
 
-/**
- * The page for applicants to register for the job application system.
- */
 const Register = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");

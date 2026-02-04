@@ -4,6 +4,10 @@ import { parseRole } from "../utils/roleParser";
 import { STORAGE_KEYS } from "../constants/storageKeys";
 import type { Role } from "../types/role";
 
+/**
+ * Authentication service to handle login, logout, and session management.
+ * This is the actual implementation of the authService used in the AuthProvider.
+ */
 export const authService = {
 	getSession() {
 		return {

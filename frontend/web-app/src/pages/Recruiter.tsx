@@ -12,9 +12,6 @@ import {
     Paper,
 } from "@mui/material";
 
-/**
- * The page for recruiters to manage and view job applicantions.
- */
 const Recruiter = () => {
     return (
         <Box>

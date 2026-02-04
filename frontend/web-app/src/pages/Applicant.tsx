@@ -1,8 +1,5 @@
 import { Box, Typography } from "@mui/material";
 
-/**
- * The page for applicants to submit the job application form.
- */
 const Applicant = () => {
     return (
         <Box>

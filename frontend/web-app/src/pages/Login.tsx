@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
+
 import { Box, Typography, TextField, Button, Link } from "@mui/material";
 
-/**
- * The page for handling login.
- * Currently only a dummy page with some minor authentication logic.
- */
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
