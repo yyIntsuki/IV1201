@@ -14,29 +14,35 @@ class UserRepository:
     This implements the data access layer.
     """
     
-    async def create(self, email: str, first_name: str, last_name: str, password_hash: str) -> User:
+    async def create(self, name: str, surname: str, pnr: str, email: str, password: str, role_id: int, username: str) -> User:
         """
         Insert a new user into the database.
         
         Args:
+            name: User's first name
+            surname: User's last name
+            pnr: User's personal number
             email: User's email address
-            first_name: User's first name
-            last_name: User's last name
-            password_hash: Hashed password
+            password: Hashed password
+            role_id: User's role ID
+            username: User's username
             
         Returns:
             Created user object
         """
         query = """
-            INSERT INTO users (email, first_name, last_name, password_hash)
-            VALUES (:email, :first_name, :last_name, :password_hash)
-            RETURNING id, email, first_name, last_name, created_at, updated_at
+            INSERT INTO person (name, surname, pnr, email, password, role_id, username)
+            VALUES (:name, :surname, :pnr, :email, :password, :role_id, :username)
+            RETURNING id, name, surname, pnr, email, role_id, username
         """
         values = {
+            "name": name,
+            "surname": surname,
+            "pnr": pnr,
             "email": email,
-            "first_name": first_name,
-            "last_name": last_name,
-            "password_hash": password_hash
+            "password": password,
+            "role_id": role_id,
+            "username": username
         }
         
         result = await database.fetch_one(query=query, values=values)
@@ -53,8 +59,8 @@ class UserRepository:
             User data or None if not found
         """
         query = """
-            SELECT id, email, first_name, last_name, created_at, updated_at
-            FROM users
+            SELECT id, name, surname, pnr, email, role_id, username
+            FROM person
             WHERE id = :user_id
         """
         result = await database.fetch_one(query=query, values={"user_id": user_id})
@@ -71,13 +77,30 @@ class UserRepository:
             User data or None if not found
         """
         query = """
-            SELECT id, email, first_name, last_name, password_hash, created_at, updated_at
-            FROM users
+            SELECT id, name, surname, pnr, email, password, role_id, username
+            FROM person
             WHERE email = :email
         """
         result = await database.fetch_one(query=query, values={"email": email})
         return result
     
+    async def get_by_username(self, username: str) -> Optional[dict]:
+        """
+        Retrieve a user by their username.
+        
+        Args:
+            username: The user's username
+            
+        Returns:
+            User data or None if not found
+        """
+        query = """
+            SELECT * FROM person
+            WHERE username = :username
+        """
+        result = await database.fetch_one(query=query, values={"username": username})
+        return result
+
     async def get_all(self) -> List[dict]:
         """
         Retrieve all users from the database.
@@ -86,9 +109,9 @@ class UserRepository:
             List of all users
         """
         query = """
-            SELECT id, email, first_name, last_name, created_at, updated_at
-            FROM users
-            ORDER BY created_at DESC
+            SELECT id, name, surname, pnr, email, role_id, username
+            FROM person
+            ORDER BY id DESC
         """
         results = await database.fetch_all(query=query)
         return results
@@ -117,10 +140,10 @@ class UserRepository:
             return await self.get_by_id(user_id)
         
         query = f"""
-            UPDATE users
+            UPDATE person
             SET {', '.join(update_fields)}, updated_at = NOW()
             WHERE id = :user_id
-            RETURNING id, email, first_name, last_name, created_at, updated_at
+            RETURNING id, name, surname, pnr, email, role_id, username
         """
         
         result = await database.fetch_one(query=query, values=values)
@@ -137,7 +160,7 @@ class UserRepository:
             True if deleted, False if not found
         """
         query = """
-            DELETE FROM users
+            DELETE FROM person
             WHERE id = :user_id
         """
         result = await database.execute(query=query, values={"user_id": user_id})
