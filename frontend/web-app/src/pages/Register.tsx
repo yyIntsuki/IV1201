@@ -63,10 +63,12 @@ const Register = () => {
 
     if (success) {
         return (
-            <div>
-                <h1>Registration Successful!</h1>
-                <p>You are now logged in as an applicant and redirected to your dashboard.</p>
-            </div>
+            <Box>
+                <Typography variant="h1">Registration Successful!</Typography>
+                <Typography variant="body1">
+                    You are now logged in as an applicant and redirected to your dashboard.
+                </Typography>
+            </Box>
         );
     }
 

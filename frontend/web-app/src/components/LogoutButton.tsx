@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 
-import Button from "@mui/material/Button";
+import { Box, Button } from "@mui/material";
 
 /**
  * LogoutButton component with logout button positioned at top right using only positioning.
@@ -18,11 +18,11 @@ const LogoutButton = () => {
     if (!isLoggedIn) return null;
 
     return (
-        <div style={{ position: "fixed", top: "0", right: "0", padding: "10px" }}>
+        <Box style={{ position: "fixed", top: "0", right: "0", padding: "10px" }}>
             <Button variant="contained" onClick={handleLogout}>
                 Log Out
             </Button>
-        </div>
+        </Box>
     );
 };
 
