@@ -5,6 +5,7 @@ Contains business logic and coordinates between presentation and data layers.
 from typing import List, Optional
 import hashlib
 import re
+import logging
 
 from app.database.repositories.user_repository import UserRepository
 from app.api.schemas.user_schemas import UserCreate, UserResponse, UserUpdate
@@ -192,7 +193,7 @@ class UserService:
         # For example: check if user has related records, soft delete, etc.
         return await self.repository.delete(user_id)
 
-    async def authenticate_user(self, username: str, password: str) -> bool:
+    async def authenticate_user(self, username: str, password: str) -> int:
         """
         Authenticate a user by username and password.
         
@@ -204,10 +205,12 @@ class UserService:
         """
         user = await self.repository.get_by_username(username)
         if not user:
-            return False
+            logging.info(f"Authentication failed: User '{username}' not found.")
+            return None
         
         hashed_input_password = self._hash_password(password)
         if user['password'] != hashed_input_password:
-            return False
+            logging.info(f"Authentication failed: Incorrect password for user '{username}'.")
+            return None
         
-        return True
+        return user['role_id']
