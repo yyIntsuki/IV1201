@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 
-import { Box, Typography, Button, ButtonGroup } from "@mui/material";
+import { Container, Typography, Button, ButtonGroup } from "@mui/material";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -14,7 +14,7 @@ const Home = () => {
     };
 
     return (
-        <Box>
+        <Container>
             <Typography variant="h1">Amusement Park</Typography>
             <Typography variant="h2" gutterBottom>
                 Recruitement Application
@@ -25,7 +25,7 @@ const Home = () => {
                 <Button onClick={login}>Log in</Button>
                 <Button onClick={register}>Register</Button>
             </ButtonGroup>
-        </Box>
+        </Container>
     );
 };
 

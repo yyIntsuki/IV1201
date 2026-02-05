@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 
-import { Box, Typography, TextField, Button, Link } from "@mui/material";
+import { Container, Box, Typography, TextField, Button, Link } from "@mui/material";
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -25,7 +25,7 @@ const Login = () => {
     };
 
     return (
-        <Box>
+        <Container>
             <Typography variant="h1">Login</Typography>
             <Typography variant="subtitle1">Please log in to access the application</Typography>
 
@@ -58,7 +58,7 @@ const Login = () => {
                     Applicant: <b>test</b>; <b>test</b>
                 </Typography>
             </Box>
-        </Box>
+        </Container>
     );
 };
 

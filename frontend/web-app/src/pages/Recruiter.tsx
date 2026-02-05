@@ -1,7 +1,7 @@
 import { dummyApplications } from "../constants/applications";
 
 import {
-    Box,
+    Container,
     Typography,
     Table,
     TableBody,
@@ -14,7 +14,7 @@ import {
 
 const Recruiter = () => {
     return (
-        <Box>
+        <Container>
             <Typography variant="h1">Recruiter Page</Typography>
             <Typography variant="body1">List of job applications below.</Typography>
 
@@ -41,7 +41,7 @@ const Recruiter = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </Box>
+        </Container>
     );
 };
 

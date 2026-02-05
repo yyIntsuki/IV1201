@@ -3,7 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router";
 import { registerService } from "../services/register.service";
 
-import { Box, Typography, TextField, Button, Link } from "@mui/material";
+import { Container, Box, Typography, TextField, Button, Link } from "@mui/material";
 
 const Register = () => {
     const [firstName, setFirstName] = useState("");
@@ -61,7 +61,7 @@ const Register = () => {
     }
 
     return (
-        <Box>
+        <Container>
             <Typography variant="h1">Register</Typography>
             <Typography variant="subtitle1">Please register an account to apply for job application</Typography>
 
@@ -83,7 +83,7 @@ const Register = () => {
             <Typography variant="subtitle1">
                 Already have an account? <Link href="/login">Log in</Link>.
             </Typography>
-        </Box>
+        </Container>
     );
 };
 
