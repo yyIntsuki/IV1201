@@ -42,4 +42,28 @@ The database that is used for this project is a relational database, with Postgr
 
 Since each of the two team members are responsible separately for frontend and backend, the code styles are mainly up to each individual. Stick to the common coding styles that are used in each language. For variable names that are used on both ends, like when it comes to API calls, and data structure, if possible it should use the same variable names to avoid confusion.
 
-In frontend, prettier is used to ensure consistent formatting is used throughout the main source code.
+## Frontend
+
+### Build tool and language
+
+Vite is used as the build tool for the frontend. It provides a dev server that includes enhancements for development such as the Hot Module Replacement (HMR). The React SWC plugin, a Rust-based compiler that replaces Babel in React project, offering greater compilation and build times. It may not be necessary since the project isn't large but it is used as it is easy to include in the project.
+
+### Architecture
+
+All relevant source files are in /src, which then is divided into folders that handle different kinds of functionalities in the frontend. It is a great way to separate concerns and organize functionality individually to avoid messy code structure.
+
+### Router
+
+The router uses the 'react-router' module which allows route definitions and protected routes, which allows preventing users to access pages they do not have access in the application state, such as a logged in user accessing the /login page.
+
+### Authentication
+
+The user authorizes by logging in, which fetches a login response from the API. If user successfully log in, the session is stored in form of a AuthContext, which is accessible by a useAuth hook. The AuthProvider decides which authorization service it uses, currently there is only one such service. By separating it into a service gives the opportunity to test multiple methods of authentication, if needed.
+
+### Views
+
+The views of the frontend are put in /pages, which handles UI that is presented to the user, and interaction logic. The interactions should call functions from other parts of the code to return relevant data, and not directly from the code in /pages.
+
+### Types
+
+Types are used as definitions to data structures, similarly to classes like in C# and Java. 
