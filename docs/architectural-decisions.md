@@ -4,6 +4,10 @@ This is a documentation of some of the architectural decisions made in the team,
 
 ## Decisions regarding the process
 
+<details>
+
+<summary>Collapsed Section</summary>
+
 ### How to take decisions
 
 The team decides to take decisions together through communication in various means as long as a valid discussion can be held, currently over Discord.
@@ -12,7 +16,13 @@ The team decides to take decisions together through communication in various mea
 
 Frontend, backend, database.
 
+</details>
+
 ## Decisions regarding tools
+
+<details>
+
+<summary>Collapsed Section</summary>
 
 ### Build tool
 
@@ -32,17 +42,35 @@ One consideration for deployment is on Heroku. The frontend will use API calls t
 
 Visual Studio Code will be used by both members in the team.
 
+</details>
+
 ## Decisions regarding servers and frameworks
+
+<details>
+
+<summary>Collapsed Section</summary>
 
 The backend server will be built with FastAPI, in Python.
 
 The database that is used for this project is a relational database, with PostgreSQL.
 
+</details>
+
 ## Decisions regarding code style
+
+<details>
+
+<summary>Collapsed Section</summary>
 
 Since each of the two team members are responsible separately for frontend and backend, the code styles are mainly up to each individual. Stick to the common coding styles that are used in each language. For variable names that are used on both ends, like when it comes to API calls, and data structure, if possible it should use the same variable names to avoid confusion.
 
+</details>
+
 ## Frontend
+
+<details>
+
+<summary>Collapsed Section</summary>
 
 ### Build tool and language
 
@@ -67,3 +95,5 @@ The views of the frontend are put in /pages, which handles UI that is presented 
 ### Types
 
 Types are used as definitions to data structures, similarly to classes like in C# and Java. 
+
+</details>
