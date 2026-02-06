@@ -66,14 +66,18 @@ IV1201/
 ├── frontend/                 # React frontend
 │   └── web-app/
 │       ├── src/
+│       │   ├── api/          # API calls
 │       │   ├── auth/         # AuthContext
 │       │   ├── components/   # Components used in pages
+│       │   ├── constants/    # Constant definition
+│       │   ├── hooks/        # Hooks for functional abstraction
 │       │   ├── pages/        # UI pages view
 │       │   ├── routes/       # URL routing
+│       │   ├── servoces/     # Services functiosn
+│       │   ├── types/        # Type definitions
+│       │   ├── utils/        # Utility functions
 │       │   ├── main.tsx      # Main component
-│       │   ├── Router.tsx    # Main router
-│       │   └── services/
-│       │       └── api.ts    # Backend API client (tentative)
+│       │   └── Router.tsx    # Main router
 │       ├── package.json
 │       └── README.md
 │
@@ -133,9 +137,6 @@ Backend will run at `http://localhost:8000`
 ```bash
 cd frontend/web-app
 npm install
-
-# Configure environment
-cp .env.example .env
 
 # Run the development server
 npm run dev
@@ -207,7 +208,7 @@ Changes will hot-reload automatically.
 cd frontend/web-app
 npm run dev
 ```
-Vite provides instant HMR (Hot Module Replacement).
+Vite provides instant HMR (Hot Module Replacement), with React-SWC plugin.
 
 ## Documentation
 
