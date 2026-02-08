@@ -2,25 +2,30 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../hooks/use-auth";
 
-import { Container, Box, Typography, TextField, Button, Link } from "@mui/material";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
 
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [loginError, setLoginError] = useState("");
 
     const { role, login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
+        setLoginError("");
 
         try {
             await login(username, password);
             navigate(role === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
         } catch {
-            setError("Invalid username or password");
+            setLoginError("Invalid username or password");
         }
     };
 
@@ -35,14 +40,26 @@ const Login = () => {
                 autoComplete="off"
                 noValidate
                 onSubmit={handleSubmit}>
-                <TextField required label="Username" defaultValue="" onChange={(e) => setUsername(e.target.value)} />
-                <TextField required label="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
-
+                <TextField
+                    required
+                    slotProps={{ inputLabel: { required: false } }}
+                    label="Username"
+                    placeholder="Enter your username"
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <TextField
+                    required
+                    slotProps={{ inputLabel: { required: false } }}
+                    label="Password"
+                    type="password"
+                    placeholder="••••••••"
+                    onChange={(e) => setPassword(e.target.value)}
+                />
                 <Button variant="contained" type="submit">
                     Log in
                 </Button>
 
-                {error && <Box style={{ color: "red" }}>{error}</Box>}
+                {loginError && <Box style={{ color: "red" }}>{loginError}</Box>}
             </Box>
 
             <Typography variant="subtitle1">

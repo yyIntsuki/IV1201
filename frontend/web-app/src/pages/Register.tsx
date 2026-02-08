@@ -3,7 +3,12 @@ import { useAuth } from "../hooks/use-auth";
 import { useNavigate } from "react-router";
 import { registerService } from "../services/register-service";
 
-import { Container, Box, Typography, TextField, Button, Link } from "@mui/material";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
 
 const Register = () => {
     const [firstName, setFirstName] = useState("");
