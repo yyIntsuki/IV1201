@@ -151,7 +151,7 @@ const Applicant = () => {
                             onChange={(e) => setCurrentEnd(e.target.value)}
                         />
 
-                        <Button variant="contained" onClick={addAvailability}>
+                        <Button variant="contained" onClick={addAvailability} disabled={!currentStart || !currentEnd}>
                             Add
                         </Button>
                     </Stack>
