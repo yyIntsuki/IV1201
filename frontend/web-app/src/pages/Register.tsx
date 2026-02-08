@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { useAuth } from "../hooks/use-auth";
-import { useNavigate } from "react-router";
+import { useState, useEffect } from "react";
 import { registerService } from "../services/register-service";
 import { ErrorToast } from "../components/ErrorToast";
 
@@ -10,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
+import { useNavigate } from "react-router";
 
 const Register = () => {
     const [firstName, setFirstName] = useState("");
@@ -21,30 +20,23 @@ const Register = () => {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
 
-    const { login } = useAuth();
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
         setSuccess(false);
 
-        // if (!firstName || !lastName || !email || !personNumber || !username || !password) {
-        //     setError("All fields are required.");
-        //     return;
-        // }
+        if (!firstName || !lastName || !email || !personNumber || !username || !password) {
+            setError("All fields are required.");
+            return;
+        }
 
-        // if (accountService.usernameExists(username)) {
-        //     setError("Username already exists");
-        //     return;
-        // }
-
-        // const newAccount: Account = { firstName, lastName, email, personNumber, username, password, role: "applicant" };
-
-        // accountService.create(newAccount);
-
-        // login("applicant");
-        // navigate("/applicant", { replace: true });
+        try {
+            await registerService.register({ firstName, lastName, email, personNumber, username, password });
+        } catch {
+            setError("Registration failed. Please try again.");
+        }
 
         setSuccess(true);
         setFirstName("");
@@ -55,18 +47,27 @@ const Register = () => {
         setPassword("");
     };
 
-    const errorToast = error && <ErrorToast open={Boolean(error)} message={error} onClose={() => setError("")} />;
+    useEffect(() => {
+        if (success) {
+            const timer = setTimeout(() => {
+                navigate("/login");
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [success, navigate]);
 
     if (success) {
         return (
             <Box>
                 <Typography variant="h1">Registration Successful!</Typography>
                 <Typography variant="body1">
-                    You are now logged in as an applicant and redirected to your dashboard.
+                    You will be redirected to the login page shortly. If not, click <Link href="/login">here</Link>.
                 </Typography>
             </Box>
         );
     }
+
+    const errorToast = error && <ErrorToast open={Boolean(error)} message={error} onClose={() => setError("")} />;
 
     return (
         <Container>
@@ -75,13 +76,59 @@ const Register = () => {
             <Typography variant="h1">Register</Typography>
             <Typography variant="subtitle1">Please register an account to apply for job application</Typography>
 
-            <Box component="form" sx={{ display: "flex", flexDirection: "column", gap: 1 }} onSubmit={handleSubmit}>
-                <TextField required label="First Name" defaultValue="" onChange={(e) => setFirstName(e.target.value)} />
-                <TextField required label="Last Name" defaultValue="" onChange={(e) => setLastName(e.target.value)} />
-                <TextField required label="Email" type="email" onChange={(e) => setEmail(e.target.value)} />
-                <TextField required label="Personal Number" onChange={(e) => setPersonNumber(e.target.value)} />
-                <TextField required label="Username" defaultValue="" onChange={(e) => setUsername(e.target.value)} />
-                <TextField required label="Password" type="password" onChange={(e) => setPassword(e.target.value)} />
+            <Box
+                component="form"
+                sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                autoComplete="off"
+                noValidate
+                onSubmit={handleSubmit}>
+                <TextField
+                    required
+                    slotProps={{ inputLabel: { required: false } }}
+                    label="First Name"
+                    placeholder="Jane"
+                    onChange={(e) => setFirstName(e.target.value)}
+                    // error
+                    // helperText="Incorrect entry."
+                />
+                <TextField
+                    required
+                    slotProps={{ inputLabel: { required: false } }}
+                    label="Last Name"
+                    placeholder="Doe"
+                    onChange={(e) => setLastName(e.target.value)}
+                />
+                <TextField
+                    required
+                    slotProps={{ inputLabel: { required: false } }}
+                    label="Email"
+                    type="email"
+                    placeholder="jane.doe@example.com"
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <TextField
+                    required
+                    slotProps={{ inputLabel: { required: false } }}
+                    label="Personal Number"
+                    placeholder="YYYYMMDD-XXXX"
+                    onChange={(e) => setPersonNumber(e.target.value)}
+                />
+                <TextField
+                    required
+                    slotProps={{ inputLabel: { required: false } }}
+                    label="Username"
+                    defaultValue=""
+                    placeholder="Enter your username"
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <TextField
+                    required
+                    slotProps={{ inputLabel: { required: false } }}
+                    label="Password"
+                    type="password"
+                    placeholder="••••••••"
+                    onChange={(e) => setPassword(e.target.value)}
+                />
 
                 <Button variant="contained" type="submit">
                     Register
