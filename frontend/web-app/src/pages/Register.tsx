@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/use-auth";
 import { useNavigate } from "react-router";
-import { registerService } from "../services/register.service";
+import { registerService } from "../services/register-service";
 
 import { Container, Box, Typography, TextField, Button, Link } from "@mui/material";
 

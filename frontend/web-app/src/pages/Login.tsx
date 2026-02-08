@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/use-auth";
 
 import { Container, Box, Typography, TextField, Button, Link } from "@mui/material";
 

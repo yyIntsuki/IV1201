@@ -1,7 +1,7 @@
-import { login as loginApi } from "../api/login.api";
-import { parseRole } from "../utils/roleParser";
+import { login as loginApi } from "../api/login-api";
+import { parseRole } from "../utils/role-parser";
 
-import { STORAGE_KEYS } from "../constants/storageKeys";
+import { STORAGE_KEYS } from "../constants/storage-keys";
 import type { Role } from "../types/role";
 
 /**
