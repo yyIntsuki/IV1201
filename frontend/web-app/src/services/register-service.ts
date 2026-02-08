@@ -5,7 +5,6 @@ const STORAGE_KEY = "local_accounts";
 export const registerService = {
     /**
      * Registers a new account in localStorage
-     * Throws an error if username already exists
      */
     register: async (account: Account) => {
         await new Promise((resolve) => setTimeout(resolve, 300));
