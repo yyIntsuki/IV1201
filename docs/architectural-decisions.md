@@ -94,6 +94,10 @@ The views of the frontend are put in /pages, which handles UI that is presented 
 
 ### Types
 
-Types are used as definitions to data structures, similarly to classes like in C# and Java. 
+Types are used as definitions to data structures.
+
+### Naming conventions
+
+The actual syntax namings should follow the most regular conventions. However, there are no such strict rules for file namings. In this regard, the frontend uses PascalCase for everything that are used like components and types, then kebab-case for everything else.
 
 </details>

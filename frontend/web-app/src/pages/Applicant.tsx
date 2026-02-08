@@ -57,6 +57,10 @@ const Applicant = () => {
         }
     };
 
+    const removeAvailability = (index: number) => {
+        setAvailabilityList(availabilityList.filter((_, i) => i !== index));
+    };
+
     const handleSubmit = () => {
         console.log("Submitting job application:", { expertiseList, availabilityList });
         setStep(4);
@@ -69,6 +73,7 @@ const Applicant = () => {
                     <Typography variant="h5" mb={2}>
                         Step 1: Add Areas of Expertise
                     </Typography>
+
                     <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem />}>
                         <Select
                             fullWidth
@@ -86,6 +91,7 @@ const Applicant = () => {
                                     </MenuItem>
                                 ))}
                         </Select>
+
                         <TextField
                             type="number"
                             label="Years"
@@ -93,6 +99,7 @@ const Applicant = () => {
                             slotProps={{ htmlInput: { min: 1 } }}
                             onChange={(e) => setCurrentYears(Number(e.target.value))}
                         />
+
                         <Button variant="contained" onClick={addExpertise} disabled={!currentArea}>
                             Add
                         </Button>
@@ -124,11 +131,12 @@ const Applicant = () => {
                     <Typography variant="h5" mb={2}>
                         Step 2: Add Availability Periods
                     </Typography>
+
                     <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem />}>
                         <TextField
                             type="date"
                             label="Start"
-                            InputLabelProps={{ shrink: true }}
+                            slotProps={{ inputLabel: { shrink: true } }}
                             fullWidth
                             value={currentStart}
                             onChange={(e) => setCurrentStart(e.target.value)}
@@ -137,7 +145,7 @@ const Applicant = () => {
                         <TextField
                             type="date"
                             label="End"
-                            InputLabelProps={{ shrink: true }}
+                            slotProps={{ inputLabel: { shrink: true } }}
                             fullWidth
                             value={currentEnd}
                             onChange={(e) => setCurrentEnd(e.target.value)}
@@ -147,17 +155,30 @@ const Applicant = () => {
                             Add
                         </Button>
                     </Stack>
+
                     <List>
                         {availabilityList.map((a, i) => (
-                            <ListItem key={i}>
+                            <ListItem
+                                key={i}
+                                secondaryAction={
+                                    <Button
+                                        size="small"
+                                        variant="outlined"
+                                        color="error"
+                                        onClick={() => removeAvailability(i)}>
+                                        Remove
+                                    </Button>
+                                }>
                                 <ListItemText primary={`${a.start} → ${a.end}`} />
                             </ListItem>
                         ))}
                     </List>
+
                     <ButtonGroup>
                         <Button variant="outlined" onClick={() => setStep(1)}>
                             Back
-                        </Button>{" "}
+                        </Button>
+
                         <Button variant="contained" onClick={() => setStep(3)} disabled={availabilityList.length === 0}>
                             Next: Review
                         </Button>
@@ -170,6 +191,7 @@ const Applicant = () => {
                     <Typography variant="h5" mb={2}>
                         Step 3: Review & Submit
                     </Typography>
+
                     <Typography variant="subtitle1">Expertise:</Typography>
                     <List>
                         {expertiseList.map((exp, i) => (
@@ -178,6 +200,7 @@ const Applicant = () => {
                             </ListItem>
                         ))}
                     </List>
+
                     <Typography variant="subtitle1">Availability:</Typography>
                     <List>
                         {availabilityList.map((a, i) => (
@@ -186,6 +209,7 @@ const Applicant = () => {
                             </ListItem>
                         ))}
                     </List>
+
                     <ButtonGroup>
                         <Button variant="outlined" onClick={() => setStep(2)}>
                             Back
