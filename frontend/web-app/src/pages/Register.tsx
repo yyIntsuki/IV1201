@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../hooks/use-auth";
 import { useNavigate } from "react-router";
 import { registerService } from "../services/register-service";
+import { ErrorToast } from "../components/ErrorToast";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -54,6 +55,8 @@ const Register = () => {
         setPassword("");
     };
 
+    const errorToast = error && <ErrorToast open={Boolean(error)} message={error} onClose={() => setError("")} />;
+
     if (success) {
         return (
             <Box>
@@ -67,6 +70,8 @@ const Register = () => {
 
     return (
         <Container>
+            {errorToast}
+
             <Typography variant="h1">Register</Typography>
             <Typography variant="subtitle1">Please register an account to apply for job application</Typography>
 
@@ -81,8 +86,6 @@ const Register = () => {
                 <Button variant="contained" type="submit">
                     Register
                 </Button>
-
-                {error && <Box style={{ color: "red" }}>{error}</Box>}
             </Box>
 
             <Typography variant="subtitle1">

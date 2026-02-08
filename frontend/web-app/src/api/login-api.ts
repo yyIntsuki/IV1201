@@ -7,14 +7,14 @@ import { apiRequest } from "./client";
  * @returns the role ID of the logged-in user (1 or 2)
  */
 export const login = async (
-	username: string,
-	password: string,
+    username: string,
+    password: string,
 ): Promise<number> => {
-	return apiRequest<number>(
-		"/api/v1/users/login",
-		{
-			method: "POST",
-			params: { username, password },
-		}
-	);
+    return apiRequest<number>(
+        "/api/v1/users/login",
+        {
+            method: "POST",
+            params: { username, password },
+        }
+    );
 };

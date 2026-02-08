@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../hooks/use-auth";
+import { ErrorToast } from "../components/ErrorToast";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -12,25 +13,29 @@ import Link from "@mui/material/Link";
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [loginError, setLoginError] = useState("");
+    const [error, setError] = useState("");
 
     const { role, login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoginError("");
+        setError("");
 
         try {
             await login(username, password);
             navigate(role === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
         } catch {
-            setLoginError("Invalid username or password");
+            setError("Invalid username or password");
         }
     };
 
+    const errorToast = error && <ErrorToast open={Boolean(error)} message={error} onClose={() => setError("")} />;
+
     return (
         <Container>
+            {errorToast}
+
             <Typography variant="h1">Login</Typography>
             <Typography variant="subtitle1">Please log in to access the application</Typography>
 
@@ -58,8 +63,6 @@ const Login = () => {
                 <Button variant="contained" type="submit">
                     Log in
                 </Button>
-
-                {loginError && <Box style={{ color: "red" }}>{loginError}</Box>}
             </Box>
 
             <Typography variant="subtitle1">

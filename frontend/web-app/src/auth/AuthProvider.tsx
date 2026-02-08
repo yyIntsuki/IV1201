@@ -15,9 +15,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [role, setRole] = useState<Role | null>(session.role);
 
     const login = async (username: string, password: string) => {
-        await authService.login(username, password);
+        const userRole = await authService.login(username, password);
         setIsLoggedIn(true);
-        setRole(authService.getSession().role);
+        setRole(userRole);
     };
 
     const logout = () => {

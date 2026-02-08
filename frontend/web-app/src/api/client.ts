@@ -6,10 +6,10 @@ const API_BASE_URL = "http://127.0.0.1:8000";
  * Base API client using axios.
  */
 const apiClient = axios.create({
-	baseURL: API_BASE_URL,
-	headers: {
-		"Content-Type": "application/json",
-	},
+    baseURL: API_BASE_URL,
+    headers: {
+        "Content-Type": "application/json",
+    },
 });
 
 /**
@@ -17,20 +17,20 @@ const apiClient = axios.create({
  * Automatically returns parsed JSON.
  */
 export const apiRequest = async <T>(
-	path: string,
-	options?: AxiosRequestConfig,
+    path: string,
+    options?: AxiosRequestConfig,
 ): Promise<T> => {
-	try {
-		const response = await apiClient({
-			url: path,
-			...options,
-		});
-		return response.data as T;
-	} catch (error: unknown) {
-		if (axios.isAxiosError(error)) {
-			const message = error.response?.data?.message ?? `HTTP error ${error.response?.status}`;
-			throw new Error(message);
-		}
-		throw new Error("Unexpected error");
-	}
+    try {
+        const response = await apiClient({
+            url: path,
+            ...options,
+        });
+        return response.data as T;
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            const message = error.response?.data?.message ?? `HTTP error ${error.response?.status}`;
+            throw new Error(message);
+        }
+        throw new Error("Unexpected error");
+    }
 };
