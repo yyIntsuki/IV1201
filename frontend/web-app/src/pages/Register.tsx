@@ -5,8 +5,9 @@ import { RegisterForm } from "@/components/register/RegisterForm";
 import { ErrorToast } from "@/components/ErrorToast";
 
 import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import Link from "@mui/material/Link";
 
 const Register = () => {
@@ -56,39 +57,52 @@ const Register = () => {
 
     if (success) {
         return (
-            <Box>
-                <Typography variant="h1">Registration Successful!</Typography>
-                <Typography variant="body1">
-                    You will be redirected to the login page shortly. If not, click <Link href="/login">here</Link>.
-                </Typography>
-            </Box>
+            <Container sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Card sx={{ display: "inline-block", p: 2 }}>
+                    <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        <Typography variant="h3">Registration Successful!</Typography>
+                        <Typography variant="body1">
+                            You will be redirected to the login page shortly. If not, click{" "}
+                            <Link href="/login">here</Link>.
+                        </Typography>
+                    </CardContent>
+                </Card>
+            </Container>
         );
     }
 
     const errorToast = error && <ErrorToast open={Boolean(error)} message={error} onClose={() => setError("")} />;
 
     return (
-        <Container>
+        <Container sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
             {errorToast}
 
-            <Typography variant="h1">Register</Typography>
-            <Typography variant="subtitle1">Please register an account to apply for job application</Typography>
+            <Card sx={{ display: "inline-block", p: 2 }}>
+                <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    <Typography variant="h1">Register</Typography>
+                    <Typography variant="subtitle1">Please register to apply for the job application</Typography>
 
-            <RegisterForm
-                firstName={firstName}
-                lastName={lastName}
-                email={email}
-                personNumber={personNumber}
-                username={username}
-                password={password}
-                setFirstName={setFirstName}
-                setLastName={setLastName}
-                setEmail={setEmail}
-                setPersonNumber={setPersonNumber}
-                setUsername={setUsername}
-                setPassword={setPassword}
-                handleSubmit={handleSubmit}
-            />
+                    <RegisterForm
+                        firstName={firstName}
+                        lastName={lastName}
+                        email={email}
+                        personNumber={personNumber}
+                        username={username}
+                        password={password}
+                        setFirstName={setFirstName}
+                        setLastName={setLastName}
+                        setEmail={setEmail}
+                        setPersonNumber={setPersonNumber}
+                        setUsername={setUsername}
+                        setPassword={setPassword}
+                        handleSubmit={handleSubmit}
+                    />
+
+                    <Typography variant="subtitle1">
+                        Already have an account? <Link href="/login">Log in</Link>.
+                    </Typography>
+                </CardContent>
+            </Card>
         </Container>
     );
 };

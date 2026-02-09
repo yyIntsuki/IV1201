@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "@/hooks/use-auth";
 import { LoginForm } from "@/components/login/LoginForm";
 import { ErrorToast } from "@/components/ErrorToast";
 
 import Container from "@mui/material/Container";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -30,19 +34,37 @@ const Login = () => {
     const errorToast = error && <ErrorToast open={Boolean(error)} message={error} onClose={() => setError("")} />;
 
     return (
-        <Container>
+        <Container sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
             {errorToast}
 
-            <Typography variant="h1">Login</Typography>
-            <Typography variant="subtitle1">Please log in to access the application</Typography>
+            <Card sx={{ width: 400, p: 2 }}>
+                <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    <Typography variant="h1">Login</Typography>
+                    <Typography variant="subtitle1">Please log in to access the application</Typography>
 
-            <LoginForm
-                username={username}
-                password={password}
-                setUsername={setUsername}
-                setPassword={setPassword}
-                handleSubmit={handleSubmit}
-            />
+                    <LoginForm
+                        username={username}
+                        password={password}
+                        setUsername={setUsername}
+                        setPassword={setPassword}
+                        handleSubmit={handleSubmit}
+                    />
+
+                    <Typography variant="subtitle1">
+                        Don't have an account? <Link href="/register">Register</Link>.
+                    </Typography>
+
+                    <Box>
+                        <Typography variant="h6">Sample accounts for testing:</Typography>
+                        <Typography variant="body1">
+                            Recruiter: <b>test1</b> | <b>test</b>
+                        </Typography>
+                        <Typography variant="body1">
+                            Applicant: <b>test</b> | <b>test</b>
+                        </Typography>
+                    </Box>
+                </CardContent>
+            </Card>
         </Container>
     );
 };

@@ -1,8 +1,6 @@
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
 
 interface RegisterFormProps {
     firstName: string;
@@ -36,74 +34,68 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
     handleSubmit,
 }) => {
     return (
-        <>
-            <Box
-                component="form"
-                sx={{ display: "flex", flexDirection: "column", gap: 1 }}
-                autoComplete="off"
-                noValidate
-                onSubmit={handleSubmit}>
-                <TextField
-                    // error
-                    // helperText="Incorrect entry."
-                    required
-                    slotProps={{ inputLabel: { required: false } }}
-                    label="First Name"
-                    placeholder="Jane"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                />
-                <TextField
-                    required
-                    slotProps={{ inputLabel: { required: false } }}
-                    label="Last Name"
-                    placeholder="Doe"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                />
-                <TextField
-                    required
-                    slotProps={{ inputLabel: { required: false } }}
-                    label="Email"
-                    type="email"
-                    placeholder="jane.doe@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <TextField
-                    required
-                    slotProps={{ inputLabel: { required: false } }}
-                    label="Personal Number"
-                    placeholder="YYYYMMDD-XXXX"
-                    value={personNumber}
-                    onChange={(e) => setPersonNumber(e.target.value)}
-                />
-                <TextField
-                    required
-                    slotProps={{ inputLabel: { required: false } }}
-                    label="Username"
-                    placeholder="Enter your username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <TextField
-                    required
-                    slotProps={{ inputLabel: { required: false } }}
-                    label="Password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+        <Box
+            component="form"
+            sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+            autoComplete="off"
+            noValidate
+            onSubmit={handleSubmit}>
+            <TextField
+                // error
+                // helperText="Incorrect entry."
+                required
+                slotProps={{ inputLabel: { required: false } }}
+                label="First Name"
+                placeholder="Jane"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+            />
+            <TextField
+                required
+                slotProps={{ inputLabel: { required: false } }}
+                label="Last Name"
+                placeholder="Doe"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+            />
+            <TextField
+                required
+                slotProps={{ inputLabel: { required: false } }}
+                label="Email"
+                type="email"
+                placeholder="jane.doe@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+                required
+                slotProps={{ inputLabel: { required: false } }}
+                label="Personal Number"
+                placeholder="YYYYMMDD-XXXX"
+                value={personNumber}
+                onChange={(e) => setPersonNumber(e.target.value)}
+            />
+            <TextField
+                required
+                slotProps={{ inputLabel: { required: false } }}
+                label="Username"
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+            />
+            <TextField
+                required
+                slotProps={{ inputLabel: { required: false } }}
+                label="Password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+            />
 
-                <Button variant="contained" type="submit">
-                    Register
-                </Button>
-            </Box>
-
-            <Typography variant="subtitle1">
-                Already have an account? <Link href="/login">Log in</Link>.
-            </Typography>
-        </>
+            <Button variant="contained" type="submit">
+                Register
+            </Button>
+        </Box>
     );
 };

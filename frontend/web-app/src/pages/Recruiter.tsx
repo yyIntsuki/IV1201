@@ -5,6 +5,9 @@ import { ApplicationDetailsDialog } from "@/components/recruiter/ApplicationDeta
 import { dummyApplications } from "@/constants/dummy-applications";
 
 import Container from "@mui/material/Container";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 const Recruiter = () => {
@@ -22,17 +25,30 @@ const Recruiter = () => {
     };
 
     return (
-        <Container>
-            <Typography variant="h1">Recruiter Page</Typography>
-            <Typography variant="body1">Expand application details by clicking an entry.</Typography>
+        <Container
+            sx={{
+                height: "100vh",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+            }}>
+            <Card sx={{ display: "inline-block", p: 2 }}>
+                <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    <Stack>
+                        <Typography variant="h2">Recruiter</Typography>
+                        <Typography variant="body1">Expand application details by clicking an entry.</Typography>
+                    </Stack>
 
-            <ApplicationsTable applications={applications} onRowClick={handleRowClick} />
+                    <ApplicationsTable applications={applications} onRowClick={handleRowClick} />
 
-            <ApplicationDetailsDialog
-                application={selectedApplication}
-                onClose={() => setSelectedApplication(null)}
-                onStatusChange={handleStatusChange}
-            />
+                    <ApplicationDetailsDialog
+                        application={selectedApplication}
+                        onClose={() => setSelectedApplication(null)}
+                        onStatusChange={handleStatusChange}
+                    />
+                </CardContent>
+            </Card>
         </Container>
     );
 };

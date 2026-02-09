@@ -5,6 +5,8 @@ import { ExpertiseInput } from "@/components/applicant/ExpertiseInput";
 import { ReviewSummaryList } from "@/components/applicant/ReviewSummaryList";
 
 import Container from "@mui/material/Container";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -24,45 +26,57 @@ const Applicant = () => {
     };
 
     return (
-        <Container>
-            {step < 4 && <Typography variant="h1">Job Application</Typography>}
+        <Container sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Card sx={{ display: "inline-block", p: 2 }}>
+                <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    {step < 4 && <Typography variant="h1">Job Application</Typography>}
 
-            {step === 1 && (
-                <ExpertiseInput value={expertiseList} onChange={setExpertiseList} onValidityChange={setIsStepValid} />
-            )}
+                    {step === 1 && (
+                        <ExpertiseInput
+                            value={expertiseList}
+                            onChange={setExpertiseList}
+                            onValidityChange={setIsStepValid}
+                        />
+                    )}
 
-            {step === 2 && (
-                <AvailabilityInput
-                    value={availabilityList}
-                    onChange={setAvailabilityList}
-                    onValidityChange={setIsStepValid}
-                />
-            )}
+                    {step === 2 && (
+                        <AvailabilityInput
+                            value={availabilityList}
+                            onChange={setAvailabilityList}
+                            onValidityChange={setIsStepValid}
+                        />
+                    )}
 
-            {step === 3 && <ReviewSummaryList expertiseList={expertiseList} availabilityList={availabilityList} />}
+                    {step === 3 && (
+                        <ReviewSummaryList expertiseList={expertiseList} availabilityList={availabilityList} />
+                    )}
 
-            {step === 4 && (
-                <>
-                    <Typography variant="h2">Application Submitted!</Typography>
-                    <Typography variant="body1">Your job application has been registered successfully.</Typography>
-                </>
-            )}
+                    {step === 4 && (
+                        <>
+                            <Typography variant="h2">Application Submitted!</Typography>
+                            <Typography variant="body1">
+                                Your job application has been registered successfully.
+                            </Typography>
+                        </>
+                    )}
 
-            <ButtonGroup>
-                {step > 1 && step < 4 && <Button onClick={handleBack}>Back</Button>}
+                    <ButtonGroup sx={{ display: "flex", justifyContent: "flex-end" }}>
+                        {step > 1 && step < 4 && <Button onClick={handleBack}>Back</Button>}
 
-                {step < 3 && (
-                    <Button variant="contained" onClick={handleNext} disabled={!isStepValid}>
-                        Next
-                    </Button>
-                )}
+                        {step < 3 && (
+                            <Button variant="contained" onClick={handleNext} disabled={!isStepValid}>
+                                Next
+                            </Button>
+                        )}
 
-                {step === 3 && (
-                    <Button variant="contained" onClick={handleSubmit} disabled={!isStepValid}>
-                        Submit Application
-                    </Button>
-                )}
-            </ButtonGroup>
+                        {step === 3 && (
+                            <Button variant="contained" onClick={handleSubmit} disabled={!isStepValid}>
+                                Submit Application
+                            </Button>
+                        )}
+                    </ButtonGroup>
+                </CardContent>
+            </Card>
         </Container>
     );
 };

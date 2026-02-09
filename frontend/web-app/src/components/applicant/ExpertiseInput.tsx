@@ -35,9 +35,7 @@ export const ExpertiseInput: React.FC<ExpertiseInputProps> = ({ value, onChange,
     };
 
     useEffect(() => {
-        if (onValidityChange) {
-            onValidityChange(value.length > 0); // valid if at least one expertise
-        }
+        if (onValidityChange) onValidityChange(value.length > 0);
     }, [value, onValidityChange]);
 
     return (
@@ -49,7 +47,7 @@ export const ExpertiseInput: React.FC<ExpertiseInputProps> = ({ value, onChange,
             <Stack direction="row" spacing={2} divider={<Divider orientation="vertical" flexItem />}>
                 <TextField
                     select
-                    label="Expertise"
+                    label="Select expertise"
                     fullWidth
                     value={currentArea}
                     onChange={(e) => setCurrentArea(e.target.value)}>

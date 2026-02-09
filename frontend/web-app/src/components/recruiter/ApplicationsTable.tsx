@@ -16,7 +16,7 @@ interface ApplicationsTableProps {
 
 export const ApplicationsTable: React.FC<ApplicationsTableProps> = ({ applications, onRowClick }) => {
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{ width: 800 }}>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -32,8 +32,8 @@ export const ApplicationsTable: React.FC<ApplicationsTableProps> = ({ applicatio
                 <TableBody>
                     {applications.map((app) => (
                         <TableRow key={app.id} hover sx={{ cursor: "pointer" }} onClick={() => onRowClick(app)}>
-                            <TableCell>{app.fullName}</TableCell>
-                            <TableCell>
+                            <TableCell sx={{ width: "auto" }}>{app.fullName}</TableCell>
+                            <TableCell sx={{ width: 120 }}>
                                 <Chip
                                     label={app.status}
                                     size="small"
