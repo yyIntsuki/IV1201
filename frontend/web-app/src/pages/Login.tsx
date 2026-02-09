@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { useAuth } from "../hooks/use-auth";
-import { ErrorToast } from "../components/ErrorToast";
+import { useAuth } from "@/hooks/use-auth";
+import { ErrorToast } from "@/components/ErrorToast";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";

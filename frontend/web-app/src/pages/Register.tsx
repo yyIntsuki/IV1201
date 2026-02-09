@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { registerService } from "../services/register-service";
-import { ErrorToast } from "../components/ErrorToast";
+import { registerService } from "@/services/register-service";
+import { ErrorToast } from "@/components/ErrorToast";
 
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";

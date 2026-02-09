@@ -1,6 +1,15 @@
 import { useState, useEffect, type FC } from "react";
-import { Typography, TextField, MenuItem, Button, List, ListItem, ListItemText, Stack, Divider } from "@mui/material";
-import type { Expertise, ExpertiseArea } from "../../types/application";
+import type { Expertise, ExpertiseArea } from "@/types/application";
+
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 
 interface ExpertiseInputProps {
     value: Expertise[];

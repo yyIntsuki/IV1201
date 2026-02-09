@@ -1,8 +1,8 @@
-import { login as loginApi } from "../api/login-api";
-import { parseRole } from "../utils/role-parser";
+import { login as loginApi } from "@/api/login-api";
+import { parseRole } from "@/utils/role-parser";
 
-import { STORAGE_KEYS } from "../constants/storage-keys";
-import type { Role } from "../types/role";
+import { STORAGE_KEYS } from "@/constants/storage-keys";
+import type { Role } from "@/types/role";
 
 /**
  * Authentication service to handle login, logout, and session management.

@@ -1,12 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Applicant from "./pages/Applicant";
-import Recruiter from "./pages/Recruiter";
-import ProtectedRoute from "./routes/ProtectedRoute";
-import PublicRoute from "./routes/PublicRoute";
-import LogoutButton from "./components/LogoutButton";
+
+import Home from "@/pages/Home";
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
+import Applicant from "@/pages/Applicant";
+import Recruiter from "@/pages/Recruiter";
+
+import ProtectedRoute from "@/routes/ProtectedRoute";
+import PublicRoute from "@/routes/PublicRoute";
+
+import LogoutButton from "@/components/LogoutButton";
 
 /**
  * The root component that sets up routing for the application.

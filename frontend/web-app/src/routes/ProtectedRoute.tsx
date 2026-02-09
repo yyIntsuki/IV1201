@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router";
-import { useAuth } from "../hooks/use-auth";
-import type { Role } from "../types/role";
+import { useAuth } from "@/hooks/use-auth";
+import type { Role } from "@/types/role";
 
 /**
  * ProtectedRoute component to guard routes that require authentication.

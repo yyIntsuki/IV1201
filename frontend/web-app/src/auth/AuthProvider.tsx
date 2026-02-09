@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { authService } from "../services/auth-service";
-import type { Role } from "../types/role";
+import type { Role } from "@/types/role";
 
 /**
  * AuthProvider component that provides authentication context to its children.

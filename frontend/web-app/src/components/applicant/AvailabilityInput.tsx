@@ -1,6 +1,14 @@
 import { useState, useEffect, type FC } from "react";
-import { Typography, TextField, Button, List, ListItem, ListItemText, Stack, Divider } from "@mui/material";
-import type { Availability } from "../../types/application";
+
+import type { Availability } from "@/types/application";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 
 interface AvailabilityInputProps {
     value: Availability[];

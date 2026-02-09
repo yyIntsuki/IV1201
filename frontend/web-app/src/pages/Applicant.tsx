@@ -1,8 +1,8 @@
 import { useState } from "react";
-import type { Expertise, Availability } from "../types/application";
-import { EXPERTISE_AREAS } from "../constants/expertise-areas";
-import { AvailabilityInput } from "../components/applicant/AvailabilityInput";
-import { ExpertiseInput } from "../components/applicant/ExpertiseInput";
+import type { Expertise, Availability } from "@/types/application";
+import { EXPERTISE_AREAS } from "@/constants/expertise-areas";
+import { AvailabilityInput } from "@/components/applicant/AvailabilityInput";
+import { ExpertiseInput } from "@/components/applicant/ExpertiseInput";
 
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";

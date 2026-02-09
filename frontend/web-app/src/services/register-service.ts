@@ -1,4 +1,4 @@
-import type { Account } from "../types/account";
+import type { Account } from "@/types/account";
 
 const STORAGE_KEY = "local_accounts";
 

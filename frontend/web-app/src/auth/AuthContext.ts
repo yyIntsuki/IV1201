@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { Session } from "../types/session";
+import type { Session } from "@/types/session";
 
 /**
  * Authentication context to provide session state throughout the app.

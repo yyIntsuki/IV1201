@@ -1,10 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import Router from "./Router";
-import AuthProvider from "./auth/AuthProvider";
 
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import Router from "./Router";
+import AuthProvider from "@/auth/AuthProvider";
+
 import { theme } from "./theme";
+import { ThemeProvider, CssBaseline } from "@mui/material";
 
 /**
  * The main entry point of the React application.

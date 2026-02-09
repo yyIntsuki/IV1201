@@ -1,4 +1,4 @@
-import { EXPERTISE_AREAS } from "../constants/expertise-areas";
+import { EXPERTISE_AREAS } from "@/constants/expertise-areas";
 
 /**
  * Types related to job applications.
