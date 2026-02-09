@@ -1,5 +1,6 @@
 import { useState, useEffect, type FC } from "react";
-import type { Expertise, ExpertiseArea } from "@/types/application";
+import type { Expertise } from "@/types/application";
+import { EXPERTISE_AREAS } from "@/constants/expertise-areas";
 
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
@@ -14,11 +15,10 @@ import ListItemText from "@mui/material/ListItemText";
 interface ExpertiseInputProps {
     value: Expertise[];
     onChange: (value: Expertise[]) => void;
-    options: readonly ExpertiseArea[];
     onValidityChange?: (isValid: boolean) => void;
 }
 
-export const ExpertiseInput: FC<ExpertiseInputProps> = ({ value, onChange, options, onValidityChange }) => {
+export const ExpertiseInput: FC<ExpertiseInputProps> = ({ value, onChange, onValidityChange }) => {
     const [currentArea, setCurrentArea] = useState("");
     const [currentYears, setCurrentYears] = useState(1);
 
@@ -53,13 +53,11 @@ export const ExpertiseInput: FC<ExpertiseInputProps> = ({ value, onChange, optio
                     fullWidth
                     value={currentArea}
                     onChange={(e) => setCurrentArea(e.target.value)}>
-                    {options
-                        .filter((area) => !value.some((exp) => exp.area === area))
-                        .map((area) => (
-                            <MenuItem key={area} value={area}>
-                                {area}
-                            </MenuItem>
-                        ))}
+                    {EXPERTISE_AREAS.filter((area) => !value.some((exp) => exp.area === area)).map((area) => (
+                        <MenuItem key={area} value={area}>
+                            {area}
+                        </MenuItem>
+                    ))}
                 </TextField>
 
                 <TextField
