@@ -1,4 +1,4 @@
-import { useState, useEffect, type FC } from "react";
+import { useState, useEffect } from "react";
 import type { Expertise } from "@/types/application";
 import { EXPERTISE_AREAS } from "@/constants/expertise-areas";
 
@@ -18,7 +18,7 @@ interface ExpertiseInputProps {
     onValidityChange?: (isValid: boolean) => void;
 }
 
-export const ExpertiseInput: FC<ExpertiseInputProps> = ({ value, onChange, onValidityChange }) => {
+export const ExpertiseInput: React.FC<ExpertiseInputProps> = ({ value, onChange, onValidityChange }) => {
     const [currentArea, setCurrentArea] = useState("");
     const [currentYears, setCurrentYears] = useState(1);
 
