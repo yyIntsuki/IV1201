@@ -3,8 +3,7 @@ User repository - Database Layer.
 Handles all database operations for users.
 """
 from typing import List, Optional
-from sqlalchemy import select, update, delete
-from app.database.models import User
+from app.database.models import Person
 from app.database.connection import database
 
 
@@ -14,7 +13,7 @@ class UserRepository:
     This implements the data access layer.
     """
     
-    async def create(self, name: str, surname: str, pnr: str, email: str, password: str, role_id: int, username: str) -> User:
+    async def create(self, name: str, surname: str, pnr: str, email: str, password: str, role_id: int, username: str) -> Person:
         """
         Insert a new user into the database.
         
@@ -101,6 +100,24 @@ class UserRepository:
         result = await database.fetch_one(query=query, values={"username": username})
         return result
 
+    async def get_by_pnr(self, pnr: str) -> Optional[dict]:
+        """
+        Retrieve a user by their personal number (pnr).
+        
+        Args:
+            pnr: The user's personal number
+            
+        Returns:
+            User data or None if not found
+        """
+        query = """
+            SELECT id, name, surname, pnr, email, role_id, username
+            FROM person
+            WHERE pnr = :pnr
+        """
+        result = await database.fetch_one(query=query, values={"pnr": pnr})
+        return result
+
     async def get_all(self) -> List[dict]:
         """
         Retrieve all users from the database.
@@ -141,7 +158,7 @@ class UserRepository:
         
         query = f"""
             UPDATE person
-            SET {', '.join(update_fields)}, updated_at = NOW()
+            SET {', '.join(update_fields)}
             WHERE id = :user_id
             RETURNING id, name, surname, pnr, email, role_id, username
         """

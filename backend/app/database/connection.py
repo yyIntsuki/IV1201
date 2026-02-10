@@ -25,7 +25,7 @@ engine = sqlalchemy.create_engine(
     DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://")
 )
 
-# Create sessionmaker for sync operations if needed
+# Create sessionmaker for sync operations
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Create base class for models

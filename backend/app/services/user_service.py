@@ -58,6 +58,30 @@ class UserService:
         """
         # Name should contain only letters, spaces, hyphens
         return bool(re.match(r'^[a-zA-Z\s\-]+$', name)) and len(name.strip()) > 0
+
+    def _validate_username(self, username: str) -> bool:
+        """
+        Validate username format (business rule).
+        
+        Args:
+            username: Username to validate
+            
+        Returns:
+            True if valid, False otherwise
+        """
+        return bool(re.match(r'^[a-zA-Z0-9_\-]+$', username)) and len(username.strip()) > 0
+
+    def _validate_pnr(self, pnr: str) -> bool:
+        """
+        Validate personal number format (business rule).
+        
+        Args:
+            pnr: Personal number to validate
+            
+        Returns:
+            True if valid, False otherwise
+        """
+        return bool(re.match(r'^[a-zA-Z0-9\-]+$', pnr)) and len(pnr.strip()) > 0
     
     async def create_user(self, user_data: UserCreate) -> UserResponse:
         """
@@ -83,26 +107,43 @@ class UserService:
             raise ValueError("Invalid email format")
         
         # Business logic: Validate names
-        if not self._validate_name(user_data.first_name):
-            raise ValueError("Invalid first name format")
+        if not self._validate_name(user_data.name):
+            raise ValueError("Invalid name format")
         
-        if not self._validate_name(user_data.last_name):
-            raise ValueError("Invalid last name format")
+        if not self._validate_name(user_data.surname):
+            raise ValueError("Invalid surname format")
+
+        if not self._validate_pnr(user_data.pnr):
+            raise ValueError("Invalid personal number format")
+
+        if not self._validate_username(user_data.username):
+            raise ValueError("Invalid username format")
         
         # Business logic: Check if user already exists
         existing_user = await self.repository.get_by_email(user_data.email)
         if existing_user:
             raise ValueError("User with this email already exists")
+
+        existing_username = await self.repository.get_by_username(user_data.username)
+        if existing_username:
+            raise ValueError("User with this username already exists")
+
+        existing_pnr = await self.repository.get_by_pnr(user_data.pnr)
+        if existing_pnr:
+            raise ValueError("User with this personal number already exists")
         
         # Business logic: Hash password
         password_hash = self._hash_password(user_data.password)
         
         # Call database layer to create user
         user = await self.repository.create(
+            name=user_data.name,
+            surname=user_data.surname,
+            pnr=user_data.pnr,
             email=user_data.email,
-            first_name=user_data.first_name,
-            last_name=user_data.last_name,
-            password_hash=password_hash
+            password=password_hash,
+            role_id=user_data.role_id,
+            username=user_data.username
         )
         
         return UserResponse(**dict(user))
@@ -150,28 +191,50 @@ class UserService:
         if user_data.email and not self._validate_email(user_data.email):
             raise ValueError("Invalid email format")
         
-        if user_data.first_name and not self._validate_name(user_data.first_name):
-            raise ValueError("Invalid first name format")
+        if user_data.name and not self._validate_name(user_data.name):
+            raise ValueError("Invalid name format")
         
-        if user_data.last_name and not self._validate_name(user_data.last_name):
-            raise ValueError("Invalid last name format")
+        if user_data.surname and not self._validate_name(user_data.surname):
+            raise ValueError("Invalid surname format")
+
+        if user_data.pnr and not self._validate_pnr(user_data.pnr):
+            raise ValueError("Invalid personal number format")
+
+        if user_data.username and not self._validate_username(user_data.username):
+            raise ValueError("Invalid username format")
         
         # Business logic: Check for email conflicts
         if user_data.email:
             existing_user = await self.repository.get_by_email(user_data.email)
             if existing_user and existing_user['id'] != user_id:
                 raise ValueError("Email already in use by another user")
+
+        if user_data.username:
+            existing_username = await self.repository.get_by_username(user_data.username)
+            if existing_username and existing_username['id'] != user_id:
+                raise ValueError("Username already in use by another user")
+
+        if user_data.pnr:
+            existing_pnr = await self.repository.get_by_pnr(user_data.pnr)
+            if existing_pnr and existing_pnr['id'] != user_id:
+                raise ValueError("Personal number already in use by another user")
         
         # Prepare update data
         update_data = {}
+        if user_data.name:
+            update_data['name'] = user_data.name
+        if user_data.surname:
+            update_data['surname'] = user_data.surname
+        if user_data.pnr:
+            update_data['pnr'] = user_data.pnr
         if user_data.email:
             update_data['email'] = user_data.email
-        if user_data.first_name:
-            update_data['first_name'] = user_data.first_name
-        if user_data.last_name:
-            update_data['last_name'] = user_data.last_name
+        if user_data.role_id is not None:
+            update_data['role_id'] = user_data.role_id
+        if user_data.username:
+            update_data['username'] = user_data.username
         if user_data.password:
-            update_data['password_hash'] = self._hash_password(user_data.password)
+            update_data['password'] = self._hash_password(user_data.password)
         
         # Call database layer to update
         user = await self.repository.update(user_id, **update_data)
@@ -193,7 +256,7 @@ class UserService:
         # For example: check if user has related records, soft delete, etc.
         return await self.repository.delete(user_id)
 
-    async def authenticate_user(self, username: str, password: str) -> int:
+    async def authenticate_user(self, username: str, password: str) -> Optional[int]:
         """
         Authenticate a user by username and password.
         
@@ -201,7 +264,7 @@ class UserService:
             username: User's username
             password: Plain text password
         Returns:
-            Authenticated user or None if credentials are invalid
+            Role ID if authenticated, or None if credentials are invalid
         """
         user = await self.repository.get_by_username(username)
         if not user:
