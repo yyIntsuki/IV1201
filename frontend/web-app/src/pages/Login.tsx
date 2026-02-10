@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useAuth } from "@/hooks/use-auth";
-import { LoginForm } from "@/components/login/LoginForm";
-import { ErrorToast } from "@/components/ErrorToast";
+import useAuth from "@/hooks/use-auth";
+import LoginForm from "@/components/login/LoginForm";
+import ErrorToast from "@/components/ErrorToast";
 
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";

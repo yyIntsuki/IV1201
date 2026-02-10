@@ -14,7 +14,7 @@ interface ApplicationsTableProps {
     onRowClick: (app: JobApplication) => void;
 }
 
-export const ApplicationsTable: React.FC<ApplicationsTableProps> = ({ applications, onRowClick }) => {
+const ApplicationsTable: React.FC<ApplicationsTableProps> = ({ applications, onRowClick }) => {
     return (
         <TableContainer component={Paper} sx={{ width: 800 }}>
             <Table>
@@ -52,3 +52,5 @@ export const ApplicationsTable: React.FC<ApplicationsTableProps> = ({ applicatio
         </TableContainer>
     );
 };
+
+export default ApplicationsTable;

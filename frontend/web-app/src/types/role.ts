@@ -1,4 +1,4 @@
-import { ROLES } from "@/constants/roles"
+import ROLES from "@/constants/roles";
 
 /**
  * Role type representing user roles in the system.

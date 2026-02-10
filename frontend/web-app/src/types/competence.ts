@@ -1,4 +1,4 @@
-import { COMPETENCE } from "@/constants/competence"
+import COMPETENCE from "@/constants/competence"
 
 /**
  * Competence type representing user competence in the system.

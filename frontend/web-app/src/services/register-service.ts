@@ -2,7 +2,7 @@ import type { Account } from "@/types/account";
 
 const STORAGE_KEY = "local_accounts";
 
-export const registerService = {
+const registerService = {
     /**
      * Registers a new account in localStorage
      */
@@ -17,3 +17,5 @@ export const registerService = {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
     },
 };
+
+export default registerService;

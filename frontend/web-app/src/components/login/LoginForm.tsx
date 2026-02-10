@@ -10,7 +10,7 @@ interface LoginFormProps {
     handleSubmit: (e: React.FormEvent) => void;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({ username, password, setUsername, setPassword, handleSubmit }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ username, password, setUsername, setPassword, handleSubmit }) => {
     return (
         <Box
             component="form"
@@ -43,3 +43,5 @@ export const LoginForm: React.FC<LoginFormProps> = ({ username, password, setUse
         </Box>
     );
 };
+
+export default LoginForm;

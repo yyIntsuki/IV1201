@@ -10,7 +10,7 @@ interface ReviewSummaryListProps {
     availabilityList: Availability[];
 }
 
-export const ReviewSummaryList: React.FC<ReviewSummaryListProps> = ({ competenceList, availabilityList }) => {
+const ReviewSummaryList: React.FC<ReviewSummaryListProps> = ({ competenceList, availabilityList }) => {
     return (
         <>
             <Typography variant="h5" mb={2}>
@@ -37,3 +37,5 @@ export const ReviewSummaryList: React.FC<ReviewSummaryListProps> = ({ competence
         </>
     );
 };
+
+export default ReviewSummaryList;

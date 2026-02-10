@@ -1,4 +1,5 @@
-import { Snackbar, Alert } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 interface Props {
     open: boolean;
@@ -6,7 +7,7 @@ interface Props {
     onClose: () => void;
 }
 
-export const ErrorToast = ({ open, message, onClose }: Props) => {
+const ErrorToast = ({ open, message, onClose }: Props) => {
     return (
         <Snackbar
             open={open}
@@ -19,3 +20,5 @@ export const ErrorToast = ({ open, message, onClose }: Props) => {
         </Snackbar>
     );
 };
+
+export default ErrorToast;

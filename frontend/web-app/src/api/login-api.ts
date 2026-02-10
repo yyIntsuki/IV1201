@@ -1,4 +1,4 @@
-import { apiRequest } from "./client";
+import apiRequest from "./client";
 
 /**
  * Fetches the login API endpoint.
@@ -6,7 +6,7 @@ import { apiRequest } from "./client";
  * @param password
  * @returns the role ID of the logged-in user (1 or 2)
  */
-export const login = async (
+const loginApi = async (
     username: string,
     password: string,
 ): Promise<number> => {
@@ -18,3 +18,5 @@ export const login = async (
         }
     );
 };
+
+export default loginApi;

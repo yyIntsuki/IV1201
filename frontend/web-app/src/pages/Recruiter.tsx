@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { JobApplication, ApplicationStatus } from "@/types/application";
-import { ApplicationsTable } from "@/components/recruiter/ApplicationsTable";
-import { ApplicationDetailsDialog } from "@/components/recruiter/ApplicationDetailsDialog";
-import { dummyApplications } from "@/constants/dummy-applications";
+import ApplicationsTable from "@/components/recruiter/ApplicationsTable";
+import ApplicationDetailsDialog from "@/components/recruiter/ApplicationDetailsDialog";
+import dummyApplications from "@/constants/dummy-applications";
 
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";

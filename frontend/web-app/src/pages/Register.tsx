@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { registerService } from "@/services/register-service";
-import { RegisterForm } from "@/components/register/RegisterForm";
-import { ErrorToast } from "@/components/ErrorToast";
+import registerService from "@/services/register-service";
+import RegisterForm from "@/components/register/RegisterForm";
+import ErrorToast from "@/components/ErrorToast";
 
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";

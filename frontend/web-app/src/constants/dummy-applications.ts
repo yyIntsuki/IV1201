@@ -1,6 +1,6 @@
 import type { JobApplication } from "@/types/application";
 
-export const dummyApplications: JobApplication[] = [
+const dummyApplications: JobApplication[] = [
     {
         id: "1",
         fullName: "Alice Andersson",
@@ -41,3 +41,5 @@ export const dummyApplications: JobApplication[] = [
         ],
     },
 ];
+
+export default dummyApplications;

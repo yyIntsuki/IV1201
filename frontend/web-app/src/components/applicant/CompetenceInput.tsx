@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import COMPETENCE from "@/constants/competence";
 import type { Competence } from "@/types/application";
-import { COMPETENCE } from "@/constants/competence";
 
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
@@ -18,7 +18,7 @@ interface CompetenceInputProps {
     onValidityChange?: (isValid: boolean) => void;
 }
 
-export const CompetenceInput: React.FC<CompetenceInputProps> = ({ value, onChange, onValidityChange }) => {
+const CompetenceInput: React.FC<CompetenceInputProps> = ({ value, onChange, onValidityChange }) => {
     const [currentCompetence, setCurrentCompetence] = useState("");
     const [currentYearsOfExperience, setCurrentYearsOfExperience] = useState(1);
 
@@ -89,3 +89,5 @@ export const CompetenceInput: React.FC<CompetenceInputProps> = ({ value, onChang
         </>
     );
 };
+
+export default CompetenceInput;

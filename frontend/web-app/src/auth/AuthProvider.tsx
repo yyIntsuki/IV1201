@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { AuthContext } from "./AuthContext";
-import { authService } from "../services/auth-service";
+import AuthContext from "./AuthContext";
+import authService from "../services/auth-service";
 import type { Role } from "@/types/role";
 
 /**

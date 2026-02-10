@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { Competence, Availability } from "@/types/application";
-import { AvailabilityInput } from "@/components/applicant/AvailabilityInput";
-import { CompetenceInput } from "@/components/applicant/CompetenceInput";
-import { ReviewSummaryList } from "@/components/applicant/ReviewSummaryList";
+import AvailabilityInput from "@/components/applicant/AvailabilityInput";
+import CompetenceInput from "@/components/applicant/CompetenceInput";
+import ReviewSummaryList from "@/components/applicant/ReviewSummaryList";
 
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";

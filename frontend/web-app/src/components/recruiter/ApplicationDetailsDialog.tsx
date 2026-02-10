@@ -19,7 +19,7 @@ interface ApplicationDetailsDialogProps {
     onStatusChange: (newStatus: ApplicationStatus) => void;
 }
 
-export const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = ({
+const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = ({
     application,
     onClose,
     onStatusChange,
@@ -84,3 +84,5 @@ export const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> =
         </Dialog>
     );
 };
+
+export default ApplicationDetailsDialog;

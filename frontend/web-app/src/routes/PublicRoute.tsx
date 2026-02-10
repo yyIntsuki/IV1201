@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router";
-import { useAuth } from "@/hooks/use-auth";
+import useAuth from "@/hooks/use-auth";
 
 const PublicRoute = () => {
     const { isLoggedIn, role } = useAuth();

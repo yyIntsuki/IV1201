@@ -2,9 +2,6 @@ import axios, { type AxiosRequestConfig } from "axios";
 
 const API_BASE_URL = "http://127.0.0.1:8000";
 
-/**
- * Base API client using axios.
- */
 const apiClient = axios.create({
     baseURL: API_BASE_URL,
     headers: {
@@ -16,7 +13,7 @@ const apiClient = axios.create({
  * Generic API request helper.
  * Automatically returns parsed JSON.
  */
-export const apiRequest = async <T>(
+const apiRequest = async <T>(
     path: string,
     options?: AxiosRequestConfig,
 ): Promise<T> => {
@@ -34,3 +31,5 @@ export const apiRequest = async <T>(
         throw new Error("Unexpected error");
     }
 };
+
+export default apiRequest;

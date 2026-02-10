@@ -1,14 +1,13 @@
-import { login as loginApi } from "@/api/login-api";
-import { parseRole } from "@/utils/role-parser";
-
-import { STORAGE_KEYS } from "@/constants/storage-keys";
+import loginApi from "@/api/login-api";
+import STORAGE_KEYS from "@/constants/storage-keys";
 import type { Role } from "@/types/role";
+import parseRole from "@/utils/role-parser";
 
 /**
  * Authentication service to handle login, logout, and session management.
  * This is the actual implementation of the authService used in the AuthProvider.
  */
-export const authService = {
+const authService = {
 
     /**
      * Get current session from localStorage
@@ -47,3 +46,5 @@ export const authService = {
         localStorage.removeItem(STORAGE_KEYS.ROLE);
     }
 };
+
+export default authService;

@@ -16,7 +16,7 @@ interface AvailabilityInputProps {
     onValidityChange?: (isValid: boolean) => void;
 }
 
-export const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange, onValidityChange }) => {
+const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange, onValidityChange }) => {
     const [currentFromDate, setCurrentFromDate] = useState("");
     const [currentToDate, setCurrentToDate] = useState("");
 
@@ -87,3 +87,5 @@ export const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange,
         </>
     );
 };
+
+export default AvailabilityInput;

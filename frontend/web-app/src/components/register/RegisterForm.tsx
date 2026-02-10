@@ -18,7 +18,7 @@ interface RegisterFormProps {
     handleSubmit: (e: React.FormEvent) => void;
 }
 
-export const RegisterForm: React.FC<RegisterFormProps> = ({
+const RegisterForm: React.FC<RegisterFormProps> = ({
     firstName,
     lastName,
     email,
@@ -99,3 +99,5 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
         </Box>
     );
 };
+
+export default RegisterForm;

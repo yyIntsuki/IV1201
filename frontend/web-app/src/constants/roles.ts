@@ -1,7 +1,9 @@
 /**
  * Currently available role tyles.
  */
-export const ROLES = [
+const ROLES = [
     "recruiter",
     "applicant"
 ];
+
+export default ROLES;
