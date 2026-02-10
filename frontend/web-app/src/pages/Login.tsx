@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import useAuth from "@/hooks/use-auth";
 import ErrorToast from "@/components/ErrorToast";
 import LoginForm from "@/components/login/LoginForm";
-import { validateUsername, validatePassword, isLoginFormValid } from "@/validation/login";
+import { validateUsername, validatePassword } from "@/utils/validators";
 
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
@@ -13,56 +13,75 @@ import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 
 const Login = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-
-    const [usernameTouched, setUsernameTouched] = useState(false);
-    const [passwordTouched, setPasswordTouched] = useState(false);
-
-    const isUsernameValid = validateUsername(username);
-    const isPasswordValid = validatePassword(password);
-    const isFormValid = isLoginFormValid(username, password);
+    const [formData, setFormData] = useState({ username: "", password: "" });
+    const [touched, setTouched] = useState({ username: false, password: false });
+    const [errors, setErrors] = useState<Partial<Record<"username" | "password", string>>>({});
+    const [errorToastMessage, setErrorToastMessage] = useState("");
 
     const { role, login } = useAuth();
     const navigate = useNavigate();
 
+    const handleChange = (field: "username" | "password", value: string) => {
+        setFormData((prev) => ({ ...prev, [field]: value }));
+        if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }));
+    };
+
+    const handleBlur = (field: "username" | "password") => {
+        setTouched((prev) => ({ ...prev, [field]: true }));
+        const error = field === "username" ? validateUsername(formData.username) : validatePassword(formData.password);
+        if (error) setErrors((prev) => ({ ...prev, [field]: error }));
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
+        setTouched({ username: true, password: true });
+        setErrorToastMessage("");
+
+        const usernameError = validateUsername(formData.username);
+        const passwordError = validatePassword(formData.password);
+
+        const newErrors: Partial<Record<"username" | "password", string>> = {};
+        if (usernameError) newErrors.username = usernameError;
+        if (passwordError) newErrors.password = passwordError;
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length > 0) return;
 
         try {
-            await login(username, password);
+            await login(formData.username, formData.password);
             navigate(role === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
         } catch {
-            setError("Invalid username or password");
+            setErrorToastMessage("Invalid username or password");
         }
     };
 
-    const errorToast = error && <ErrorToast open={Boolean(error)} message={error} onClose={() => setError("")} />;
+    const isFormValid = !validateUsername(formData.username) && !validatePassword(formData.password);
+
+    const errorToast = errorToastMessage && (
+        <ErrorToast
+            open={Boolean(errorToastMessage)}
+            message={errorToastMessage}
+            onClose={() => setErrorToastMessage("")}
+        />
+    );
 
     return (
         <Container sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
             {errorToast}
-
             <Card sx={{ width: 400, p: 2 }}>
                 <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     <Typography variant="h1">Login</Typography>
                     <Typography variant="subtitle1">Please log in to access the application</Typography>
 
                     <LoginForm
-                        username={username}
-                        setUsername={setUsername}
-                        usernameTouched={usernameTouched}
-                        setUsernameTouched={setUsernameTouched}
-                        isUsernameValid={isUsernameValid}
-                        password={password}
-                        setPassword={setPassword}
-                        passwordTouched={passwordTouched}
-                        setPasswordTouched={setPasswordTouched}
-                        isPasswordValid={isPasswordValid}
-                        isFormValid={isFormValid}
+                        data={formData}
+                        touched={touched}
+                        errors={errors}
+                        handleChange={handleChange}
+                        handleBlur={handleBlur}
                         handleSubmit={handleSubmit}
+                        isFormValid={isFormValid}
                     />
 
                     <Typography variant="subtitle1">

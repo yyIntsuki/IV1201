@@ -3,38 +3,31 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
 interface LoginFormProps {
-    username: string;
-    setUsername: (val: string) => void;
-
-    usernameTouched: boolean;
-    setUsernameTouched: (val: boolean) => void;
-    isUsernameValid: boolean;
-
-    password: string;
-    setPassword: (val: string) => void;
-
-    passwordTouched: boolean;
-    setPasswordTouched: (val: boolean) => void;
-    isPasswordValid: boolean;
-
-    isFormValid: boolean;
+    data: { username: string; password: string };
+    touched: { username: boolean; password: boolean };
+    errors: Partial<Record<"username" | "password", string>>;
+    handleChange: (field: "username" | "password", value: string) => void;
+    handleBlur: (field: "username" | "password") => void;
     handleSubmit: (e: React.FormEvent) => void;
+    isFormValid: boolean;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({
-    username,
-    setUsername,
-    usernameTouched,
-    setUsernameTouched,
-    isUsernameValid,
-    password,
-    setPassword,
-    passwordTouched,
-    setPasswordTouched,
-    isPasswordValid,
-    isFormValid,
+    data,
+    touched,
+    errors,
+    handleChange,
+    handleBlur,
     handleSubmit,
+    isFormValid,
 }) => {
+    const fields: ("username" | "password")[] = ["username", "password"];
+
+    const placeholders: Record<"username" | "password", string> = {
+        username: "Enter your username",
+        password: "••••••••",
+    };
+
     return (
         <Box
             component="form"
@@ -42,27 +35,21 @@ const LoginForm: React.FC<LoginFormProps> = ({
             autoComplete="off"
             noValidate
             onSubmit={handleSubmit}>
-            <TextField
-                required
-                slotProps={{ inputLabel: { required: false } }}
-                label="Username"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                onBlur={() => setUsernameTouched(true)}
-                helperText={usernameTouched && !isUsernameValid ? "Username is required" : " "}
-            />
-            <TextField
-                required
-                slotProps={{ inputLabel: { required: false } }}
-                label="Password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onBlur={() => setPasswordTouched(true)}
-                helperText={passwordTouched && !isPasswordValid ? "Password is required" : " "}
-            />
+            {fields.map((field) => (
+                <TextField
+                    key={field}
+                    required
+                    slotProps={{ inputLabel: { required: false } }}
+                    type={field === "password" ? "password" : "text"}
+                    label={field.charAt(0).toUpperCase() + field.slice(1)}
+                    placeholder={placeholders[field]}
+                    value={data[field]}
+                    onChange={(e) => handleChange(field, e.target.value)}
+                    onBlur={() => handleBlur(field)}
+                    error={touched[field] && Boolean(errors[field])}
+                    helperText={touched[field] && errors[field] ? errors[field] : " "}
+                />
+            ))}
             <Button variant="contained" type="submit" disabled={!isFormValid}>
                 Log in
             </Button>
