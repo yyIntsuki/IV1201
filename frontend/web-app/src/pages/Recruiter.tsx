@@ -14,6 +14,11 @@ const Recruiter = () => {
     const [applications, setApplications] = useState<JobApplication[]>(dummyApplications);
     const [selectedApplication, setSelectedApplication] = useState<JobApplication | null>(null);
 
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    const paginatedApps = applications.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
     const handleRowClick = (app: JobApplication) => setSelectedApplication(app);
 
     const handleStatusChange = (status: ApplicationStatus) => {
@@ -40,7 +45,18 @@ const Recruiter = () => {
                         <Typography variant="body1">Expand application details by clicking an entry.</Typography>
                     </Stack>
 
-                    <ApplicationsTable applications={applications} onRowClick={handleRowClick} />
+                    <ApplicationsTable
+                        applications={paginatedApps}
+                        totalCount={applications.length}
+                        page={page}
+                        rowsPerPage={rowsPerPage}
+                        onPageChange={setPage}
+                        onRowsPerPageChange={(rows) => {
+                            setRowsPerPage(rows);
+                            setPage(0);
+                        }}
+                        onRowClick={handleRowClick}
+                    />
 
                     <ApplicationDetailsDialog
                         application={selectedApplication}
