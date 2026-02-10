@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import useAuth from "@/hooks/use-auth";
-import LoginForm from "@/components/login/LoginForm";
 import ErrorToast from "@/components/ErrorToast";
+import LoginForm from "@/components/login/LoginForm";
+import { validateUsername, validatePassword, isLoginFormValid } from "@/validation/login";
 
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
@@ -15,6 +16,13 @@ const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+
+    const [usernameTouched, setUsernameTouched] = useState(false);
+    const [passwordTouched, setPasswordTouched] = useState(false);
+
+    const isUsernameValid = validateUsername(username);
+    const isPasswordValid = validatePassword(password);
+    const isFormValid = isLoginFormValid(username, password);
 
     const { role, login } = useAuth();
     const navigate = useNavigate();
@@ -44,9 +52,16 @@ const Login = () => {
 
                     <LoginForm
                         username={username}
-                        password={password}
                         setUsername={setUsername}
+                        usernameTouched={usernameTouched}
+                        setUsernameTouched={setUsernameTouched}
+                        isUsernameValid={isUsernameValid}
+                        password={password}
                         setPassword={setPassword}
+                        passwordTouched={passwordTouched}
+                        setPasswordTouched={setPasswordTouched}
+                        isPasswordValid={isPasswordValid}
+                        isFormValid={isFormValid}
                         handleSubmit={handleSubmit}
                     />
 
