@@ -6,3 +6,5 @@ export interface Account {
     username: string;           // username
     password: string;           // password
 }
+
+export type LoginData = Pick<Account, "username" | "password">;

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import useAuth from "@/hooks/use-auth";
 import ErrorToast from "@/components/ErrorToast";
 import LoginForm from "@/components/login/LoginForm";
+import type { LoginData } from "@/types/account";
 import { validateUsername, validatePassword } from "@/utils/validators";
 
 import Container from "@mui/material/Container";
@@ -13,16 +14,16 @@ import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 
 const Login = () => {
-    const [formData, setFormData] = useState({ username: "", password: "" });
-    const [touched, setTouched] = useState({ username: false, password: false });
-    const [fieldErrors, setFieldErrors] = useState<Partial<Record<"username" | "password", string>>>({});
+    const [formData, setFormData] = useState<LoginData>({ username: "", password: "" });
+    const [touched, setTouched] = useState<Record<keyof LoginData, boolean>>({ username: false, password: false });
+    const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof LoginData, string>>>({});
     const [loginError, setLoginError] = useState("");
 
     const { role, login } = useAuth();
     const navigate = useNavigate();
 
     /* Maps each field to its validator function */
-    const fieldValidators: Record<keyof typeof formData, (val: string) => string | null> = {
+    const fieldValidators: Record<keyof LoginData, (val: string) => string | null> = {
         username: validateUsername,
         password: validatePassword,
     };

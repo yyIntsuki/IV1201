@@ -1,13 +1,15 @@
+import type { LoginData } from "@/types/account";
+
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
 interface LoginFormProps {
-    data: { username: string; password: string };
-    touched: { username: boolean; password: boolean };
-    fieldErrors: Partial<Record<"username" | "password", string>>;
-    handleChange: (field: "username" | "password", value: string) => void;
-    handleBlur: (field: "username" | "password") => void;
+    data: LoginData;
+    touched: Record<keyof LoginData, boolean>;
+    fieldErrors: Partial<Record<keyof LoginData, string>>;
+    handleChange: (field: keyof LoginData, value: string) => void;
+    handleBlur: (field: keyof LoginData) => void;
     handleSubmit: (e: React.FormEvent) => void;
     isFormValid: boolean;
 }
@@ -21,12 +23,11 @@ const LoginForm: React.FC<LoginFormProps> = ({
     handleSubmit,
     isFormValid,
 }) => {
-    const fields: ("username" | "password")[] = ["username", "password"];
+    const fields: (keyof LoginData)[] = ["username", "password"];
 
-    const placeholders: Record<"username" | "password", string> = {
-        username: "Enter your username",
-        password: "••••••••",
-    };
+    const labels: Record<keyof LoginData, string> = { username: "Username", password: "Password" };
+
+    const placeholders: Record<keyof LoginData, string> = { username: "Enter your username", password: "••••••••" };
 
     return (
         <Box
@@ -41,7 +42,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                     required
                     slotProps={{ inputLabel: { required: false } }}
                     type={field === "password" ? "password" : "text"}
-                    label={field.charAt(0).toUpperCase() + field.slice(1)}
+                    label={labels[field]}
                     placeholder={placeholders[field]}
                     value={data[field]}
                     onChange={(e) => handleChange(field, e.target.value)}

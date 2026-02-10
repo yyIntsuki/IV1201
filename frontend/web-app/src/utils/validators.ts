@@ -17,8 +17,31 @@ export const validateEmail = (value: string): string | null => {
 
 export const validatePersonNumber = (value: string): string | null => {
     if (!value.trim()) return "Person number is required.";
-    const pnrRegex = /^\d{8}-\d{4}$/;
-    if (!pnrRegex.test(value)) return "Format: YYYYMMDD-XXXX";
+
+    const pnrRegex = /^(\d{4})(\d{2})(\d{2})-(\d{4})$/;
+    const match = value.match(pnrRegex);
+
+    if (!match) return "Format: YYYYMMDD-XXXX";
+
+    const [, yearStr, monthStr, dayStr] = match;
+
+    const year = Number(yearStr);
+    const month = Number(monthStr) - 1;
+    const day = Number(dayStr);
+
+    const currentYear = new Date().getFullYear();
+
+    const date = new Date(year, month, day);
+
+    const isInvalid =
+        year < 1900 ||
+        year > currentYear ||
+        date.getFullYear() !== year ||
+        date.getMonth() !== month ||
+        date.getDate() !== day;
+
+    if (isInvalid) return "Please ensure that the person number is correct.";
+
     return null;
 };
 
