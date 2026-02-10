@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 interface LoginFormProps {
     data: { username: string; password: string };
     touched: { username: boolean; password: boolean };
-    errors: Partial<Record<"username" | "password", string>>;
+    fieldErrors: Partial<Record<"username" | "password", string>>;
     handleChange: (field: "username" | "password", value: string) => void;
     handleBlur: (field: "username" | "password") => void;
     handleSubmit: (e: React.FormEvent) => void;
@@ -15,7 +15,7 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({
     data,
     touched,
-    errors,
+    fieldErrors,
     handleChange,
     handleBlur,
     handleSubmit,
@@ -46,8 +46,8 @@ const LoginForm: React.FC<LoginFormProps> = ({
                     value={data[field]}
                     onChange={(e) => handleChange(field, e.target.value)}
                     onBlur={() => handleBlur(field)}
-                    error={touched[field] && Boolean(errors[field])}
-                    helperText={touched[field] && errors[field] ? errors[field] : " "}
+                    error={touched[field] && Boolean(fieldErrors[field])}
+                    helperText={touched[field] && fieldErrors[field] ? fieldErrors[field] : " "}
                 />
             ))}
             <Button variant="contained" type="submit" disabled={!isFormValid}>

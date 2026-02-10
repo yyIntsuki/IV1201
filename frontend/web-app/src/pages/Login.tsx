@@ -15,27 +15,27 @@ import Link from "@mui/material/Link";
 const Login = () => {
     const [formData, setFormData] = useState({ username: "", password: "" });
     const [touched, setTouched] = useState({ username: false, password: false });
-    const [errors, setErrors] = useState<Partial<Record<"username" | "password", string>>>({});
-    const [errorToastMessage, setErrorToastMessage] = useState("");
+    const [fieldErrors, setFieldErrors] = useState<Partial<Record<"username" | "password", string>>>({});
+    const [loginError, setLoginError] = useState("");
 
     const { role, login } = useAuth();
     const navigate = useNavigate();
 
     const handleChange = (field: "username" | "password", value: string) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
-        if (errors[field]) setErrors((prev) => ({ ...prev, [field]: "" }));
+        if (fieldErrors[field]) setFieldErrors((prev) => ({ ...prev, [field]: "" }));
     };
 
     const handleBlur = (field: "username" | "password") => {
         setTouched((prev) => ({ ...prev, [field]: true }));
         const error = field === "username" ? validateUsername(formData.username) : validatePassword(formData.password);
-        if (error) setErrors((prev) => ({ ...prev, [field]: error }));
+        if (error) setFieldErrors((prev) => ({ ...prev, [field]: error }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setTouched({ username: true, password: true });
-        setErrorToastMessage("");
+        setLoginError("");
 
         const usernameError = validateUsername(formData.username);
         const passwordError = validatePassword(formData.password);
@@ -44,7 +44,7 @@ const Login = () => {
         if (usernameError) newErrors.username = usernameError;
         if (passwordError) newErrors.password = passwordError;
 
-        setErrors(newErrors);
+        setFieldErrors(newErrors);
 
         if (Object.keys(newErrors).length > 0) return;
 
@@ -52,19 +52,13 @@ const Login = () => {
             await login(formData.username, formData.password);
             navigate(role === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
         } catch {
-            setErrorToastMessage("Invalid username or password");
+            setLoginError("Invalid username or password");
         }
     };
 
     const isFormValid = !validateUsername(formData.username) && !validatePassword(formData.password);
 
-    const errorToast = errorToastMessage && (
-        <ErrorToast
-            open={Boolean(errorToastMessage)}
-            message={errorToastMessage}
-            onClose={() => setErrorToastMessage("")}
-        />
-    );
+    const errorToast = loginError && <ErrorToast open={true} message={loginError} onClose={() => setLoginError("")} />;
 
     return (
         <Container sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -77,7 +71,7 @@ const Login = () => {
                     <LoginForm
                         data={formData}
                         touched={touched}
-                        errors={errors}
+                        fieldErrors={fieldErrors}
                         handleChange={handleChange}
                         handleBlur={handleBlur}
                         handleSubmit={handleSubmit}
