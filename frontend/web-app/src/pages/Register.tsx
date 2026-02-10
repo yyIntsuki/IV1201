@@ -42,6 +42,7 @@ const Register = () => {
 
     const navigate = useNavigate();
 
+    /* Maps each field to its validator function */
     const fieldValidators: Record<keyof Account, (val: string) => string | null> = {
         firstName: validateFirstName,
         lastName: validateLastName,
@@ -51,24 +52,24 @@ const Register = () => {
         password: validatePassword,
     };
 
-    const isFormValid = (Object.keys(formData) as (keyof Account)[]).every(
-        (field) => !fieldValidators[field](formData[field]),
-    );
-
+    /* Updates formData and clears any previous error for that field */
     const handleChange = (field: keyof Account, value: string) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
         if (fieldErrors[field]) setFieldErrors((prev) => ({ ...prev, [field]: "" })); // clear previous error on change
     };
 
+    /* Called when a field loses focus (onBlur), and marks field as touched and validates it */
     const handleBlur = (field: keyof Account) => {
         setTouched((prev) => ({ ...prev, [field]: true }));
         const error = fieldValidators[field](formData[field]);
         if (error) setFieldErrors((prev) => ({ ...prev, [field]: error }));
     };
 
+    /* Called when the form is submitted. Validates all fields, sets errors, and attempts login */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Validate all fields dynamically
         const newErrors: Partial<Record<keyof Account, string>> = {};
         (Object.keys(formData) as (keyof Account)[]).forEach((field) => {
             const error = fieldValidators[field](formData[field]);
@@ -90,20 +91,18 @@ const Register = () => {
         try {
             await registerService.register(formData);
             setSuccess(true);
-            setFormData({ firstName: "", lastName: "", email: "", personNumber: "", username: "", password: "" });
-            setFieldErrors({});
-            setTouched({
-                firstName: false,
-                lastName: false,
-                email: false,
-                personNumber: false,
-                username: false,
-                password: false,
-            });
         } catch {
             setRegistrationError("Registration failed. Please try again.");
         }
     };
+
+    const isFormValid = (Object.keys(formData) as (keyof Account)[]).every(
+        (field) => !fieldValidators[field](formData[field]),
+    );
+
+    const errorToast = registrationError && (
+        <ErrorToast open={true} message={registrationError} onClose={() => setRegistrationError("")} />
+    );
 
     useEffect(() => {
         if (success) {
@@ -129,14 +128,6 @@ const Register = () => {
             </Container>
         );
     }
-
-    const errorToast = registrationError && (
-        <ErrorToast
-            open={Boolean(registrationError)}
-            message={registrationError}
-            onClose={() => setRegistrationError("")}
-        />
-    );
 
     return (
         <Container sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>

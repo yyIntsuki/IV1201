@@ -21,28 +21,38 @@ const Login = () => {
     const { role, login } = useAuth();
     const navigate = useNavigate();
 
+    /* Maps each field to its validator function */
+    const fieldValidators: Record<keyof typeof formData, (val: string) => string | null> = {
+        username: validateUsername,
+        password: validatePassword,
+    };
+
+    /* Updates formData and clears any previous error for that field */
     const handleChange = (field: "username" | "password", value: string) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
         if (fieldErrors[field]) setFieldErrors((prev) => ({ ...prev, [field]: "" }));
     };
 
+    /* Called when a field loses focus (onBlur), and marks field as touched and validates it */
     const handleBlur = (field: "username" | "password") => {
         setTouched((prev) => ({ ...prev, [field]: true }));
-        const error = field === "username" ? validateUsername(formData.username) : validatePassword(formData.password);
+        const error = fieldValidators[field](formData[field]);
         if (error) setFieldErrors((prev) => ({ ...prev, [field]: error }));
     };
 
+    /* Called when the form is submitted. Validates all fields, sets errors, and attempts login */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
         setTouched({ username: true, password: true });
         setLoginError("");
 
-        const usernameError = validateUsername(formData.username);
-        const passwordError = validatePassword(formData.password);
-
+        // Validate all fields dynamically
         const newErrors: Partial<Record<"username" | "password", string>> = {};
-        if (usernameError) newErrors.username = usernameError;
-        if (passwordError) newErrors.password = passwordError;
+        (Object.keys(fieldValidators) as (keyof typeof fieldValidators)[]).forEach((field) => {
+            const error = fieldValidators[field](formData[field]);
+            if (error) newErrors[field] = error;
+        });
 
         setFieldErrors(newErrors);
 
@@ -56,7 +66,9 @@ const Login = () => {
         }
     };
 
-    const isFormValid = !validateUsername(formData.username) && !validatePassword(formData.password);
+    const isFormValid = (Object.keys(fieldValidators) as (keyof typeof fieldValidators)[]).every(
+        (field) => !fieldValidators[field](formData[field]),
+    );
 
     const errorToast = loginError && <ErrorToast open={true} message={loginError} onClose={() => setLoginError("")} />;
 
