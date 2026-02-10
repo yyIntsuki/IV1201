@@ -26,7 +26,7 @@ export const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> =
 }) => {
     if (!application) return null;
 
-    const { expertise, availability, fullName, status } = application;
+    const { competenceProfile, availability, fullName, status } = application;
 
     return (
         <Dialog open={Boolean(application)} onClose={onClose} fullWidth>
@@ -50,9 +50,9 @@ export const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> =
             <DialogContent dividers>
                 <Typography variant="h6">Expertise</Typography>
                 <List dense>
-                    {expertise.map((e) => (
-                        <ListItem key={e.area}>
-                            <ListItemText primary={e.area} secondary={`${e.years} years`} />
+                    {competenceProfile.map((e) => (
+                        <ListItem key={e.competence}>
+                            <ListItemText primary={e.competence} secondary={`${e.yearsOfExperience} years`} />
                         </ListItem>
                     ))}
                 </List>
@@ -63,7 +63,7 @@ export const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> =
                 <List dense>
                     {availability.map((a, i) => (
                         <ListItem key={i}>
-                            <ListItemText primary={`${a.start} → ${a.end}`} />
+                            <ListItemText primary={`${a.fromDate} → ${a.toDate}`} />
                         </ListItem>
                     ))}
                 </List>

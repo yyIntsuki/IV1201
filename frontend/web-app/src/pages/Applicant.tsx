@@ -1,7 +1,7 @@
 import { useState } from "react";
-import type { Expertise, Availability } from "@/types/application";
+import type { Competence, Availability } from "@/types/application";
 import { AvailabilityInput } from "@/components/applicant/AvailabilityInput";
-import { ExpertiseInput } from "@/components/applicant/ExpertiseInput";
+import { CompetenceInput } from "@/components/applicant/CompetenceInput";
 import { ReviewSummaryList } from "@/components/applicant/ReviewSummaryList";
 
 import Container from "@mui/material/Container";
@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 
 const Applicant = () => {
-    const [expertiseList, setExpertiseList] = useState<Expertise[]>([]);
+    const [competenceList, setCompetenceList] = useState<Competence[]>([]);
     const [availabilityList, setAvailabilityList] = useState<Availability[]>([]);
 
     const [step, setStep] = useState(1);
@@ -21,7 +21,7 @@ const Applicant = () => {
     const handleBack = () => setStep(step - 1);
 
     const handleSubmit = () => {
-        console.log("Submitting job application:", { expertiseList, availabilityList });
+        console.log("Submitting job application:", { competenceList, availabilityList });
         setStep(4);
     };
 
@@ -32,9 +32,9 @@ const Applicant = () => {
                     {step < 4 && <Typography variant="h1">Job Application</Typography>}
 
                     {step === 1 && (
-                        <ExpertiseInput
-                            value={expertiseList}
-                            onChange={setExpertiseList}
+                        <CompetenceInput
+                            value={competenceList}
+                            onChange={setCompetenceList}
                             onValidityChange={setIsStepValid}
                         />
                     )}
@@ -48,7 +48,7 @@ const Applicant = () => {
                     )}
 
                     {step === 3 && (
-                        <ReviewSummaryList expertiseList={expertiseList} availabilityList={availabilityList} />
+                        <ReviewSummaryList competenceList={competenceList} availabilityList={availabilityList} />
                     )}
 
                     {step === 4 && (

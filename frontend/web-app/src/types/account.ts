@@ -3,10 +3,10 @@
  * Used for registration purposes.
  */
 export interface Account {
-    firstName: string;
-    lastName: string;
-    email: string;
-    personNumber: string;
-    username: string;
-    password: string;
+    firstName: string;          // name
+    lastName: string;           // surname
+    personNumber: string;       // pnr
+    email: string;              // email
+    username: string;           // username
+    password: string;           // password
 }

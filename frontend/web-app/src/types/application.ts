@@ -1,27 +1,28 @@
-import { EXPERTISE_AREAS } from "@/constants/expertise-areas";
+import type { Competence as CompetenceType } from "@/types/competence"; // Alias to avoid confusion
 
 /**
- * Types related to job applications.
- * ExpertiseArea is defined here to avoid type errors.
- */
-export type ExpertiseArea = (typeof EXPERTISE_AREAS)[number];
+ * Represents one competence in a list of competence.
+ * To get the list of available competence, please use constants/competence.
+*/
+export interface Competence {
+    competence: CompetenceType;     // string parsed from competence_id
+    yearsOfExperience: number;      // years_of_experience
+}
+
+/**
+ * Represents one availablity in a list of availablities.
+*/
+export interface Availability {
+    fromDate: string;               // from_date
+    toDate: string;                 // to_date
+}
 
 export type ApplicationStatus = "accepted" | "rejected" | "unhandled";
-
-export interface Expertise {
-    area: string;
-    years: number;
-}
-
-export interface Availability {
-    start: string;
-    end: string;
-}
 
 export interface JobApplication {
     id: string;
     fullName: string;
     status: ApplicationStatus;
-    expertise: Expertise[];
+    competenceProfile: Competence[];
     availability: Availability[];
 }

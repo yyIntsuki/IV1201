@@ -2,8 +2,8 @@ import { ROLES } from "@/constants/roles";
 import type { Role } from "@/types/role";
 
 /**
- * Parses a role number into a string.
- * @param roleId a number, either 1 for recruiter, or 2 for applicant.
+ * Parses a role number into a string. To be used directly after getting the JSON data from API.
+ * @param roleId a number. For details see constants/role.
  * @returns the role in string form
  */
 export const parseRole = (roleId: number): Role => {

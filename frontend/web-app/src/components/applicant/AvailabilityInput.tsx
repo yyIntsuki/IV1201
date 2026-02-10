@@ -17,30 +17,30 @@ interface AvailabilityInputProps {
 }
 
 export const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange, onValidityChange }) => {
-    const [currentStart, setCurrentStart] = useState("");
-    const [currentEnd, setCurrentEnd] = useState("");
+    const [currentFromDate, setCurrentFromDate] = useState("");
+    const [currentToDate, setCurrentToDate] = useState("");
 
     const handleStartChange = (value: string) => {
-        setCurrentStart(value);
-        if (currentEnd && value > currentEnd) {
-            setCurrentEnd("");
+        setCurrentFromDate(value);
+        if (currentToDate && value > currentToDate) {
+            setCurrentToDate("");
         }
     };
 
     const addAvailability = () => {
-        if (!currentStart || !currentEnd) return;
-        if (currentEnd < currentStart) return;
+        if (!currentFromDate || !currentToDate) return;
+        if (currentToDate < currentFromDate) return;
 
-        onChange([...value, { start: currentStart, end: currentEnd }]);
-        setCurrentStart("");
-        setCurrentEnd("");
+        onChange([...value, { fromDate: currentFromDate, toDate: currentToDate }]);
+        setCurrentFromDate("");
+        setCurrentToDate("");
     };
 
     const removeAvailability = (index: number) => {
         onChange(value.filter((_, i) => i !== index));
     };
 
-    const isValidRange = currentStart && currentEnd && currentStart <= currentEnd;
+    const isValidRange = currentFromDate && currentToDate && currentFromDate <= currentToDate;
 
     useEffect(() => {
         const isValid = value.length > 0;
@@ -59,17 +59,17 @@ export const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange,
                     label="Start"
                     slotProps={{ inputLabel: { shrink: true } }}
                     fullWidth
-                    value={currentStart}
+                    value={currentFromDate}
                     onChange={(e) => handleStartChange(e.target.value)}
                 />
 
                 <TextField
                     type="date"
                     label="End"
-                    slotProps={{ inputLabel: { shrink: true }, htmlInput: { min: currentStart } }}
+                    slotProps={{ inputLabel: { shrink: true }, htmlInput: { min: currentFromDate } }}
                     fullWidth
-                    value={currentEnd}
-                    onChange={(e) => setCurrentEnd(e.target.value)}
+                    value={currentToDate}
+                    onChange={(e) => setCurrentToDate(e.target.value)}
                 />
 
                 <Button variant="contained" onClick={addAvailability} disabled={!isValidRange}>
@@ -80,7 +80,7 @@ export const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange,
             <List dense>
                 {value.map((a, i) => (
                     <ListItem key={i} secondaryAction={<Button onClick={() => removeAvailability(i)}>Remove</Button>}>
-                        <ListItemText primary={`${a.start} → ${a.end}`} />
+                        <ListItemText primary={`${a.fromDate} → ${a.toDate}`} />
                     </ListItem>
                 ))}
             </List>
