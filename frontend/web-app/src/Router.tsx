@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router";
 
+import MainLayout from "./layout/MainLayout";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
@@ -9,8 +10,6 @@ import Recruiter from "@/pages/Recruiter";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import PublicRoute from "@/routes/PublicRoute";
 
-import LogoutButton from "@/components/LogoutButton";
-
 /**
  * The root component that sets up routing for the application.
  * Only logged in users can access protected routes, otherwise they are redirected to login.
@@ -19,20 +18,21 @@ import LogoutButton from "@/components/LogoutButton";
 function Router() {
     return (
         <BrowserRouter>
-            <LogoutButton />
             <Routes>
-                <Route element={<PublicRoute />}>
-                    <Route index element={<Home />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                </Route>
+                <Route element={<MainLayout />}>
+                    <Route element={<PublicRoute />}>
+                        <Route index element={<Home />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                    </Route>
 
-                <Route element={<ProtectedRoute allowedRoles={["applicant"]} />}>
-                    <Route path="/applicant" element={<Applicant />} />
-                </Route>
+                    <Route element={<ProtectedRoute allowedRoles={["applicant"]} />}>
+                        <Route path="/applicant" element={<Applicant />} />
+                    </Route>
 
-                <Route element={<ProtectedRoute allowedRoles={["recruiter"]} />}>
-                    <Route path="/recruiter" element={<Recruiter />} />
+                    <Route element={<ProtectedRoute allowedRoles={["recruiter"]} />}>
+                        <Route path="/recruiter" element={<Recruiter />} />
+                    </Route>
                 </Route>
             </Routes>
         </BrowserRouter>

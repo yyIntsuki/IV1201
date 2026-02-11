@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation, Trans } from "react-i18next";
 import ErrorToast from "@/components/ErrorToast";
 import registerService from "@/services/register-service";
 import RegisterForm from "@/components/register/RegisterForm";
@@ -13,7 +14,6 @@ import {
     validatePassword,
 } from "@/utils/validators";
 
-import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -41,6 +41,7 @@ const Register = () => {
     const [success, setSuccess] = useState(false);
 
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     /* Maps each field to its validator function */
     const fieldValidators: Record<keyof Account, (val: string) => string | null> = {
@@ -115,27 +116,24 @@ const Register = () => {
 
     if (success) {
         return (
-            <Container sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <>
                 <Card sx={{ display: "inline-block", p: 2 }}>
                     <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                        <Typography variant="h3">Registration Successful!</Typography>
-                        <Typography variant="body1">
-                            You will be redirected to the login page shortly. If not, click{" "}
-                            <Link href="/login">here</Link>.
-                        </Typography>
+                        <Typography variant="h3">{t("register.success_title")}</Typography>
+                        <Typography variant="body1">{t("register.success_message")}</Typography>
                     </CardContent>
                 </Card>
-            </Container>
+            </>
         );
     }
 
     return (
-        <Container sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <>
             {errorToast}
             <Card sx={{ display: "inline-block", p: 2 }}>
                 <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <Typography variant="h1">Register</Typography>
-                    <Typography variant="subtitle1">Please register to apply for the job application</Typography>
+                    <Typography variant="h1">{t("register.title")}</Typography>
+                    <Typography variant="subtitle1">{t("register.subtitle")}</Typography>
 
                     <RegisterForm
                         data={formData}
@@ -148,11 +146,11 @@ const Register = () => {
                     />
 
                     <Typography variant="subtitle1">
-                        Already have an account? <Link href="/login">Log in</Link>.
+                        <Trans i18nKey="register.have_account" components={{ 1: <Link href="/login" /> }} />
                     </Typography>
                 </CardContent>
             </Card>
-        </Container>
+        </>
     );
 };
 

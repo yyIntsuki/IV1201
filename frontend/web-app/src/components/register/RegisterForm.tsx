@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { Account } from "@/types/account";
 
 import Box from "@mui/material/Box";
@@ -24,25 +25,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     handleSubmit,
     isFormValid,
 }) => {
+    const { t } = useTranslation();
+
     const fields: (keyof Account)[] = ["firstName", "lastName", "email", "personNumber", "username", "password"];
-
-    const labels: Record<keyof Account, string> = {
-        firstName: "First name",
-        lastName: "Last name",
-        email: "Email address",
-        personNumber: "Person number",
-        username: "Username",
-        password: "Password",
-    };
-
-    const placeholders: Record<keyof Account, string> = {
-        firstName: "Jane",
-        lastName: "Doe",
-        email: "jane.doe@example.com",
-        personNumber: "YYYYMMDD-XXXX",
-        username: "Enter your username",
-        password: "••••••••",
-    };
 
     return (
         <Box
@@ -58,8 +43,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
                             required
                             slotProps={{ inputLabel: { required: false } }}
                             type={field === "password" ? "password" : "text"}
-                            label={labels[field]}
-                            placeholder={placeholders[field]}
+                            label={t(`register.fields.${field}.label`)}
+                            placeholder={t(`register.fields.${field}.placeholder`)}
                             value={data[field]}
                             onChange={(e) => handleChange(field, e.target.value)}
                             onBlur={() => handleBlur(field)}
@@ -71,7 +56,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
                 ))}
             </Grid>
             <Button variant="contained" type="submit" disabled={!isFormValid}>
-                Register
+                {t("register.submit")}
             </Button>
         </Box>
     );

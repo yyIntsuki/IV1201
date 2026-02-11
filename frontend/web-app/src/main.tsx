@@ -4,6 +4,8 @@ import { createRoot } from "react-dom/client";
 import Router from "./Router";
 import AuthProvider from "@/auth/AuthProvider";
 
+import "./i18n";
+
 import { theme } from "./theme";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 

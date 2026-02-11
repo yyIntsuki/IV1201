@@ -4,7 +4,6 @@ import AvailabilityInput from "@/components/applicant/AvailabilityInput";
 import CompetenceInput from "@/components/applicant/CompetenceInput";
 import ReviewSummaryList from "@/components/applicant/ReviewSummaryList";
 
-import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -26,7 +25,7 @@ const Applicant = () => {
     };
 
     return (
-        <Container sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <>
             <Card sx={{ display: "inline-block", p: 2 }}>
                 <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     {step < 4 && <Typography variant="h1">Job Application</Typography>}
@@ -77,7 +76,7 @@ const Applicant = () => {
                     </ButtonGroup>
                 </CardContent>
             </Card>
-        </Container>
+        </>
     );
 };
 

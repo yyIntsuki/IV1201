@@ -1,0 +1,53 @@
+{
+    "login": {
+        "title": "Inloggning",
+        "subtitle": "Vänligen logga in för att komma åt applikationen",
+        "submit": "Logga in",
+        "no_account": "Har inget konto? Vänligen <1>registrera</1>.",
+        "fields": {
+            "username": {
+                "label": "Användarnamn",
+                "placeholder": "Ange ditt användarnamn"
+            },
+            "password": {
+                "label": "Lösenord",
+                "placeholder": "••••••••"
+            }
+        }
+    },
+    "logout": "Logga ut",
+    "register": {
+        "title": "Registrera",
+        "subtitle": "Vänligen registrera dig för att ansöka",
+        "have_account": "Har redan ett konto? <1>Logga in</1>.",
+        "success_title": "Registrering lyckades!",
+        "success_message": "Du kommer snart att skickas till inloggningssidan. Om inte, klicka <1>här</1>.",
+        "submit": "Registrera",
+        "fields": {
+            "firstName": {
+                "label": "Förnamn",
+                "placeholder": "Jane"
+            },
+            "lastName": {
+                "label": "Efternamn",
+                "placeholder": "Doe"
+            },
+            "email": {
+                "label": "E-postadress",
+                "placeholder": "jane.doe@example.com"
+            },
+            "personNumber": {
+                "label": "Personnummer",
+                "placeholder": "ÅÅÅÅMMDD-XXXX"
+            },
+            "username": {
+                "label": "Användarnamn",
+                "placeholder": "Ange ditt användarnamn"
+            },
+            "password": {
+                "label": "Lösenord",
+                "placeholder": "••••••••"
+            }
+        }
+    }
+}

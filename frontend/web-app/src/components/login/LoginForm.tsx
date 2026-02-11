@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { LoginData } from "@/types/account";
 
 import Box from "@mui/material/Box";
@@ -23,11 +24,9 @@ const LoginForm: React.FC<LoginFormProps> = ({
     handleSubmit,
     isFormValid,
 }) => {
+    const { t } = useTranslation();
+
     const fields: (keyof LoginData)[] = ["username", "password"];
-
-    const labels: Record<keyof LoginData, string> = { username: "Username", password: "Password" };
-
-    const placeholders: Record<keyof LoginData, string> = { username: "Enter your username", password: "••••••••" };
 
     return (
         <Box
@@ -42,8 +41,8 @@ const LoginForm: React.FC<LoginFormProps> = ({
                     required
                     slotProps={{ inputLabel: { required: false } }}
                     type={field === "password" ? "password" : "text"}
-                    label={labels[field]}
-                    placeholder={placeholders[field]}
+                    label={t(`login.fields.${field}.label`)}
+                    placeholder={t(`login.fields.${field}.placeholder`)}
                     value={data[field]}
                     onChange={(e) => handleChange(field, e.target.value)}
                     onBlur={() => handleBlur(field)}
@@ -52,7 +51,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 />
             ))}
             <Button variant="contained" type="submit" disabled={!isFormValid}>
-                Log in
+                {t("login.submit")}
             </Button>
         </Box>
     );

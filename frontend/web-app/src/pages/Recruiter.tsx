@@ -4,7 +4,6 @@ import ApplicationsTable from "@/components/recruiter/ApplicationsTable";
 import ApplicationDetailsDialog from "@/components/recruiter/ApplicationDetailsDialog";
 import dummyApplications from "@/constants/dummy-applications";
 
-import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Stack from "@mui/material/Stack";
@@ -30,14 +29,7 @@ const Recruiter = () => {
     };
 
     return (
-        <Container
-            sx={{
-                height: "100vh",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-            }}>
+        <>
             <Card sx={{ display: "inline-block", p: 2 }}>
                 <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     <Stack>
@@ -65,7 +57,7 @@ const Recruiter = () => {
                     />
                 </CardContent>
             </Card>
-        </Container>
+        </>
     );
 };
 

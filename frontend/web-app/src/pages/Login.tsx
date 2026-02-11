@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useTranslation, Trans } from "react-i18next";
 import useAuth from "@/hooks/use-auth";
 import ErrorToast from "@/components/ErrorToast";
 import LoginForm from "@/components/login/LoginForm";
 import type { LoginData } from "@/types/account";
 import { validateUsername, validatePassword } from "@/utils/validators";
 
-import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 
 const Login = () => {
@@ -19,8 +18,9 @@ const Login = () => {
     const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof LoginData, string>>>({});
     const [loginError, setLoginError] = useState("");
 
-    const { role, login } = useAuth();
     const navigate = useNavigate();
+    const { t } = useTranslation();
+    const { role, login } = useAuth();
 
     /* Maps each field to its validator function */
     const fieldValidators: Record<keyof LoginData, (val: string) => string | null> = {
@@ -74,12 +74,12 @@ const Login = () => {
     const errorToast = loginError && <ErrorToast open={true} message={loginError} onClose={() => setLoginError("")} />;
 
     return (
-        <Container sx={{ height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <>
             {errorToast}
-            <Card sx={{ width: 400, p: 2 }}>
+            <Card sx={{ minWidth: 400, p: 2 }}>
                 <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <Typography variant="h1">Login</Typography>
-                    <Typography variant="subtitle1">Please log in to access the application</Typography>
+                    <Typography variant="h1">{t("login.title")}</Typography>
+                    <Typography variant="subtitle1">{t("login.subtitle")}</Typography>
 
                     <LoginForm
                         data={formData}
@@ -92,21 +92,11 @@ const Login = () => {
                     />
 
                     <Typography variant="subtitle1">
-                        Don't have an account? <Link href="/register">Register</Link>.
+                        <Trans i18nKey="login.no_account" components={{ 1: <Link href="/register" /> }} />
                     </Typography>
-
-                    <Box>
-                        <Typography variant="h6">Sample accounts for testing:</Typography>
-                        <Typography variant="body1">
-                            Recruiter: <b>test1</b> | <b>test</b>
-                        </Typography>
-                        <Typography variant="body1">
-                            Applicant: <b>test</b> | <b>test</b>
-                        </Typography>
-                    </Box>
                 </CardContent>
             </Card>
-        </Container>
+        </>
     );
 };
 

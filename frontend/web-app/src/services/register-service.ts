@@ -1,5 +1,5 @@
 import type { Account } from "@/types/account";
-import registerApi from "@/api/register-api"; 
+import registerApi from "@/api/register-api";
 
 const registerService = {
     /**

@@ -1,14 +1,16 @@
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import useAuth from "@/hooks/use-auth";
 
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
 /**
  * LogoutButton component with logout button positioned at top right using only positioning.
+ * Only visible if user is already logged in.
  */
 const LogoutButton = () => {
     const { isLoggedIn, logout } = useAuth();
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -19,11 +21,9 @@ const LogoutButton = () => {
     if (!isLoggedIn) return null;
 
     return (
-        <Box style={{ position: "fixed", top: "0", right: "0", padding: "10px" }}>
-            <Button variant="contained" onClick={handleLogout}>
-                Log Out
-            </Button>
-        </Box>
+        <Button variant="contained" onClick={handleLogout}>
+            {t("logout")}
+        </Button>
     );
 };
 
