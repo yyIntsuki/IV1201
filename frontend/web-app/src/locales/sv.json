@@ -1,4 +1,11 @@
 {
+    "home": {
+        "title": "Amusement Park",
+        "subtitle": "Anställningsapplikation",
+        "description": "Vänligen logga in eller registrera för att fortsätta",
+        "login": "Logga in",
+        "register": "Registrera"
+    },
     "login": {
         "title": "Inloggning",
         "subtitle": "Vänligen logga in för att komma åt applikationen",

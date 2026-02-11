@@ -1,4 +1,11 @@
 {
+    "home": {
+        "title": "Amusement Park",
+        "subtitle": "Recruitement Application",
+        "description": "Please log in or register to continue",
+        "login": "Log in",
+        "register": "Register"
+    },
     "login": {
         "title": "Login",
         "subtitle": "Please log in to access the application",
