@@ -5,7 +5,7 @@ import useAuth from "@/hooks/use-auth";
 import ErrorToast from "@/components/ErrorToast";
 import LoginForm from "@/components/login/LoginForm";
 import type { LoginData } from "@/types/account";
-import { validateUsername, validatePassword } from "@/utils/validators";
+import formValidator from "@/utils/form-validator";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -20,12 +20,13 @@ const Login = () => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const validators = formValidator(t);
     const { role, login } = useAuth();
 
     /* Maps each field to its validator function */
     const fieldValidators: Record<keyof LoginData, (val: string) => string | null> = {
-        username: validateUsername,
-        password: validatePassword,
+        username: validators.validateUsername,
+        password: validators.validatePassword,
     };
 
     /* Updates formData and clears any previous error for that field */
@@ -63,7 +64,7 @@ const Login = () => {
             await login(formData.username, formData.password);
             navigate(role === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
         } catch {
-            setLoginError("Invalid username or password");
+            setLoginError(t("login.error"));
         }
     };
 

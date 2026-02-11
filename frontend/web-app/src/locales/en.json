@@ -11,6 +11,7 @@
         "subtitle": "Please log in to access the application",
         "submit": "Log in",
         "no_account": "Don't have an account? Please <1>register</1>.",
+        "error": "Invalid username or password",
         "fields": {
             "username": {
                 "label": "Username",
@@ -30,6 +31,7 @@
         "success_title": "Registration Successful!",
         "success_message": "You will be redirected to the login page shortly. If not, click <1>here</1>.",
         "submit": "Register",
+        "error": "Something went wrong with registration",
         "fields": {
             "firstName": {
                 "label": "First name",
@@ -126,5 +128,18 @@
         "rowsPerPage": "Rows per page",
         "displayedRows": "{{from}}–{{to}} of {{count}}",
         "moreThan": "more than {{to}}"
+    },
+    "validation": {
+        "firstNameRequired": "First name is required.",
+        "lastNameRequired": "Last name is required.",
+        "emailRequired": "Email is required.",
+        "emailInvalid": "Enter a valid email.",
+        "personNumberRequired": "Person number is required.",
+        "personNumberFormat": "Format: YYYYMMDD-XXXX",
+        "personNumberInvalid": "Please ensure that the person number is correct.",
+        "usernameRequired": "Username is required.",
+        "usernameTooShort": "Username must be at least 4 characters.",
+        "passwordRequired": "Password is required.",
+        "passwordTooShort": "Password must be at least 8 characters."
     }
 }

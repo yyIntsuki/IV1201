@@ -5,14 +5,7 @@ import ErrorToast from "@/components/ErrorToast";
 import registerService from "@/services/register-service";
 import RegisterForm from "@/components/register/RegisterForm";
 import type { Account } from "@/types/account";
-import {
-    validateFirstName,
-    validateLastName,
-    validateEmail,
-    validatePersonNumber,
-    validateUsername,
-    validatePassword,
-} from "@/utils/validators";
+import formValidator from "@/utils/form-validator";
 
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
@@ -42,15 +35,16 @@ const Register = () => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const validator = formValidator(t);
 
     /* Maps each field to its validator function */
     const fieldValidators: Record<keyof Account, (val: string) => string | null> = {
-        firstName: validateFirstName,
-        lastName: validateLastName,
-        email: validateEmail,
-        personNumber: validatePersonNumber,
-        username: validateUsername,
-        password: validatePassword,
+        firstName: validator.validateFirstName,
+        lastName: validator.validateLastName,
+        email: validator.validateEmail,
+        personNumber: validator.validatePersonNumber,
+        username: validator.validateUsername,
+        password: validator.validatePassword,
     };
 
     /* Updates formData and clears any previous error for that field */
@@ -92,8 +86,8 @@ const Register = () => {
         try {
             await registerService.register(formData);
             setSuccess(true);
-        } catch (e) {
-            setRegistrationError(`${e}`);
+        } catch {
+            setRegistrationError(t("register.error"));
         }
     };
 
