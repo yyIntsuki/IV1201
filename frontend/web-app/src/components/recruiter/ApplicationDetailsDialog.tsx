@@ -1,4 +1,6 @@
 import type { JobApplication, ApplicationStatus } from "@/types/application";
+import { useTranslation } from "react-i18next";
+import ApplicationStatusChip from "./ApplicationStatusChip";
 
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -6,7 +8,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
@@ -24,6 +25,8 @@ const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = ({
     onClose,
     onStatusChange,
 }) => {
+    const { t } = useTranslation();
+
     if (!application) return null;
 
     const { competenceProfile, availability, fullName, status } = application;
@@ -33,37 +36,34 @@ const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = ({
             <DialogTitle>
                 <Stack direction="row" spacing={2} alignItems="center">
                     <Typography variant="h6">{fullName}</Typography>
-
-                    <Chip
-                        label={status}
-                        size="small"
-                        color={
-                            status === "accepted" ? "success"
-                            : status === "rejected" ?
-                                "error"
-                            :   "default"
-                        }
-                    />
+                    <ApplicationStatusChip status={status} />
                 </Stack>
             </DialogTitle>
 
             <DialogContent dividers>
-                <Typography variant="h6">Expertise</Typography>
+                <Typography variant="h6">{t("recruiter.applications.dialog.expertise")}</Typography>
                 <List dense>
                     {competenceProfile.map((e) => (
                         <ListItem key={e.competence}>
-                            <ListItemText primary={e.competence} secondary={`${e.yearsOfExperience} years`} />
+                            <ListItemText
+                                primary={t(`recruiter.applications.dialog.competence.${e.competence}`)}
+                                secondary={t("recruiter.applications.dialog.yearsOfExperience", {
+                                    count: e.yearsOfExperience,
+                                })}
+                            />
                         </ListItem>
                     ))}
                 </List>
 
                 <Divider sx={{ my: 2 }} />
 
-                <Typography variant="h6">Availability</Typography>
+                <Typography variant="h6">{t("recruiter.applications.dialog.availability")}</Typography>
                 <List dense>
                     {availability.map((a, i) => (
                         <ListItem key={i}>
-                            <ListItemText primary={`${a.fromDate} → ${a.toDate}`} />
+                            <ListItemText
+                                primary={t("recruiter.applications.dialog.fromTo", { from: a.fromDate, to: a.toDate })}
+                            />
                         </ListItem>
                     ))}
                 </List>
@@ -71,15 +71,15 @@ const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = ({
 
             <DialogActions>
                 <Button onClick={() => onStatusChange("accepted")} color="success" disabled={status === "accepted"}>
-                    Accept
+                    {t("recruiter.applications.dialog.accept")}
                 </Button>
                 <Button onClick={() => onStatusChange("rejected")} color="error" disabled={status === "rejected"}>
-                    Reject
+                    {t("recruiter.applications.dialog.reject")}
                 </Button>
                 <Button onClick={() => onStatusChange("unhandled")} disabled={status === "unhandled"}>
-                    Mark as unhandled
+                    {t("recruiter.applications.dialog.markUnhandled")}
                 </Button>
-                <Button onClick={onClose}>Close</Button>
+                <Button onClick={onClose}>{t("recruiter.applications.dialog.close")}</Button>
             </DialogActions>
         </Dialog>
     );

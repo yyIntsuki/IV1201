@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { JobApplication, ApplicationStatus } from "@/types/application";
 import ApplicationsTable from "@/components/recruiter/ApplicationsTable";
 import ApplicationDetailsDialog from "@/components/recruiter/ApplicationDetailsDialog";
@@ -12,6 +13,8 @@ import Typography from "@mui/material/Typography";
 const Recruiter = () => {
     const [applications, setApplications] = useState<JobApplication[]>(dummyApplications);
     const [selectedApplication, setSelectedApplication] = useState<JobApplication | null>(null);
+
+    const { t } = useTranslation();
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -33,8 +36,8 @@ const Recruiter = () => {
             <Card sx={{ display: "inline-block", p: 2 }}>
                 <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     <Stack>
-                        <Typography variant="h2">Recruiter</Typography>
-                        <Typography variant="body1">Expand application details by clicking an entry.</Typography>
+                        <Typography variant="h2">{t("recruiter.title")}</Typography>
+                        <Typography variant="body1">{t("recruiter.subtitle")}</Typography>
                     </Stack>
 
                     <ApplicationsTable

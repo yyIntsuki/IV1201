@@ -56,5 +56,40 @@
                 "placeholder": "••••••••"
             }
         }
+    },
+    "recruiter": {
+        "title": "Recruiter",
+        "subtitle": "Expand application details by clicking in the list.",
+        "applications": {
+            "table": {
+                "applicantName": "Applicant name",
+                "statusTitle": "Status",
+                "status": {
+                    "accepted": "Accepted",
+                    "rejected": "Rejected",
+                    "unhandled": "Unhandled"
+                }
+            },
+            "dialog": {
+                "expertise": "Expertise",
+                "competence": {
+                    "ticket sales": "Ticket sales",
+                    "lotteries": "Lotteries",
+                    "roller coaster operation": "Roller coaster operation"
+                },
+                "yearsOfExperience": "{{count}} year(s)",
+                "availability": "Availability",
+                "fromTo": "{{from}} → {{to}}",
+                "accept": "Accept",
+                "reject": "Reject",
+                "markUnhandled": "Mark as unhandled",
+                "close": "Close"
+            }
+        }
+    },
+    "pagination": {
+        "rowsPerPage": "Rows per page",
+        "displayedRows": "{{from}}–{{to}} of {{count}}",
+        "moreThan": "more than {{to}}"
     }
 }

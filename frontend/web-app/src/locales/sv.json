@@ -56,5 +56,41 @@
                 "placeholder": "••••••••"
             }
         }
+    },
+    "recruiter": {
+        "title": "Rekryterare",
+        "subtitle": "Expandera ansökningsdetaljer genom att klicka i listan.",
+        "applications": {
+            "table": {
+                "applicantName": "Sökandens namn",
+                "statusTitle": "Status",
+                "status": {
+                    "accepted": "Godkänd",
+                    "rejected": "Avslagen",
+                    "unhandled": "Ej behandlad"
+                }
+            },
+            "dialog": {
+                "expertise": "Erfarenhet",
+                "competence": {
+                    "ticket sales": "Biljettförsäljning",
+                    "lotteries": "Lotterier",
+                    "roller coaster operation": "Berg- och dalbanedrift"
+                },
+                "yearsOfExperience": "{{count}} år",
+                "yearsOfExperience_plural": "{{count}} år",
+                "availability": "Tillgänglighet",
+                "fromTo": "{{from}} → {{to}}",
+                "accept": "Godkänn",
+                "reject": "Avslå",
+                "markUnhandled": "Markera som ej behandlad",
+                "close": "Stäng"
+            }
+        }
+    },
+    "pagination": {
+        "rowsPerPage": "Rader per sida",
+        "displayedRows": "{{from}}–{{to}} av {{count}}",
+        "moreThan": "fler än {{to}}"
     }
 }

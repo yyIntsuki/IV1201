@@ -1,4 +1,6 @@
+import { useTranslation } from "react-i18next";
 import type { JobApplication } from "@/types/application";
+import ApplicationStatusChip from "./ApplicationStatusChip";
 
 import Box from "@mui/material/Box";
 import TableContainer from "@mui/material/TableContainer";
@@ -8,7 +10,6 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import TablePagination from "@mui/material/TablePagination";
-import Chip from "@mui/material/Chip";
 
 interface ApplicationsTableProps {
     applications: JobApplication[];
@@ -29,10 +30,12 @@ const ApplicationsTable: React.FC<ApplicationsTableProps> = ({
     onRowsPerPageChange,
     onRowClick,
 }) => {
+    const { t } = useTranslation();
+
     return (
         <Box
             sx={{
-                width: 650,
+                minWidth: 450,
                 display: "flex",
                 flexDirection: "column",
                 border: "1px solid gray",
@@ -40,14 +43,14 @@ const ApplicationsTable: React.FC<ApplicationsTableProps> = ({
                 overflow: "hidden",
             }}>
             <TableContainer sx={{ flex: 1, overflow: "auto" }}>
-                <Table stickyHeader>
+                <Table stickyHeader size="medium">
                     <TableHead>
                         <TableRow>
                             <TableCell>
-                                <strong>Applicant Name</strong>
+                                <strong>{t("recruiter.applications.table.applicantName")}</strong>
                             </TableCell>
-                            <TableCell sx={{ width: 120 }}>
-                                <strong>Status</strong>
+                            <TableCell sx={{ width: 120 }} align="center">
+                                <strong>{t("recruiter.applications.table.statusTitle")}</strong>
                             </TableCell>
                         </TableRow>
                     </TableHead>
@@ -55,17 +58,8 @@ const ApplicationsTable: React.FC<ApplicationsTableProps> = ({
                         {applications.map((app) => (
                             <TableRow key={app.id} hover sx={{ cursor: "pointer" }} onClick={() => onRowClick(app)}>
                                 <TableCell>{app.fullName}</TableCell>
-                                <TableCell>
-                                    <Chip
-                                        label={app.status}
-                                        size="small"
-                                        color={
-                                            app.status === "accepted" ? "success"
-                                            : app.status === "rejected" ?
-                                                "error"
-                                            :   "default"
-                                        }
-                                    />
+                                <TableCell align="center">
+                                    <ApplicationStatusChip status={app.status} />
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -80,6 +74,10 @@ const ApplicationsTable: React.FC<ApplicationsTableProps> = ({
                 rowsPerPage={rowsPerPage}
                 rowsPerPageOptions={[5, 10]}
                 onRowsPerPageChange={(e) => onRowsPerPageChange(parseInt(e.target.value, 10))}
+                labelRowsPerPage={t("pagination.rowsPerPage")}
+                labelDisplayedRows={({ from, to, count }) =>
+                    t("pagination.displayedRows", "{{from}}–{{to}} of {{count}}", { from, to, count })
+                }
             />
         </Box>
     );
