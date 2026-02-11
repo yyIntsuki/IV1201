@@ -6,6 +6,7 @@ import type { Role } from "./role";
 export interface Session {
     isLoggedIn: boolean;
     role: Role | null;
+    token: string | null;
     login: (username: string, password: string) => Promise<void>;
     logout: () => void;
 }

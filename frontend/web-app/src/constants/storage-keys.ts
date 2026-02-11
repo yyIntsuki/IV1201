@@ -5,6 +5,7 @@
 const STORAGE_KEYS = {
     IS_LOGGED_IN: "isLoggedIn",
     ROLE: "role",
+    TOKEN: "token",
 };
 
 export default STORAGE_KEYS;

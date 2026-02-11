@@ -19,3 +19,6 @@ pydantic[email]==2.10.5
 
 # CORS
 python-multipart==0.0.20
+
+# JWT
+python-jose[cryptography]==3.3.0

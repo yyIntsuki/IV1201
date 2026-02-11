@@ -1,4 +1,5 @@
 import axios, { type AxiosRequestConfig } from "axios";
+import STORAGE_KEYS from "@/constants/storage-keys";
 
 const API_BASE_URL = "http://127.0.0.1:8000";
 
@@ -18,8 +19,14 @@ const apiRequest = async <T>(
     options?: AxiosRequestConfig,
 ): Promise<T> => {
     try {
+        const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
+        const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
         const response = await apiClient({
             url: path,
+            headers: {
+                ...authHeader,
+                ...(options?.headers ?? {}),
+            },
             ...options,
         });
         return response.data as T;

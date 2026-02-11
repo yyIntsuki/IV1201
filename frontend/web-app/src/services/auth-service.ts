@@ -17,6 +17,7 @@ const authService = {
         return {
             isLoggedIn: localStorage.getItem(STORAGE_KEYS.IS_LOGGED_IN) === "true",
             role: (localStorage.getItem(STORAGE_KEYS.ROLE) as Role) || null,
+            token: localStorage.getItem(STORAGE_KEYS.TOKEN),
         };
     },
 
@@ -26,11 +27,12 @@ const authService = {
      */
     async login(username: string, password: string): Promise<Role> {
         try {
-            const roleId = await loginApi(username, password);
-            const role = parseRole(roleId);
+            const loginResponse = await loginApi(username, password);
+            const role = parseRole(loginResponse.role_id);
 
             localStorage.setItem(STORAGE_KEYS.IS_LOGGED_IN, "true");
             localStorage.setItem(STORAGE_KEYS.ROLE, role);
+            localStorage.setItem(STORAGE_KEYS.TOKEN, loginResponse.access_token);
 
             return role;
         } catch {
@@ -44,6 +46,7 @@ const authService = {
     logout() {
         localStorage.removeItem(STORAGE_KEYS.IS_LOGGED_IN);
         localStorage.removeItem(STORAGE_KEYS.ROLE);
+        localStorage.removeItem(STORAGE_KEYS.TOKEN);
     }
 };
 

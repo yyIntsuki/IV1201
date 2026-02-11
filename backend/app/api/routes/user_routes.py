@@ -2,17 +2,23 @@
 User API routes - Presentation Layer.
 Handles HTTP requests and responses.
 """
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List
 
-from app.api.schemas.user_schemas import UserCreate, UserResponse, UserUpdate
+from app.api.schemas.user_schemas import UserCreate, UserResponse, UserUpdate, TokenResponse
 from app.services.user_service import UserService
+from app.security.jwt import create_access_token
+from app.security.dependencies import get_current_user
 
 router = APIRouter()
 user_service = UserService()
 
 
-@router.post("/users", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/users",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_user(user_data: UserCreate):
     """
     Create a new user.
@@ -31,7 +37,11 @@ async def create_user(user_data: UserCreate):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
 
 
-@router.get("/users", response_model=List[UserResponse])
+@router.get(
+    "/users",
+    response_model=List[UserResponse],
+    dependencies=[Depends(get_current_user)],
+)
 async def get_all_users():
     """
     Get all users from the database.
@@ -45,7 +55,11 @@ async def get_all_users():
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
 
 
-@router.get("/users/{user_id}", response_model=UserResponse)
+@router.get(
+    "/users/{user_id}",
+    response_model=UserResponse,
+    dependencies=[Depends(get_current_user)],
+)
 async def get_user(user_id: int):
     """
     Get a specific user by ID.
@@ -63,7 +77,11 @@ async def get_user(user_id: int):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
 
 
-@router.put("/users/{user_id}", response_model=UserResponse)
+@router.put(
+    "/users/{user_id}",
+    response_model=UserResponse,
+    dependencies=[Depends(get_current_user)],
+)
 async def update_user(user_id: int, user_data: UserUpdate):
     """
     Update a user's information.
@@ -83,7 +101,11 @@ async def update_user(user_id: int, user_data: UserUpdate):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
 
 
-@router.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/users/{user_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(get_current_user)],
+)
 async def delete_user(user_id: int):
     """
     Delete a user.
@@ -99,8 +121,12 @@ async def delete_user(user_id: int):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
 
-@router.post("/users/login", response_model=int)
-async def login_user(username: str, password: str):    
+@router.post(
+    "/login",
+    response_model=TokenResponse,
+    status_code=status.HTTP_200_OK,
+)
+async def login_user(username: str, password: str):
     """
     User login endpoint.
     
@@ -110,7 +136,8 @@ async def login_user(username: str, password: str):
         user_role_id = await user_service.authenticate_user(username=username, password=password)
         if not user_role_id:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-        return user_role_id
+        access_token = create_access_token({"sub": username, "role_id": user_role_id})
+        return TokenResponse(access_token=access_token, token_type="bearer", role_id=user_role_id)
     except HTTPException:
         raise
     except Exception as e:

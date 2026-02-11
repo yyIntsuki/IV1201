@@ -38,3 +38,10 @@ class UserResponse(UserBase):
     
     class Config:
         from_attributes = True
+
+
+class TokenResponse(BaseModel):
+    """Schema for login response with JWT token."""
+    access_token: str
+    token_type: str
+    role_id: int
