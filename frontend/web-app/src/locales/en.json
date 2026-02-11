@@ -87,6 +87,41 @@
             }
         }
     },
+    "applicant": {
+        "applicationForm": {
+            "title": "Application Form",
+            "back": "Back",
+            "next": "Next",
+            "submit": "Submit application",
+            "submitted": {
+                "title": "Application submitted!",
+                "message": "Your job application has been registered successfully."
+            },
+            "competence": {
+                "ticket sales": "Ticket sales",
+                "lotteries": "Lotteries",
+                "roller coaster operation": "Roller coaster operation"
+            },
+            "expertise": {
+                "title": "Step 1: Add areas of expertise",
+                "selectLabel": "Select expertise",
+                "yearsLabel": "Years"
+            },
+            "availability": {
+                "title": "Step 2: Add availability periods",
+                "startLabel": "Start",
+                "endLabel": "End"
+            },
+            "review": {
+                "title": "Step 3: Review & submit",
+                "expertise": "Expertise:",
+                "availability": "Availability:"
+            },
+            "years": "year(s)",
+            "add": "Add",
+            "remove": "Remove"
+        }
+    },
     "pagination": {
         "rowsPerPage": "Rows per page",
         "displayedRows": "{{from}}–{{to}} of {{count}}",

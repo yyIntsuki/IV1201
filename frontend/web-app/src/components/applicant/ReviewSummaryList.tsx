@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { Competence, Availability } from "@/types/application";
 
 import Typography from "@mui/material/Typography";
@@ -11,22 +12,26 @@ interface ReviewSummaryListProps {
 }
 
 const ReviewSummaryList: React.FC<ReviewSummaryListProps> = ({ competenceList, availabilityList }) => {
+    const { t } = useTranslation();
+
     return (
         <>
             <Typography variant="h5" mb={2}>
-                Step 3: Review & Submit
+                {t("applicant.applicationForm.review.title")}
             </Typography>
 
-            <Typography variant="subtitle1">Expertise:</Typography>
+            <Typography variant="h6">{t("applicant.applicationForm.review.expertise")}</Typography>
             <List>
                 {competenceList.map((exp, i) => (
                     <ListItem key={i}>
-                        <ListItemText primary={`${exp.competence} — ${exp.yearsOfExperience} years`} />
+                        <ListItemText
+                            primary={`${t(`applicant.applicationForm.competence.${exp.competence}`)} — ${exp.yearsOfExperience} ${t("applicant.applicationForm.years")}`}
+                        />
                     </ListItem>
                 ))}
             </List>
 
-            <Typography variant="subtitle1">Availability:</Typography>
+            <Typography variant="h6">{t("applicant.applicationForm.review.availability")}</Typography>
             <List>
                 {availabilityList.map((a, i) => (
                     <ListItem key={i}>

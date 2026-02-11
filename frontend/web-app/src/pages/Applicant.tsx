@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { Competence, Availability } from "@/types/application";
 import AvailabilityInput from "@/components/applicant/AvailabilityInput";
 import CompetenceInput from "@/components/applicant/CompetenceInput";
@@ -19,6 +20,8 @@ const Applicant = () => {
     const handleNext = () => setStep(step + 1);
     const handleBack = () => setStep(step - 1);
 
+    const { t } = useTranslation();
+
     const handleSubmit = () => {
         console.log("Submitting job application:", { competenceList, availabilityList });
         setStep(4);
@@ -28,7 +31,7 @@ const Applicant = () => {
         <>
             <Card sx={{ display: "inline-block", p: 2 }}>
                 <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    {step < 4 && <Typography variant="h1">Job Application</Typography>}
+                    {step < 4 && <Typography variant="h1">{t("applicant.applicationForm.title")}</Typography>}
 
                     {step === 1 && (
                         <CompetenceInput
@@ -52,25 +55,25 @@ const Applicant = () => {
 
                     {step === 4 && (
                         <>
-                            <Typography variant="h2">Application Submitted!</Typography>
-                            <Typography variant="body1">
-                                Your job application has been registered successfully.
-                            </Typography>
+                            <Typography variant="h2">{t("applicant.applicationForm.submitted.title")}</Typography>
+                            <Typography variant="body1">{t("applicant.applicationForm.submitted.message")}</Typography>
                         </>
                     )}
 
                     <ButtonGroup sx={{ display: "flex", justifyContent: "flex-end" }}>
-                        {step > 1 && step < 4 && <Button onClick={handleBack}>Back</Button>}
+                        {step > 1 && step < 4 && (
+                            <Button onClick={handleBack}>{t("applicant.applicationForm.back")}</Button>
+                        )}
 
                         {step < 3 && (
                             <Button variant="contained" onClick={handleNext} disabled={!isStepValid}>
-                                Next
+                                {t("applicant.applicationForm.next")}
                             </Button>
                         )}
 
                         {step === 3 && (
                             <Button variant="contained" onClick={handleSubmit} disabled={!isStepValid}>
-                                Submit Application
+                                {t("applicant.applicationForm.submit")}
                             </Button>
                         )}
                     </ButtonGroup>

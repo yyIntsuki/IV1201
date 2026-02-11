@@ -88,6 +88,41 @@
             }
         }
     },
+    "applicant": {
+        "applicationForm": {
+            "title": "Ansökningsformulär",
+            "back": "Tillbaka",
+            "next": "Nästa",
+            "submit": "Skicka ansökan",
+            "submitted": {
+                "title": "Ansökan skickad!",
+                "message": "Din jobbansökan har registrerats."
+            },
+            "competence": {
+                "ticket sales": "Biljettförsäljning",
+                "lotteries": "Lotterier",
+                "roller coaster operation": "Berg- och dalbanedrift"
+            },
+            "expertise": {
+                "title": "Steg 1: Lägg till erfarenhet",
+                "selectLabel": "Välj kompetens",
+                "yearsLabel": "År"
+            },
+            "availability": {
+                "title": "Steg 2: Lägg till tillgänglighetsperioder",
+                "startLabel": "Start",
+                "endLabel": "Slut"
+            },
+            "review": {
+                "title": "Steg 3: Granska och skicka",
+                "expertise": "Erfarenhet:",
+                "availability": "Tillgänglighet:"
+            },
+            "years": "år",
+            "add": "Lägg till",
+            "remove": "Ta bort"
+        }
+    },
     "pagination": {
         "rowsPerPage": "Rader per sida",
         "displayedRows": "{{from}}–{{to}} av {{count}}",
