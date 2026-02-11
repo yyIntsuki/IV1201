@@ -25,7 +25,8 @@ const apiRequest = async <T>(
         return response.data as T;
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
-            const message = error.response?.data?.message ?? `HTTP error ${error.response?.status}`;
+            const data = error.response?.data as { message?: string; detail?: string } | undefined;
+            const message = data?.detail ?? data?.message ?? `HTTP error ${error.response?.status}`;
             throw new Error(message);
         }
         throw new Error("Unexpected error");

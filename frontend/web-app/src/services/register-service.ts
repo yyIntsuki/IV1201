@@ -1,20 +1,17 @@
-import type { RegisterData } from "@/types/account";
-
-const STORAGE_KEY = "local_accounts";
+import type { Account } from "@/types/account";
+import registerApi from "@/api/register-api"; 
 
 const registerService = {
     /**
-     * Registers a new account in localStorage
+     * Registers a new account by calling the backend API
      */
-    register: async (account: RegisterData) => {
-        await new Promise((resolve) => setTimeout(resolve, 300));
-
-        const existing = localStorage.getItem(STORAGE_KEY);
-        const accounts: RegisterData[] = existing ? JSON.parse(existing) : [];
-
-        accounts.push(account);
-
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
+    register: async (account: Account) => {
+        try {
+            await registerApi(account);
+        } catch (e) {
+            const message = e instanceof Error ? e.message : String(e);
+            throw new Error(`Registration failed. Reason: ${message}`);
+        }
     },
 };
 

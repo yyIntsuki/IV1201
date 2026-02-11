@@ -82,6 +82,18 @@ class UserService:
             True if valid, False otherwise
         """
         return bool(re.match(r'^[a-zA-Z0-9\-]+$', pnr)) and len(pnr.strip()) > 0
+
+    def _validate_password(self, password: str) -> bool:
+        """
+        Validate password format (business rule).
+        
+        Args:
+            password: Plain text password
+            
+        Returns:
+            True if valid, False otherwise
+        """
+        return len(password.strip()) >= 8
     
     async def create_user(self, user_data: UserCreate) -> UserResponse:
         """
@@ -118,6 +130,9 @@ class UserService:
 
         if not self._validate_username(user_data.username):
             raise ValueError("Invalid username format")
+
+        if not self._validate_password(user_data.password):
+            raise ValueError("Password must be at least 8 characters")
         
         # Business logic: Check if user already exists
         existing_user = await self.repository.get_by_email(user_data.email)
@@ -202,6 +217,9 @@ class UserService:
 
         if user_data.username and not self._validate_username(user_data.username):
             raise ValueError("Invalid username format")
+
+        if user_data.password and not self._validate_password(user_data.password):
+            raise ValueError("Password must be at least 8 characters")
         
         # Business logic: Check for email conflicts
         if user_data.email:

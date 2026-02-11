@@ -91,8 +91,8 @@ const Register = () => {
         try {
             await registerService.register(formData);
             setSuccess(true);
-        } catch {
-            setRegistrationError("Registration failed. Please try again.");
+        } catch (e) {
+            setRegistrationError(`${e}`);
         }
     };
 

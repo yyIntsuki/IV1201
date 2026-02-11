@@ -12,7 +12,7 @@ class Person(Base):
     """
     __tablename__ = "person"
     
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    person_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String(255), nullable=False)
     surname = Column(String(255), nullable=False)
     pnr = Column(String(255), nullable=False, unique=True, index=True)

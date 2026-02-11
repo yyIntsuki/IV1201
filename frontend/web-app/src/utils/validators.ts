@@ -52,9 +52,13 @@ export const validateUsername = (value: string): string | null => {
 };
 
 export const validatePassword = (value: string): string | null => {
-    if (!value.trim()) return "Password is required.";
+    // if (!value.trim()) return "Password is required.";
     // const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
     // if (!passwordRegex.test(value)) return "Password must be at least 8 characters and include letters and numbers.";
-    if (value.length < 4) return "Password must be at least 4 characters."; // Temporary for testing
+    // if (value.length < 4) return "Password must be at least 4 characters."; // Temporary for testing
+    // return null;
+
+    if (!value.trim()) return "Password is required.";
+    if (value.length < 8) return "Password must be at least 8 characters.";
     return null;
 };

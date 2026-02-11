@@ -32,7 +32,7 @@ class UserRepository:
         query = """
             INSERT INTO person (name, surname, pnr, email, password, role_id, username)
             VALUES (:name, :surname, :pnr, :email, :password, :role_id, :username)
-            RETURNING id, name, surname, pnr, email, role_id, username
+            RETURNING person_id AS id, name, surname, pnr, email, role_id, username
         """
         values = {
             "name": name,
@@ -58,9 +58,9 @@ class UserRepository:
             User data or None if not found
         """
         query = """
-            SELECT id, name, surname, pnr, email, role_id, username
+            SELECT person_id AS id, name, surname, pnr, email, role_id, username
             FROM person
-            WHERE id = :user_id
+            WHERE person_id = :user_id
         """
         result = await database.fetch_one(query=query, values={"user_id": user_id})
         return result
@@ -76,7 +76,7 @@ class UserRepository:
             User data or None if not found
         """
         query = """
-            SELECT id, name, surname, pnr, email, password, role_id, username
+            SELECT person_id AS id, name, surname, pnr, email, password, role_id, username
             FROM person
             WHERE email = :email
         """
@@ -111,7 +111,7 @@ class UserRepository:
             User data or None if not found
         """
         query = """
-            SELECT id, name, surname, pnr, email, role_id, username
+            SELECT person_id AS id, name, surname, pnr, email, role_id, username
             FROM person
             WHERE pnr = :pnr
         """
@@ -126,9 +126,9 @@ class UserRepository:
             List of all users
         """
         query = """
-            SELECT id, name, surname, pnr, email, role_id, username
+            SELECT person_id AS id, name, surname, pnr, email, role_id, username
             FROM person
-            ORDER BY id DESC
+            ORDER BY person_id DESC
         """
         results = await database.fetch_all(query=query)
         return results
@@ -159,8 +159,8 @@ class UserRepository:
         query = f"""
             UPDATE person
             SET {', '.join(update_fields)}
-            WHERE id = :user_id
-            RETURNING id, name, surname, pnr, email, role_id, username
+            WHERE person_id = :user_id
+            RETURNING person_id AS id, name, surname, pnr, email, role_id, username
         """
         
         result = await database.fetch_one(query=query, values=values)
@@ -178,7 +178,7 @@ class UserRepository:
         """
         query = """
             DELETE FROM person
-            WHERE id = :user_id
+            WHERE person_id = :user_id
         """
         result = await database.execute(query=query, values={"user_id": user_id})
         return result > 0
