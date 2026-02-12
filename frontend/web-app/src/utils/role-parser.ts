@@ -1,15 +1,18 @@
-import ROLES from "@/constants/roles";
 import type { Role } from "@/types/role";
+
+export const ROLES_MAP: Record<number, Role> = {
+    1: "recruiter",
+    2: "applicant",
+};
 
 /**
  * Parses a role number into a string. To be used directly after getting the JSON data from API.
- * @param roleId a number. For details see constants/role.
- * @returns the role in string form.
+ * @param roleId role number identifier
+ * @returns the coresponding role string
  */
-const parseRole = (roleId: number): Role => {
-    const role = ROLES[roleId - 1];
-    if (!role) throw new Error("Invalid role ID");
-    return role as Role;
+export const parseRole = (roleId: number | null): Role | null => {
+    if (!roleId) return null;
+    return ROLES_MAP[roleId] ?? null;
 };
 
 export default parseRole;

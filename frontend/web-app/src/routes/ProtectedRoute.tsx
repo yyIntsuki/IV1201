@@ -3,8 +3,8 @@ import useAuth from "@/hooks/use-auth";
 import type { Role } from "@/types/role";
 
 /**
- * ProtectedRoute component to guard routes that require authentication.
- * Also handles authorization based on account type.
+ * ProtectedRoute component to guard routes that require authentication, so that unauthorized users cannot use protected pages.
+ * Also ensures recruiters cannot gain access to applicant's page, and vice versa.
  */
 const ProtectedRoute = ({ allowedRoles }: { allowedRoles?: Role[] }) => {
     const { isLoggedIn, role } = useAuth();

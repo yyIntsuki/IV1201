@@ -1,11 +1,6 @@
 /**
- * Storage keys used in localStorage.
- * Stores the keys for authentication status and user role.
+ * Storage keys used in local storage.
  */
-const STORAGE_KEYS = {
-    IS_LOGGED_IN: "isLoggedIn",
-    ROLE: "role",
-    TOKEN: "token",
-};
+const STORAGE_KEYS = { TOKEN: "token" };
 
 export default STORAGE_KEYS;

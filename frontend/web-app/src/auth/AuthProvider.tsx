@@ -1,34 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AuthContext from "./AuthContext";
 import authService from "../services/auth-service";
-import STORAGE_KEYS from "@/constants/storage-keys";
-import type { Role } from "@/types/role";
+import { getJwtRemainingTime, getRoleFromJwt, isJwtExpired } from "@/utils/jwt-decoder";
+import parseRole from "@/utils/role-parser";
 
 /**
  * AuthProvider component that provides authentication context to its children.
  * Handles login state and account type, as well as login and logout functions.
- * @returns The AuthContext.Provider component with the authentication state and functions.
+ * The isLoggedIn and role states are derived and passed down from here.
  */
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const session = authService.getSession();
-
-    const [isLoggedIn, setIsLoggedIn] = useState(session.isLoggedIn);
-    const [role, setRole] = useState<Role | null>(session.role);
-    const [token, setToken] = useState<string | null>(session.token);
+    const [token, setToken] = useState<string | null>(authService.getToken());
 
     const login = async (username: string, password: string) => {
-        const userRole = await authService.login(username, password);
-        setIsLoggedIn(true);
-        setRole(userRole);
-        setToken(localStorage.getItem(STORAGE_KEYS.TOKEN));
+        await authService.login(username, password);
+        setToken(authService.getToken());
     };
 
     const logout = () => {
         authService.logout();
-        setIsLoggedIn(false);
-        setRole(null);
         setToken(null);
     };
+
+    /* Logs out user when JWT is expired, starts counting only if there is a valid token. */
+    useEffect(() => {
+        if (!token || isJwtExpired(token)) return;
+
+        const remainingTime = getJwtRemainingTime(token);
+        const timer = setTimeout(logout, remainingTime);
+        return () => clearTimeout(timer);
+    }, [token]);
+
+    /* Derives the login state and role from the JWT instead of storing in local storage */
+    const isLoggedIn = !!token && !isJwtExpired(token);
+    const role = token ? parseRole(getRoleFromJwt(token)) : null;
 
     return <AuthContext.Provider value={{ isLoggedIn, role, token, login, logout }}>{children}</AuthContext.Provider>;
 };

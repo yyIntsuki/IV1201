@@ -5,8 +5,7 @@ import useAuth from "@/hooks/use-auth";
 import Button from "@mui/material/Button";
 
 /**
- * LogoutButton component with logout button positioned at top right using only positioning.
- * Only visible if user is already logged in.
+ * Logout Button component. Only shown if user is already logged in.
  */
 const LogoutButton = () => {
     const { isLoggedIn, logout } = useAuth();

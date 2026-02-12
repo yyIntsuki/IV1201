@@ -1,53 +1,37 @@
 import loginApi from "@/api/login-api";
 import STORAGE_KEYS from "@/constants/storage-keys";
-import type { Role } from "@/types/role";
-import parseRole from "@/utils/role-parser";
+import { isJwtExpired } from "@/utils/jwt-decoder";
 
 /**
  * Authentication service to handle login, logout, and session management.
  * This is the actual implementation of the authService used in the AuthProvider.
  */
 const authService = {
-
     /**
-     * Get current session from localStorage
-     * @returns the session state with isLoggedIn and role information
+     * Gets the current JWT from local storage, if exists.
+     * @returns the JWT
      */
-    getSession() {
-        return {
-            isLoggedIn: localStorage.getItem(STORAGE_KEYS.IS_LOGGED_IN) === "true",
-            role: (localStorage.getItem(STORAGE_KEYS.ROLE) as Role) || null,
-            token: localStorage.getItem(STORAGE_KEYS.TOKEN),
-        };
-    },
-
-    /**
-     * Login API call and save to localStorage
-     * @returns the parsed role for convenience
-     */
-    async login(username: string, password: string): Promise<Role> {
-        try {
-            const loginResponse = await loginApi(username, password);
-            const role = parseRole(loginResponse.role_id);
-
-            localStorage.setItem(STORAGE_KEYS.IS_LOGGED_IN, "true");
-            localStorage.setItem(STORAGE_KEYS.ROLE, role);
-            localStorage.setItem(STORAGE_KEYS.TOKEN, loginResponse.access_token);
-
-            return role;
-        } catch {
-            throw new Error("Login failed");
+    getToken(): string | null {
+        const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
+        if (!token || isJwtExpired(token)) {
+            localStorage.removeItem(STORAGE_KEYS.TOKEN);
+            return null;
         }
+        return token;
     },
 
     /**
-     * Logout: clears session
+     * Handles the login API call, and if successful sets token to local storage.
      */
-    logout() {
-        localStorage.removeItem(STORAGE_KEYS.IS_LOGGED_IN);
-        localStorage.removeItem(STORAGE_KEYS.ROLE);
-        localStorage.removeItem(STORAGE_KEYS.TOKEN);
-    }
+    async login(username: string, password: string) {
+        const loginResponse = await loginApi(username, password);
+        localStorage.setItem(STORAGE_KEYS.TOKEN, loginResponse.access_token);
+    },
+
+    /**
+     * Handles logout, by removing the token from local storage, hence ending the session.
+     */
+    logout() { localStorage.removeItem(STORAGE_KEYS.TOKEN); }
 };
 
 export default authService;
