@@ -88,16 +88,38 @@ The router uses the 'react-router' module which allows route definitions and pro
 
 The user authorizes by logging in, which fetches a login response from the API. If user successfully log in, the session is stored in form of a AuthContext, which is accessible by a useAuth hook. The AuthProvider decides which authorization service it uses, currently there is only one such service. By separating it into a service gives the opportunity to test multiple methods of authentication, if needed.
 
+The app uses JWT (JSON Web Token) as a secure way to store authentication session. This token is provided by the backend. It is encrypted and then stored in the frontend client's local storage. Due to its encrypted nature, the user cannot get access to pages they aren't allowed to. For instance an applicant cannot modify the JWT to authorize themselves as recruiter.
+
 ### Views
 
 The views of the frontend are put in /pages, which handles UI that is presented to the user, and interaction logic. The interactions should call functions from other parts of the code to return relevant data, and not directly from the code in /pages.
 
+To make componnets easier to work with, the views splits out components that it uses to separate concerns. This helps the architectural abstraction and maintenance. Despite being a bit more complex to set up.
+
+### Layout
+
+The app uses a Header, MainLayout, Footer format. It may not look like it first but due to how little information that is required to be shown on the screen by specifications. The header and footer elements are transparent, but fixed at the page top respectively bottom.
+
+By having a layout, we eliminate the need of rewriting same components on each page. We could technically abstract login and register forms even further but I think currently it is not strictly necessary, as it is not a big priority.
+
 ### Types
 
-Types are used as definitions to data structures.
+Types are used as definitions to data structures. They are used to define data that is used in various places in the app, which may be used elsewhere than just that one page. This can help with data consistency across the app.
 
 ### Naming conventions
 
 The actual syntax namings should follow the most regular conventions. However, there are no such strict rules for file namings. In this regard, the frontend uses PascalCase for everything that are used like components and types, then kebab-case for everything else.
+
+### Error handling
+
+Currently, the logic (non-UI) error handling are done by catching errors in try-catch blocks. This should be the recommended approach, especially for logic errors.
+
+The UI errors (such as login fail, registration fail) are handled in the form as an error context, which provides a hook to display an error toast at the bottom of the screen showing the error message. By using the hook, we eliminate the need to implement the error logic in each view that needs it.
+
+### Localization
+
+Currently, the app uses i18next for internationalization. The implemented languages are English and Swedish. This can be toggled in the top right corner using a button group.
+
+The i18next framework helps setting up a simple translation module that can be easily maintained, and all the language texts are put in one place, i.e. /locales.
 
 </details>
