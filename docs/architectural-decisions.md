@@ -123,3 +123,38 @@ Currently, the app uses i18next for internationalization. The implemented langua
 The i18next framework helps setting up a simple translation module that can be easily maintained, and all the language texts are put in one place, i.e. /locales.
 
 </details>
+
+## Backend
+
+<details>
+
+<summary>Collapsed Section</summary>
+
+
+### Architecture
+
+The backend is built with FastAPI and follows a layered architecture:
+
+- **Presentation Layer**: API routes (`app/api/routes`) handle HTTP requests and responses.
+- **Business Logic Layer**: Services (`app/services`) enforce validation and orchestrate workflows.
+- **Data Layer**: Repositories (`app/database/repositories`) execute SQL queries against PostgreSQL.
+
+### Authentication
+
+Authentication uses JWT. The login endpoint returns a JWT which the frontend stores in local storage and sends in the `Authorization: Bearer <token>` header. Protected endpoints require a valid token.
+
+### Database
+
+PostgreSQL is used as the relational database. The core tables are:
+
+- `person`
+- `role`
+- `competence`
+- `competence_profile`
+- `availability`
+
+### API Design
+
+The API uses JSON for request/response bodies and consistent error handling. Validation is performed both at the schema level (Pydantic) and in the service layer for business rules.
+
+</details>
