@@ -17,6 +17,9 @@ interface AvailabilityInputProps {
     onValidityChange?: (isValid: boolean) => void;
 }
 
+/**
+ * Component that handles availability input in the applicant page.
+ */
 const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange, onValidityChange }) => {
     const [currentFromDate, setCurrentFromDate] = useState("");
     const [currentToDate, setCurrentToDate] = useState("");

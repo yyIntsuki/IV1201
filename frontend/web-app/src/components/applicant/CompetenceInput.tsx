@@ -19,6 +19,9 @@ interface CompetenceInputProps {
     onValidityChange?: (isValid: boolean) => void;
 }
 
+/**
+ * Component that handles competence input in the applicant page.
+ */
 const CompetenceInput: React.FC<CompetenceInputProps> = ({ value, onChange, onValidityChange }) => {
     const [currentCompetence, setCurrentCompetence] = useState("");
     const [currentYearsOfExperience, setCurrentYearsOfExperience] = useState(1);

@@ -21,6 +21,9 @@ interface ApplicationsTableProps {
     onRowClick: (app: JobApplication) => void;
 }
 
+/**
+ * Component that shows list of basic job application in the recruiter page.
+ */
 const ApplicationsTable: React.FC<ApplicationsTableProps> = ({
     applications,
     totalCount,

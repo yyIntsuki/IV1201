@@ -14,6 +14,9 @@ const statusColorMap: Record<ApplicationStatus, "success" | "error" | "default">
     unhandled: "default",
 };
 
+/**
+ * Component that displays a chip of the application status in the recruiter page.
+ */
 const ApplicationStatusChip: React.FC<ApplicationStatusChipProps> = ({ status, size = "small" }) => {
     const { t } = useTranslation();
 

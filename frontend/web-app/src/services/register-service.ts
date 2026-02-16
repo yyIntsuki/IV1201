@@ -12,7 +12,7 @@ const registerService = {
             const message = e instanceof Error ? e.message : String(e);
             throw new Error(`Registration failed. Reason: ${message}`);
         }
-    },
+    }
 };
 
 export default registerService;

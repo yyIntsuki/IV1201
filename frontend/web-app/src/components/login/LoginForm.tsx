@@ -15,6 +15,9 @@ interface LoginFormProps {
     isFormValid: boolean;
 }
 
+/**
+ * Component that handles login input in the login page.
+ */
 const LoginForm: React.FC<LoginFormProps> = ({
     data,
     touched,

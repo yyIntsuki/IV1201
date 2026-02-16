@@ -7,7 +7,9 @@ interface ErrorToastProps {
     onClose: () => void;
     onExited: () => void;
 }
-
+/**
+ * An error toast that displays a message at the bottom of the page, and automatically closes after three seconds.
+ */
 const ErrorToast = ({ message, open, onClose, onExited }: ErrorToastProps) => {
     return (
         <Snackbar

@@ -20,6 +20,9 @@ interface ApplicationDetailsDialogProps {
     onStatusChange: (newStatus: ApplicationStatus) => void;
 }
 
+/**
+ * Component that handles job application details in the recruiter page.
+ */
 const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = ({
     application,
     onClose,

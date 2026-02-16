@@ -11,6 +11,9 @@ interface ReviewSummaryListProps {
     availabilityList: Availability[];
 }
 
+/**
+ * Component that handles summary of choices in the applicant page.
+ */
 const ReviewSummaryList: React.FC<ReviewSummaryListProps> = ({ competenceList, availabilityList }) => {
     const { t } = useTranslation();
 

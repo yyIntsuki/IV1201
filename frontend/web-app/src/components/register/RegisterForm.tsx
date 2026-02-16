@@ -16,6 +16,9 @@ interface RegisterFormProps {
     isFormValid: boolean;
 }
 
+/**
+ * Component that handles register input in the register page.
+ */
 const RegisterForm: React.FC<RegisterFormProps> = ({
     data,
     touched,
