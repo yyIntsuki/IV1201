@@ -6,12 +6,17 @@
         "login": "Logga in",
         "register": "Registrera"
     },
+    "errors": {
+        "network": "Kan inte ansluta till servern. Vänligen kontrollera din internetanslutning.",
+        "server": "Ett serverfel uppstod. Vänligen försök igen senare.",
+        "authentication": "Ogiltigt användarnamn eller lösenord."
+    },
     "login": {
         "title": "Inloggning",
         "subtitle": "Vänligen logga in för att komma åt applikationen",
         "submit": "Logga in",
         "no_account": "Har inget konto? Vänligen <1>registrera</1>.",
-        "error": "Ogiltigt användarnamn eller lösenord",
+        "error": "Ogiltigt användarnamn eller lösenord.",
         "fields": {
             "username": {
                 "label": "Användarnamn",
@@ -31,7 +36,7 @@
         "success_title": "Registrering lyckades!",
         "success_message": "Du kommer snart att skickas till inloggningssidan. Om inte, klicka <1>här</1>.",
         "submit": "Registrera",
-        "error": "Något gick fel under registreringen",
+        "error": "Något gick fel under registreringen.",
         "fields": {
             "firstName": {
                 "label": "Förnamn",

@@ -35,7 +35,7 @@ const Register = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const validator = formValidator(t);
-    const { showError } = useError();
+    const { showApiError } = useError();
 
     /* Maps each field to its validator function */
     const fieldValidators: Record<keyof Account, (val: string) => string | null> = {
@@ -86,8 +86,8 @@ const Register = () => {
         try {
             await registerService.register(formData);
             setSuccess(true);
-        } catch {
-            showError(t("register.error"));
+        } catch (error) {
+            showApiError(error);
         }
     };
 

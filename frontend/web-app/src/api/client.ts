@@ -10,6 +10,11 @@ const apiClient = axios.create({
     },
 });
 
+interface ApiError extends Error {
+    status?: number;
+    isNetworkError?: boolean;
+}
+
 /**
  * Generic API request helper.
  * Automatically returns parsed JSON.
@@ -34,7 +39,12 @@ const apiRequest = async <T>(
         if (axios.isAxiosError(error)) {
             const data = error.response?.data as { message?: string; detail?: string } | undefined;
             const message = data?.detail ?? data?.message ?? `HTTP error ${error.response?.status}`;
-            throw new Error(message);
+
+            /* Passes down a more readable error for easier handling. */
+            const detailedError = new Error(message) as ApiError;
+            detailedError.status = error.response?.status;
+            detailedError.isNetworkError = !error.response;
+            throw detailedError;
         }
         throw new Error("Unexpected error");
     }

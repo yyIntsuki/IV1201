@@ -21,7 +21,7 @@ const Login = () => {
     const { t } = useTranslation();
     const validators = formValidator(t);
     const { role, login } = useAuth();
-    const { showError } = useError();
+    const { showApiError } = useError();
 
     /* Maps each field to its validator function */
     const fieldValidators: Record<keyof LoginData, (val: string) => string | null> = {
@@ -62,8 +62,8 @@ const Login = () => {
         try {
             await login(formData.username, formData.password);
             navigate(role === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
-        } catch {
-            showError(t("login.error"));
+        } catch (error) {
+            showApiError(error);
         }
     };
 
