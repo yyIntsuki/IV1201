@@ -6,6 +6,8 @@ import CompetenceInput from "@/components/applicant/CompetenceInput";
 import ReviewSummaryList from "@/components/applicant/ReviewSummaryList";
 import { getUserIdFromJwt } from "@/utils/jwt-decoder";
 import STORAGE_KEYS from "@/constants/storage-keys";
+import submitApplication from "@/api/application-api";
+import COMPETENCE from "@/constants/competence";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -24,14 +26,43 @@ const Applicant = () => {
 
     const { t } = useTranslation();
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const userId = getUserIdFromJwt(localStorage.getItem(STORAGE_KEYS.TOKEN) || "");
-        console.log("User ID:", userId);
-        console.log(competenceList);
-        console.log(availabilityList);
-        // TODO: Implement actual submission logic, e.g. API call to submit application
-        console.log("Submitting job application:", { competenceList, availabilityList });
-        setStep(4);
+        if (!userId) {
+            console.error("Missing user ID in token.");
+            return;
+        }
+        if (competenceList.length === 0 || availabilityList.length === 0) {
+            console.error("Missing competence or availability data.");
+            return;
+        }
+
+        const competence_profile = competenceList.map((competence) => {
+            const competenceId = COMPETENCE.indexOf(competence.competence) + 1;
+            return {
+                competence_id: competenceId,
+                years_of_experience: competence.yearsOfExperience,
+            };
+        });
+        if (competence_profile.some((item) => item.competence_id <= 0)) {
+            console.error("Invalid competence selection.");
+            return;
+        }
+
+        const availability = availabilityList.map((item) => ({
+            from_date: item.fromDate,
+            to_date: item.toDate,
+        }));
+
+        const success = await submitApplication({
+            user_id: userId,
+            competence_profile,
+            availability,
+        });
+
+        if (success) {
+            setStep(4);
+        }
     };
 
     return (
