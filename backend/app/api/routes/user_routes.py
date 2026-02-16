@@ -4,6 +4,7 @@ Handles HTTP requests and responses.
 """
 from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List
+import logging
 
 from app.api.schemas.user_schemas import UserCreate, UserResponse, UserUpdate, TokenResponse
 from app.services.user_service import UserService
@@ -133,11 +134,12 @@ async def login_user(username: str, password: str):
     Demonstrates authentication flow through all layers.
     """
     try:
-        user_role_id = await user_service.authenticate_user(username=username, password=password)
-        if not user_role_id:
+        user_detail = await user_service.authenticate_user(username=username, password=password)
+        logging.info(user_detail)
+        if not user_detail:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-        access_token = create_access_token({"sub": username, "role_id": user_role_id})
-        return TokenResponse(access_token=access_token, token_type="bearer", role_id=user_role_id)
+        access_token = create_access_token({"role_id": user_detail["role_id"], "user_id": user_detail["user_id"]})
+        return TokenResponse(access_token=access_token, token_type="bearer")
     except HTTPException:
         raise
     except Exception as e:

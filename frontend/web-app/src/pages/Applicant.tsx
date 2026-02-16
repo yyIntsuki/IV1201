@@ -4,6 +4,8 @@ import type { Competence, Availability } from "@/types/application";
 import AvailabilityInput from "@/components/applicant/AvailabilityInput";
 import CompetenceInput from "@/components/applicant/CompetenceInput";
 import ReviewSummaryList from "@/components/applicant/ReviewSummaryList";
+import { getUserIdFromJwt } from "@/utils/jwt-decoder";
+import STORAGE_KEYS from "@/constants/storage-keys";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -23,6 +25,11 @@ const Applicant = () => {
     const { t } = useTranslation();
 
     const handleSubmit = () => {
+        const userId = getUserIdFromJwt(localStorage.getItem(STORAGE_KEYS.TOKEN) || "");
+        console.log("User ID:", userId);
+        console.log(competenceList);
+        console.log(availabilityList);
+        // TODO: Implement actual submission logic, e.g. API call to submit application
         console.log("Submitting job application:", { competenceList, availabilityList });
         setStep(4);
     };

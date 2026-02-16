@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 
 export interface JwtPayload {
-    sub: string;
+    user_id: number;
     role_id: number;
     exp: number;
 }
@@ -49,3 +49,13 @@ export const getRoleFromJwt = (token: string): number | null => {
     const decoded = decodeJwt(token);
     return decoded ? decoded.role_id : null;
 };
+
+/**
+ * Extract user ID from JWT.
+ * @param token JWT string
+ * @returns user_id or null if invalid
+ */
+export const getUserIdFromJwt = (token: string): number | null => {
+    const decoded = decodeJwt(token);
+    return decoded ? decoded.user_id : null;
+}

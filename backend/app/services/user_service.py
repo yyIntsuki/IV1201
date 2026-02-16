@@ -2,7 +2,7 @@
 User service - Business Logic Layer.
 Contains business logic and coordinates between presentation and data layers.
 """
-from typing import List, Optional
+from typing import List, Optional, Dict
 import hashlib
 import re
 import logging
@@ -274,7 +274,7 @@ class UserService:
         # For example: check if user has related records, soft delete, etc.
         return await self.repository.delete(user_id)
 
-    async def authenticate_user(self, username: str, password: str) -> Optional[int]:
+    async def authenticate_user(self, username: str, password: str) -> Dict[str, int]:
         """
         Authenticate a user by username and password.
         
@@ -294,4 +294,8 @@ class UserService:
             logging.info(f"Authentication failed: Incorrect password for user '{username}'.")
             return None
         
-        return user['role_id']
+        response = {
+            "user_id": user['person_id'],
+            "role_id": user['role_id'],
+        }
+        return response
