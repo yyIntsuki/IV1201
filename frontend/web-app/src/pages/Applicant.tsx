@@ -32,12 +32,12 @@ const Applicant = () => {
         const userId = getUserIdFromJwt(localStorage.getItem(STORAGE_KEYS.TOKEN) || "");
 
         if (!userId) {
-            showError("Missing user ID in token.");
+            showError(t("applicant.errors.missingUserId"));
             return;
         }
 
         if (competenceList.length === 0 || availabilityList.length === 0) {
-            showError("Missing competence or availability data.");
+            showError(t("applicant.errors.missingData"));
             return;
         }
 
@@ -47,7 +47,7 @@ const Applicant = () => {
         });
 
         if (competence_profile.some((item) => item.competence_id <= 0)) {
-            showError("Invalid competence selection.");
+            showError(t("applicant.errors.invalidCompetence"));
             return;
         }
 

@@ -127,6 +127,11 @@
             "years": "år",
             "add": "Lägg till",
             "remove": "Ta bort"
+        },
+        "errors": {
+            "missingUserId": "Vi kunde inte identifiera ditt konto. Logga in igen.",
+            "missingData": "Lägg till minst en kompetens och en tillgänglighetsperiod innan du skickar in.",
+            "invalidCompetence": "En eller flera av de valda kompetenserna är ogiltiga. Kontrollera och försök igen."
         }
     },
     "pagination": {

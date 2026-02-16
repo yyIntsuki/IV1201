@@ -127,6 +127,11 @@
             "years": "year(s)",
             "add": "Add",
             "remove": "Remove"
+        },
+        "errors": {
+            "missingUserId": "We couldn't identify your account. Please log in again.",
+            "missingData": "Please add at least one skill and one availability period before submitting.",
+            "invalidCompetence": "One or more of your selected skills is invalid. Please review and try again."
         }
     },
     "pagination": {
