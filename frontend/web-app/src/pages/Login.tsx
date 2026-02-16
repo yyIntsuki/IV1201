@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation, Trans } from "react-i18next";
 import useAuth from "@/hooks/use-auth";
-import ErrorToast from "@/components/ErrorToast";
+import useError from "@/hooks/use-error";
 import LoginForm from "@/components/login/LoginForm";
 import type { LoginData } from "@/types/account";
 import formValidator from "@/utils/form-validator";
@@ -16,12 +16,12 @@ const Login = () => {
     const [formData, setFormData] = useState<LoginData>({ username: "", password: "" });
     const [touched, setTouched] = useState<Record<keyof LoginData, boolean>>({ username: false, password: false });
     const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof LoginData, string>>>({});
-    const [loginError, setLoginError] = useState("");
 
     const navigate = useNavigate();
     const { t } = useTranslation();
     const validators = formValidator(t);
     const { role, login } = useAuth();
+    const { showError } = useError();
 
     /* Maps each field to its validator function */
     const fieldValidators: Record<keyof LoginData, (val: string) => string | null> = {
@@ -47,7 +47,6 @@ const Login = () => {
         e.preventDefault();
 
         setTouched({ username: true, password: true });
-        setLoginError("");
 
         // Validate all fields dynamically
         const newErrors: Partial<Record<"username" | "password", string>> = {};
@@ -64,7 +63,7 @@ const Login = () => {
             await login(formData.username, formData.password);
             navigate(role === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
         } catch {
-            setLoginError(t("login.error"));
+            showError(t("login.error"));
         }
     };
 
@@ -72,11 +71,8 @@ const Login = () => {
         (field) => !fieldValidators[field](formData[field]),
     );
 
-    const errorToast = loginError && <ErrorToast open={true} message={loginError} onClose={() => setLoginError("")} />;
-
     return (
         <>
-            {errorToast}
             <Card sx={{ minWidth: 400, p: 2 }}>
                 <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     <Typography variant="h1">{t("login.title")}</Typography>

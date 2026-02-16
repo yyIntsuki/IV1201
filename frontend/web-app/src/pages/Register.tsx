@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation, Trans } from "react-i18next";
-import ErrorToast from "@/components/ErrorToast";
+import useError from "@/hooks/use-error";
 import registerService from "@/services/register-service";
 import RegisterForm from "@/components/register/RegisterForm";
 import type { Account } from "@/types/account";
@@ -30,12 +30,12 @@ const Register = () => {
         password: false,
     });
     const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof Account, string>>>({});
-    const [registrationError, setRegistrationError] = useState("");
     const [success, setSuccess] = useState(false);
 
     const navigate = useNavigate();
     const { t } = useTranslation();
     const validator = formValidator(t);
+    const { showError } = useError();
 
     /* Maps each field to its validator function */
     const fieldValidators: Record<keyof Account, (val: string) => string | null> = {
@@ -87,16 +87,12 @@ const Register = () => {
             await registerService.register(formData);
             setSuccess(true);
         } catch {
-            setRegistrationError(t("register.error"));
+            showError(t("register.error"));
         }
     };
 
     const isFormValid = (Object.keys(formData) as (keyof Account)[]).every(
         (field) => !fieldValidators[field](formData[field]),
-    );
-
-    const errorToast = registrationError && (
-        <ErrorToast open={true} message={registrationError} onClose={() => setRegistrationError("")} />
     );
 
     useEffect(() => {
@@ -123,7 +119,6 @@ const Register = () => {
 
     return (
         <>
-            {errorToast}
             <Card sx={{ display: "inline-block", p: 2 }}>
                 <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     <Typography variant="h1">{t("register.title")}</Typography>

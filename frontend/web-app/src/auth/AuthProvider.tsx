@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import AuthContext from "./AuthContext";
-import authService from "../services/auth-service";
+import authService from "@/services/auth-service";
 import { getJwtRemainingTime, getRoleFromJwt, isJwtExpired } from "@/utils/jwt-decoder";
 import parseRole from "@/utils/role-parser";
 

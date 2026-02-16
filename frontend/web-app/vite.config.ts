@@ -13,6 +13,7 @@ export default defineConfig({
       "@/auth": path.resolve(__dirname, "src/auth"),
       "@/components": path.resolve(__dirname, "src/components"),
       "@/constants": path.resolve(__dirname, "src/constants"),
+      "@/errors": path.resolve(__dirname, "src/errors"),
       "@/hooks": path.resolve(__dirname, "src/hooks"),
       "@/layout": path.resolve(__dirname, "src/layout"),
       "@/pages": path.resolve(__dirname, "src/pages"),

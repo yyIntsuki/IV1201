@@ -1,22 +1,26 @@
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-interface Props {
+interface ErrorToastProps {
+    message: string | null;
     open: boolean;
-    message: string;
     onClose: () => void;
+    onExited: () => void;
 }
 
-const ErrorToast = ({ open, message, onClose }: Props) => {
+const ErrorToast = ({ message, open, onClose, onExited }: ErrorToastProps) => {
     return (
         <Snackbar
             open={open}
             autoHideDuration={3000}
             onClose={onClose}
+            slotProps={{ transition: { onExited } }}
             anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
-            <Alert severity="error" variant="filled">
-                {message}
-            </Alert>
+            {message ?
+                <Alert severity="error" variant="filled">
+                    {message}
+                </Alert>
+            :   undefined}
         </Snackbar>
     );
 };
