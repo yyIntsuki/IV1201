@@ -1,18 +1,19 @@
 import { useContext } from "react";
-import axios from "axios";
 import { useTranslation } from "react-i18next";
 import ErrorContext from "@/errors/ErrorContext";
+import { isApiError } from "@/api/api-error";
 
-interface ApiErrorResult {
+interface UseErrorResult {
     showError: (message: string) => void;
-    showApiError: (error: unknown) => void;
-    getApiErrorMessage: (error: unknown) => string;
+    showApiError: (error: unknown, scope?: string) => void;
+    getApiErrorMessage: (error: unknown, scope?: string) => string;
 }
 
 /**
- * Enhanced error hook that provides both general error display and API error handling.
+ * Global error handling hook.
+ * Converts API / network errors into user-facing messages.
  */
-const useError = (): ApiErrorResult => {
+const useError = (): UseErrorResult => {
     const context = useContext(ErrorContext);
     if (!context) throw new Error("useError must be used within an ErrorProvider");
 
@@ -21,22 +22,21 @@ const useError = (): ApiErrorResult => {
     /**
      * Determines the appropriate error message based on the error type.
      */
-    const getApiErrorMessage = (error: unknown): string => {
-        if (axios.isAxiosError(error)) {
-            const status = error.response?.status;
-            const data = error.response?.data as { message?: string; detail?: string } | undefined;
-            const message = data?.detail ?? data?.message;
+    const getApiErrorMessage = (error: unknown, scope?: string): string => {
+        if (isApiError(error)) {
+            if (error.isNetworkError) return t("errors.network");
 
-            if (!error.response) {
-                return t("errors.network");
-            } else if (status === 401) {
-                return t("errors.authentication");
-            } else if (status && status >= 500) {
-                return t("errors.server");
-            } else if (message) {
-                return message;
-            }
+            if (error.status === 401)
+                return scope === "login"
+                    ? t("errors.authentication")
+                    : t("errors.unauthorized");
+
+            if (error.status && error.status >= 500) return t("errors.server");
+
+            return error.message || t("errors.server");
         }
+
+        if (error instanceof Error && error.message) return error.message;
 
         return t("errors.server");
     };
@@ -44,9 +44,8 @@ const useError = (): ApiErrorResult => {
     /**
      * Handles API errors by determining the appropriate message and displaying it.
      */
-    const showApiError = (error: unknown): void => {
-        const errorMessage = getApiErrorMessage(error);
-        context.showError(errorMessage);
+    const showApiError = (error: unknown, scope?: string): void => {
+        context.showError(getApiErrorMessage(error, scope));
     };
 
     return {

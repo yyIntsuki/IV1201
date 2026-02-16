@@ -1,4 +1,5 @@
 import axios, { type AxiosRequestConfig } from "axios";
+import { createApiError } from "./api-error";
 import STORAGE_KEYS from "@/constants/storage-keys";
 
 const API_BASE_URL = "http://127.0.0.1:8000";
@@ -9,11 +10,6 @@ const apiClient = axios.create({
         "Content-Type": "application/json",
     },
 });
-
-interface ApiError extends Error {
-    status?: number;
-    isNetworkError?: boolean;
-}
 
 /**
  * Generic API request helper.
@@ -37,16 +33,24 @@ const apiRequest = async <T>(
         return response.data as T;
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
-            const data = error.response?.data as { message?: string; detail?: string } | undefined;
-            const message = data?.detail ?? data?.message ?? `HTTP error ${error.response?.status}`;
+            const data = error.response?.data as
+                | { message?: string; detail?: string }
+                | undefined;
 
-            /* Passes down a more readable error for easier handling. */
-            const detailedError = new Error(message) as ApiError;
-            detailedError.status = error.response?.status;
-            detailedError.isNetworkError = !error.response;
-            throw detailedError;
+            const message =
+                data?.detail ??
+                data?.message ??
+                `HTTP error ${error.response?.status ?? ""}`.trim();
+
+            throw createApiError(message, {
+                status: error.response?.status,
+                isNetworkError: !error.response,
+            });
         }
-        throw new Error("Unexpected error");
+
+        throw createApiError("Unexpected error", {
+            isNetworkError: true,
+        });
     }
 };
 

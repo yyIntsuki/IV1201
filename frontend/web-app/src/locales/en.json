@@ -9,7 +9,8 @@
     "errors": {
         "network": "Unable to connect to server. Please check your internet connection.",
         "server": "Server error occurred. Please try again later.",
-        "authentication": "Invalid username or password."
+        "authentication": "Invalid username or password.",
+        "registration": "Something went wrong during registration."
     },
     "login": {
         "title": "Login",
@@ -36,7 +37,6 @@
         "success_title": "Registration Successful!",
         "success_message": "You will be redirected to the login page shortly. If not, click <1>here</1>.",
         "submit": "Register",
-        "error": "Something went wrong with registration.",
         "fields": {
             "firstName": {
                 "label": "First name",

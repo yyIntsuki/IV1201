@@ -63,7 +63,7 @@ const Login = () => {
             await login(formData.username, formData.password);
             navigate(role === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
         } catch (error) {
-            showApiError(error);
+            showApiError(error, "login");
         }
     };
 

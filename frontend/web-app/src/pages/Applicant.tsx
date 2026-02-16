@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import useError from "@/hooks/use-error";
 import type { Competence, Availability } from "@/types/application";
 import AvailabilityInput from "@/components/applicant/AvailabilityInput";
 import CompetenceInput from "@/components/applicant/CompetenceInput";
@@ -25,44 +26,36 @@ const Applicant = () => {
     const handleBack = () => setStep(step - 1);
 
     const { t } = useTranslation();
+    const { showError } = useError();
 
     const handleSubmit = async () => {
         const userId = getUserIdFromJwt(localStorage.getItem(STORAGE_KEYS.TOKEN) || "");
+
         if (!userId) {
-            console.error("Missing user ID in token.");
+            showError("Missing user ID in token.");
             return;
         }
+
         if (competenceList.length === 0 || availabilityList.length === 0) {
-            console.error("Missing competence or availability data.");
+            showError("Missing competence or availability data.");
             return;
         }
 
         const competence_profile = competenceList.map((competence) => {
             const competenceId = COMPETENCE.indexOf(competence.competence) + 1;
-            return {
-                competence_id: competenceId,
-                years_of_experience: competence.yearsOfExperience,
-            };
+            return { competence_id: competenceId, years_of_experience: competence.yearsOfExperience };
         });
+
         if (competence_profile.some((item) => item.competence_id <= 0)) {
-            console.error("Invalid competence selection.");
+            showError("Invalid competence selection.");
             return;
         }
 
-        const availability = availabilityList.map((item) => ({
-            from_date: item.fromDate,
-            to_date: item.toDate,
-        }));
+        const availability = availabilityList.map((item) => ({ from_date: item.fromDate, to_date: item.toDate }));
 
-        const success = await submitApplication({
-            user_id: userId,
-            competence_profile,
-            availability,
-        });
+        const success = await submitApplication({ user_id: userId, competence_profile, availability });
 
-        if (success) {
-            setStep(4);
-        }
+        if (success) setStep(4);
     };
 
     return (
