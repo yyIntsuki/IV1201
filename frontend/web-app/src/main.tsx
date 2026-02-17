@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import Router from "./Router";
+import ErrorProvider from "@/errors/ErrorProvider";
 import AuthProvider from "@/auth/AuthProvider";
 
 import "./i18n";
@@ -17,9 +18,12 @@ createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <AuthProvider>
-                <Router />
-            </AuthProvider>
+
+            <ErrorProvider>
+                <AuthProvider>
+                    <Router />
+                </AuthProvider>
+            </ErrorProvider>
         </ThemeProvider>
     </StrictMode>,
 );
