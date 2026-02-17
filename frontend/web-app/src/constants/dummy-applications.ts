@@ -1,6 +1,6 @@
-import type { JobApplication } from "@/types/application";
+import type { ApplicationRecord } from "@/types/application";
 
-const dummyApplications: JobApplication[] = [];
+const dummyApplications: ApplicationRecord[] = [];
 
 const names = [
     "Alexandrina Sebastiane",
@@ -39,7 +39,7 @@ const names = [
     "Yidhari Murphy",
     "Yuan Zhu",
 ];
-const statuses: JobApplication["status"][] = ["unhandled", "accepted", "rejected"];
+const statuses: ApplicationRecord["status"][] = ["unhandled", "accepted", "rejected"];
 const competences = ["ticket sales", "lotteries", "roller coaster operation"];
 const years = [1, 2, 3, 4, 5];
 

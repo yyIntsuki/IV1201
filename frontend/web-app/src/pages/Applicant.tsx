@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
-import type { Competence, Availability } from "@/types/application";
+import STORAGE_KEYS from "@/constants/storage-keys";
+import type { Competence, Availability, ApplicationSubmission } from "@/types/application";
+import applicationService from "@/services/application-service";
+import { getUserIdFromJwt } from "@/utils/jwt-decoder";
+import CompetenceParser from "@/utils/competence-parser";
 import AvailabilityInput from "@/components/applicant/AvailabilityInput";
 import CompetenceInput from "@/components/applicant/CompetenceInput";
 import ReviewSummaryList from "@/components/applicant/ReviewSummaryList";
-import { getUserIdFromJwt } from "@/utils/jwt-decoder";
-import STORAGE_KEYS from "@/constants/storage-keys";
-import submitApplication from "@/api/application-api";
-import COMPETENCE from "@/constants/competence";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -26,6 +27,7 @@ const Applicant = () => {
     const handleBack = () => setStep(step - 1);
 
     const { t } = useTranslation();
+    const { startLoading, stopLoading } = useLoading();
     const { showError, showApiError } = useError();
 
     const handleSubmit = async () => {
@@ -41,23 +43,34 @@ const Applicant = () => {
             return;
         }
 
-        const competence_profile = competenceList.map((competence) => {
-            const competenceId = COMPETENCE.indexOf(competence.competence) + 1;
-            return { competence_id: competenceId, years_of_experience: competence.yearsOfExperience };
-        });
+        let submitData: ApplicationSubmission;
 
-        if (competence_profile.some((item) => item.competence_id <= 0)) {
+        try {
+            submitData = {
+                userId,
+                competenceProfile: competenceList.map((c) => ({
+                    competence: c.competence,
+                    yearsOfExperience: c.yearsOfExperience,
+                })),
+                availability: availabilityList.map((a) => ({ fromDate: a.fromDate, toDate: a.toDate })),
+            };
+
+            submitData.competenceProfile.forEach((c) => {
+                CompetenceParser.competenceToId(c.competence);
+            });
+        } catch {
             showError(t("applicant.errors.invalidCompetence"));
             return;
         }
 
-        const availability = availabilityList.map((item) => ({ from_date: item.fromDate, to_date: item.toDate }));
-
         try {
-            await submitApplication({ user_id: userId, competence_profile, availability });
+            startLoading();
+            await applicationService.submitApplication(submitData);
             setStep(4);
         } catch (error) {
             showApiError(error);
+        } finally {
+            stopLoading();
         }
     };
 
@@ -105,7 +118,7 @@ const Applicant = () => {
                     )}
 
                     {step === 3 && (
-                        <Button variant="contained" onClick={void handleSubmit} disabled={!isStepValid}>
+                        <Button variant="contained" onClick={() => void handleSubmit()} disabled={!isStepValid}>
                             {t("applicant.applicationForm.submit")}
                         </Button>
                     )}

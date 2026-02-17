@@ -5,16 +5,31 @@ import type { Competence as CompetenceType } from "@/types/competence"; // Alias
  * To get the list of available competence, please use constants/competence.
  */
 export interface Competence {
-    competence: CompetenceType;     // string parsed from competence_id
-    yearsOfExperience: number;      // years_of_experience
+    competence: CompetenceType;
+    yearsOfExperience: number;
 }
 
 /**
  * Represents one availablity in a list of availablities.
  */
 export interface Availability {
-    fromDate: string;               // from_date
-    toDate: string;                 // to_date
+    fromDate: string;
+    toDate: string;
+}
+
+/**
+ * Common base application format.
+ */
+export interface ApplicationCore {
+    competenceProfile: Competence[];
+    availability: Availability[];
+}
+
+/**
+ * Represents the application submission used for Applicant.
+ */
+export interface ApplicationSubmission extends ApplicationCore {
+    userId: number;
 }
 
 /**
@@ -23,12 +38,10 @@ export interface Availability {
 export type ApplicationStatus = "accepted" | "rejected" | "unhandled";
 
 /**
- * Represents one complete job application template.
+ * Represents the application submission used for Recruiter.
  */
-export interface JobApplication {
+export interface ApplicationRecord extends ApplicationCore {
     id: string;
     fullName: string;
     status: ApplicationStatus;
-    competenceProfile: Competence[];
-    availability: Availability[];
 }

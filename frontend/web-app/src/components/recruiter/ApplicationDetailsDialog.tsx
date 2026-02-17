@@ -1,4 +1,4 @@
-import type { JobApplication, ApplicationStatus } from "@/types/application";
+import type { ApplicationRecord, ApplicationStatus } from "@/types/application";
 import { useTranslation } from "react-i18next";
 import ApplicationStatusChip from "./ApplicationStatusChip";
 
@@ -15,7 +15,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 
 interface ApplicationDetailsDialogProps {
-    application: JobApplication | null;
+    application: ApplicationRecord | null;
     onClose: () => void;
     onStatusChange: (newStatus: ApplicationStatus) => void;
 }

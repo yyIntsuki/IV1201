@@ -4,11 +4,11 @@ import { useTranslation, Trans } from "react-i18next";
 import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
 import useForm from "@/hooks/use-form";
-import registerService from "@/services/register-service";
-import RegisterForm from "@/components/register/RegisterForm";
-import type { Account } from "@/types/account";
-import formValidator from "@/utils/form-validator";
 import ROUTES from "@/constants/routes";
+import type { Account } from "@/types/account";
+import registerService from "@/services/register-service";
+import formValidator from "@/utils/form-validator";
+import RegisterForm from "@/components/register/RegisterForm";
 
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";

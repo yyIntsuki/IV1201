@@ -3,9 +3,9 @@ import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
 import useAuth from "@/hooks/use-auth";
 import useForm from "@/hooks/use-form";
-import LoginForm from "@/components/login/LoginForm";
 import type { LoginData } from "@/types/account";
 import formValidator from "@/utils/form-validator";
+import LoginForm from "@/components/login/LoginForm";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -17,7 +17,7 @@ const Login = () => {
     const { startLoading, stopLoading } = useLoading();
     const { showApiError } = useError();
     const { login } = useAuth();
-    
+
     const validators = formValidator(t);
     const { formData, touched, fieldErrors, handleChange, handleBlur, handleSubmit, isFormValid } = useForm<LoginData>({
         initialValues: { username: "", password: "" },

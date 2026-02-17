@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import type { JobApplication } from "@/types/application";
+import type { ApplicationRecord } from "@/types/application";
 import ApplicationStatusChip from "./ApplicationStatusChip";
 
 import Box from "@mui/material/Box";
@@ -12,13 +12,13 @@ import TableBody from "@mui/material/TableBody";
 import TablePagination from "@mui/material/TablePagination";
 
 interface ApplicationsTableProps {
-    applications: JobApplication[];
+    applications: ApplicationRecord[];
     totalCount: number;
     page: number;
     rowsPerPage: number;
     onPageChange: (newPage: number) => void;
     onRowsPerPageChange: (rows: number) => void;
-    onRowClick: (app: JobApplication) => void;
+    onRowClick: (app: ApplicationRecord) => void;
 }
 
 /**

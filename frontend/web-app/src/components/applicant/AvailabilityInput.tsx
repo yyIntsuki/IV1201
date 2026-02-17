@@ -1,6 +1,6 @@
 import { useState, useEffect, type FC } from "react";
 import { useTranslation } from "react-i18next";
-import type { Availability } from "@/types/application";
+import type { Availability } from "@/types/application-record";
 
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";

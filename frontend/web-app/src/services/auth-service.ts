@@ -4,7 +4,6 @@ import { isJwtExpired } from "@/utils/jwt-decoder";
 
 /**
  * Authentication service to handle login, logout, and session management.
- * This is the actual implementation of the authService used in the AuthProvider.
  */
 const authService = {
     /**

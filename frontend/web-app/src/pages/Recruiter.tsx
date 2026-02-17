@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { JobApplication, ApplicationStatus } from "@/types/application";
+import type { ApplicationRecord, ApplicationStatus } from "@/types/application";
+import dummyApplications from "@/constants/dummy-applications";
 import ApplicationsTable from "@/components/recruiter/ApplicationsTable";
 import ApplicationDetailsDialog from "@/components/recruiter/ApplicationDetailsDialog";
-import dummyApplications from "@/constants/dummy-applications";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -11,8 +11,8 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 const Recruiter = () => {
-    const [applications, setApplications] = useState<JobApplication[]>(dummyApplications);
-    const [selectedApplication, setSelectedApplication] = useState<JobApplication | null>(null);
+    const [applications, setApplications] = useState<ApplicationRecord[]>(dummyApplications);
+    const [selectedApplication, setSelectedApplication] = useState<ApplicationRecord | null>(null);
 
     const { t } = useTranslation();
 
@@ -21,7 +21,7 @@ const Recruiter = () => {
 
     const paginatedApps = applications.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-    const handleRowClick = (app: JobApplication) => setSelectedApplication(app);
+    const handleRowClick = (app: ApplicationRecord) => setSelectedApplication(app);
 
     const handleStatusChange = (status: ApplicationStatus) => {
         if (!selectedApplication) return;
