@@ -26,7 +26,7 @@ const Applicant = () => {
     const handleBack = () => setStep(step - 1);
 
     const { t } = useTranslation();
-    const { showError } = useError();
+    const { showError, showApiError } = useError();
 
     const handleSubmit = async () => {
         const userId = getUserIdFromJwt(localStorage.getItem(STORAGE_KEYS.TOKEN) || "");
@@ -53,9 +53,12 @@ const Applicant = () => {
 
         const availability = availabilityList.map((item) => ({ from_date: item.fromDate, to_date: item.toDate }));
 
-        const success = await submitApplication({ user_id: userId, competence_profile, availability });
-
-        if (success) setStep(4);
+        try {
+            await submitApplication({ user_id: userId, competence_profile, availability });
+            setStep(4);
+        } catch (error) {
+            showApiError(error);
+        }
     };
 
     return (
