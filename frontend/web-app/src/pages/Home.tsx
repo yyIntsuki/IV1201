@@ -11,8 +11,8 @@ const Home = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
 
-    const login = () => navigate(ROUTES.LOGIN);
-    const register = () => navigate(ROUTES.REGISTER);
+    const login = () => void navigate(ROUTES.LOGIN);
+    const register = () => void navigate(ROUTES.REGISTER);
 
     return (
         <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
