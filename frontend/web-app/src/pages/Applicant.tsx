@@ -105,7 +105,7 @@ const Applicant = () => {
                     )}
 
                     {step === 3 && (
-                        <Button variant="contained" onClick={handleSubmit} disabled={!isStepValid}>
+                        <Button variant="contained" onClick={void handleSubmit} disabled={!isStepValid}>
                             {t("applicant.applicationForm.submit")}
                         </Button>
                     )}

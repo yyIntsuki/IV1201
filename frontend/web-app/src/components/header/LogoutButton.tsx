@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import useAuth from "@/hooks/use-auth";
+import ROUTES from "@/constants/routes";
 
 import Button from "@mui/material/Button";
 
@@ -14,7 +15,7 @@ const LogoutButton = () => {
 
     const handleLogout = () => {
         logout();
-        navigate("/", { replace: true });
+        void navigate(ROUTES.HOME, { replace: true });
     };
 
     if (!isLoggedIn) return null;

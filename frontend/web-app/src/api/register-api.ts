@@ -26,13 +26,7 @@ const registerApi = async (account: Account): Promise<void> => {
         role_id: 2,
     };
 
-    await apiRequest<void>(
-        "/api/v1/users",
-        {
-            method: "POST",
-            data: payload,
-        }
-    );
+    await apiRequest<void>("/api/v1/users", { method: "POST", data: payload });
 };
 
 export default registerApi;

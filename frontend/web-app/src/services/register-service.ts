@@ -5,7 +5,9 @@ const registerService = {
     /**
      * Registers a new account by calling the backend API
      */
-    async register(account: Account): Promise<void> { await registerApi(account); }
+    async register(account: Account): Promise<void> {
+        await registerApi(account);
+    },
 };
 
 export default registerService;

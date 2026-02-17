@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
+import ROUTES from "@/constants/routes";
 
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
@@ -10,13 +11,8 @@ const Home = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
 
-    const login = () => {
-        navigate("/login");
-    };
-
-    const register = () => {
-        navigate("/register");
-    };
+    const login = () => navigate(ROUTES.LOGIN);
+    const register = () => navigate(ROUTES.REGISTER);
 
     return (
         <Stack sx={{ justifyContent: "center", alignItems: "center" }}>

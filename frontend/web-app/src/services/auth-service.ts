@@ -31,7 +31,9 @@ const authService = {
     /**
      * Handles logout, by removing the token from local storage, hence ending the session.
      */
-    logout() { localStorage.removeItem(STORAGE_KEYS.TOKEN); }
+    logout() {
+        localStorage.removeItem(STORAGE_KEYS.TOKEN);
+    },
 };
 
 export default authService;

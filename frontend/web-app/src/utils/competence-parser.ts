@@ -9,7 +9,7 @@ import type { Competence } from "@/types/competence";
 const parseRole = (competenceId: number): Competence => {
     const competence = COMPETENCE[competenceId - 1];
     if (!competence) throw new Error("Invalid competence ID");
-    return competence as Competence;
+    return competence;
 };
 
 export default parseRole;

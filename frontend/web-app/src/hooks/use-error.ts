@@ -35,9 +35,7 @@ const useError = (): UseErrorResult => {
             }
 
             if (error.status === 401)
-                return scope === "login"
-                    ? t("errors.login.authentication")
-                    : t("errors.unauthorized");
+                return scope === "login" ? t("errors.login.authentication") : t("errors.unauthorized");
 
             if (error.status && error.status >= 500) return t("errors.server");
 
@@ -56,11 +54,7 @@ const useError = (): UseErrorResult => {
         context.showError(getApiErrorMessage(error, scope));
     };
 
-    return {
-        showError: context.showError,
-        showApiError,
-        getApiErrorMessage
-    };
+    return { showError: context.showError, showApiError, getApiErrorMessage };
 };
 
 export default useError;

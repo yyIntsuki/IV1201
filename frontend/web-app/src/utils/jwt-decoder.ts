@@ -12,7 +12,11 @@ export interface JwtPayload {
  * @returns decoded payload or null if invalid
  */
 export const decodeJwt = (token: string): JwtPayload | null => {
-    try { return jwtDecode<JwtPayload>(token); } catch { return null; }
+    try {
+        return jwtDecode<JwtPayload>(token);
+    } catch {
+        return null;
+    }
 };
 
 /**
@@ -58,4 +62,4 @@ export const getRoleFromJwt = (token: string): number | null => {
 export const getUserIdFromJwt = (token: string): number | null => {
     const decoded = decodeJwt(token);
     return decoded ? decoded.user_id : null;
-}
+};

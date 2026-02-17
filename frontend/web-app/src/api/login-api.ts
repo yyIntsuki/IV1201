@@ -12,17 +12,8 @@ export interface LoginResponse {
  * @param password
  * @returns login response with JWT and role ID
  */
-const loginApi = async (
-    username: string,
-    password: string,
-): Promise<LoginResponse> => {
-    return apiRequest<LoginResponse>(
-        "/api/v1/login",
-        {
-            method: "POST",
-            params: { username, password },
-        }
-    );
+const loginApi = async (username: string, password: string): Promise<LoginResponse> => {
+    return apiRequest<LoginResponse>("/api/v1/login", { method: "POST", params: { username, password } });
 };
 
 export default loginApi;

@@ -88,7 +88,9 @@ const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange, onVali
                     <ListItem
                         key={i}
                         secondaryAction={
-                            <Button onClick={() => removeAvailability(i)}>{t("applicant.applicationForm.remove")}</Button>
+                            <Button onClick={() => removeAvailability(i)}>
+                                {t("applicant.applicationForm.remove")}
+                            </Button>
                         }>
                         <ListItemText primary={`${a.fromDate} → ${a.toDate}`} />
                     </ListItem>

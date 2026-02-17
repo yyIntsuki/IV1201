@@ -37,7 +37,7 @@ const names = [
     "Vivian Banshee",
     "Shunguang Ye",
     "Yidhari Murphy",
-    "Yuan Zhu"
+    "Yuan Zhu",
 ];
 const statuses: JobApplication["status"][] = ["unhandled", "accepted", "rejected"];
 const competences = ["ticket sales", "lotteries", "roller coaster operation"];
@@ -54,10 +54,9 @@ for (let i = 0; i < 25; i++) {
 
     const shuffledCompetences = shuffle([...competences]);
     const numCompetences = 1 + Math.floor(Math.random() * shuffledCompetences.length);
-    const competenceProfile = shuffledCompetences.slice(0, numCompetences).map((c) => ({
-        competence: c,
-        yearsOfExperience: years[Math.floor(Math.random() * years.length)],
-    }));
+    const competenceProfile = shuffledCompetences
+        .slice(0, numCompetences)
+        .map((c) => ({ competence: c, yearsOfExperience: years[Math.floor(Math.random() * years.length)] }));
 
     const numAvailability = 1 + Math.floor(Math.random() * 5);
     const availability = Array.from({ length: numAvailability }, () => {
@@ -69,13 +68,7 @@ for (let i = 0; i < 25; i++) {
         };
     });
 
-    dummyApplications.push({
-        id: i.toString(),
-        fullName,
-        status,
-        competenceProfile,
-        availability,
-    });
+    dummyApplications.push({ id: i.toString(), fullName, status, competenceProfile, availability });
 }
 
 export default dummyApplications;

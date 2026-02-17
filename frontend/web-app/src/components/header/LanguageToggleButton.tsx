@@ -11,7 +11,7 @@ const LanguageToggleButton = () => {
 
     const handleChange = (_: React.MouseEvent<HTMLElement>, newLanguage: string | null) => {
         if (!newLanguage) return; // required for exclusive toggle
-        i18n.changeLanguage(newLanguage);
+        void i18n.changeLanguage(newLanguage);
     };
 
     return (

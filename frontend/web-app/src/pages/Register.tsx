@@ -7,6 +7,7 @@ import registerService from "@/services/register-service";
 import RegisterForm from "@/components/register/RegisterForm";
 import type { Account } from "@/types/account";
 import formValidator from "@/utils/form-validator";
+import ROUTES from "@/constants/routes";
 
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
@@ -42,9 +43,7 @@ const Register = () => {
 
     useEffect(() => {
         if (success) {
-            const timer = setTimeout(() => {
-                navigate("/login");
-            }, 3000);
+            const timer = setTimeout(() => navigate(ROUTES.LOGIN), 3000);
             return () => clearTimeout(timer);
         }
     }, [success, navigate]);

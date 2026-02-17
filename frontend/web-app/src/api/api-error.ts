@@ -5,10 +5,7 @@ export interface ApiError extends Error {
 
 export const createApiError = (
     message: string,
-    options: {
-        status?: number;
-        isNetworkError?: boolean;
-    } = {},
+    options: { status?: number; isNetworkError?: boolean } = {},
 ): ApiError => {
     const error = new Error(message) as ApiError;
 
@@ -20,8 +17,5 @@ export const createApiError = (
 };
 
 export const isApiError = (error: unknown): error is ApiError => {
-    return (
-        error instanceof Error &&
-        error.name === "ApiError"
-    );
+    return error instanceof Error && error.name === "ApiError";
 };

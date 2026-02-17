@@ -1,9 +1,6 @@
 import type { Role } from "@/types/role";
 
-export const ROLES_MAP: Record<number, Role> = {
-    1: "recruiter",
-    2: "applicant",
-};
+export const ROLES_MAP: Record<number, Role> = { 1: "recruiter", 2: "applicant" };
 
 /**
  * Parses a role number into a string. To be used directly after getting the JSON data from API.

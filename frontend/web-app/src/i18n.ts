@@ -1,7 +1,7 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 
-import STORAGE_KEYS from '@/constants/storage-keys';
+import STORAGE_KEYS from "@/constants/storage-keys";
 import en from "./locales/en.json";
 import sv from "./locales/sv.json";
 
@@ -15,13 +15,12 @@ i18n.use(initReactI18next).init({
     debug: true,
 
     /* Define language resources that are available to the application */
-    resources: {
-        en: { translation: en },
-        sv: { translation: sv }
-    },
+    resources: { en: { translation: en }, sv: { translation: sv } },
 });
 
 /* Language persistance */
-i18n.on("languageChanged", (lng) => { localStorage.setItem(STORAGE_KEYS.LANGUAGE, lng); });
+i18n.on("languageChanged", (lng) => {
+    localStorage.setItem(STORAGE_KEYS.LANGUAGE, lng);
+});
 
 export default i18n;
