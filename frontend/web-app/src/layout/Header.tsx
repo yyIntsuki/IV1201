@@ -1,3 +1,5 @@
+import Attractions from "@mui/icons-material/attractions";
+
 import LogoutButton from "@/components/header/LogoutButton";
 import LanguageToggleButton from "@/components/header/LanguageToggleButton";
 
@@ -17,7 +19,10 @@ const Header = () => (
             p: 2,
             zIndex: 10,
         }}>
-        <Typography variant="h6">Amusement Park</Typography>
+        <Box sx={{ display: "flex", gap: 2 }}>
+            <Attractions fontSize="large" />
+            <Typography variant="h6">Amusement Park</Typography>
+        </Box>
 
         <Box sx={{ display: "flex", gap: 2 }}>
             <LogoutButton />
