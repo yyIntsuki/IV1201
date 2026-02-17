@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router";
 import { useTranslation, Trans } from "react-i18next";
 import useAuth from "@/hooks/use-auth";
 import useError from "@/hooks/use-error";
@@ -13,10 +12,9 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 
 const Login = () => {
-    const navigate = useNavigate();
     const { t } = useTranslation();
     const validators = formValidator(t);
-    const { role, login } = useAuth();
+    const { login } = useAuth();
     const { showApiError } = useError();
     const { formData, touched, fieldErrors, handleChange, handleBlur, handleSubmit, isFormValid } = useForm<LoginData>({
         initialValues: { username: "", password: "" },
@@ -24,7 +22,6 @@ const Login = () => {
         onSubmit: async ({ username, password }) => {
             try {
                 await login(username, password);
-                navigate(role === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
             } catch (error) {
                 showApiError(error, "login");
             }

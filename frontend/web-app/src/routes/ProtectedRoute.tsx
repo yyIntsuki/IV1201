@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from "react-router";
 import useAuth from "@/hooks/use-auth";
 import type { Role } from "@/types/role";
+import getRoute from "@/utils/route-navigator";
 
 /**
  * ProtectedRoute component to guard routes that require authentication, so that unauthorized users cannot use protected pages.
@@ -11,8 +12,7 @@ const ProtectedRoute = ({ allowedRoles }: { allowedRoles?: Role[] }) => {
 
     if (!isLoggedIn) return <Navigate to="/login" replace />;
 
-    if (allowedRoles && !allowedRoles.includes(role!))
-        return <Navigate to={role === "recruiter" ? "/recruiter" : "/applicant"} replace />;
+    if (allowedRoles && !allowedRoles.includes(role!)) return <Navigate to={getRoute(role!)} replace />;
 
     return <Outlet />;
 };
