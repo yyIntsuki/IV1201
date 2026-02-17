@@ -62,58 +62,56 @@ const Applicant = () => {
     };
 
     return (
-        <>
-            <Card sx={{ display: "inline-block", p: 2 }}>
-                <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    {step < 4 && <Typography variant="h1">{t("applicant.applicationForm.title")}</Typography>}
+        <Card sx={{ display: "inline-block", p: 2 }}>
+            <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {step < 4 && <Typography variant="h1">{t("applicant.applicationForm.title")}</Typography>}
 
-                    {step === 1 && (
-                        <CompetenceInput
-                            value={competenceList}
-                            onChange={setCompetenceList}
-                            onValidityChange={setIsStepValid}
-                        />
+                {step === 1 && (
+                    <CompetenceInput
+                        value={competenceList}
+                        onChange={setCompetenceList}
+                        onValidityChange={setIsStepValid}
+                    />
+                )}
+
+                {step === 2 && (
+                    <AvailabilityInput
+                        value={availabilityList}
+                        onChange={setAvailabilityList}
+                        onValidityChange={setIsStepValid}
+                    />
+                )}
+
+                {step === 3 && (
+                    <ReviewSummaryList competenceList={competenceList} availabilityList={availabilityList} />
+                )}
+
+                {step === 4 && (
+                    <>
+                        <Typography variant="h2">{t("applicant.applicationForm.submitted.title")}</Typography>
+                        <Typography variant="body1">{t("applicant.applicationForm.submitted.message")}</Typography>
+                    </>
+                )}
+
+                <ButtonGroup sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    {step > 1 && step < 4 && (
+                        <Button onClick={handleBack}>{t("applicant.applicationForm.back")}</Button>
                     )}
 
-                    {step === 2 && (
-                        <AvailabilityInput
-                            value={availabilityList}
-                            onChange={setAvailabilityList}
-                            onValidityChange={setIsStepValid}
-                        />
+                    {step < 3 && (
+                        <Button variant="contained" onClick={handleNext} disabled={!isStepValid}>
+                            {t("applicant.applicationForm.next")}
+                        </Button>
                     )}
 
                     {step === 3 && (
-                        <ReviewSummaryList competenceList={competenceList} availabilityList={availabilityList} />
+                        <Button variant="contained" onClick={handleSubmit} disabled={!isStepValid}>
+                            {t("applicant.applicationForm.submit")}
+                        </Button>
                     )}
-
-                    {step === 4 && (
-                        <>
-                            <Typography variant="h2">{t("applicant.applicationForm.submitted.title")}</Typography>
-                            <Typography variant="body1">{t("applicant.applicationForm.submitted.message")}</Typography>
-                        </>
-                    )}
-
-                    <ButtonGroup sx={{ display: "flex", justifyContent: "flex-end" }}>
-                        {step > 1 && step < 4 && (
-                            <Button onClick={handleBack}>{t("applicant.applicationForm.back")}</Button>
-                        )}
-
-                        {step < 3 && (
-                            <Button variant="contained" onClick={handleNext} disabled={!isStepValid}>
-                                {t("applicant.applicationForm.next")}
-                            </Button>
-                        )}
-
-                        {step === 3 && (
-                            <Button variant="contained" onClick={handleSubmit} disabled={!isStepValid}>
-                                {t("applicant.applicationForm.submit")}
-                            </Button>
-                        )}
-                    </ButtonGroup>
-                </CardContent>
-            </Card>
-        </>
+                </ButtonGroup>
+            </CardContent>
+        </Card>
     );
 };
 

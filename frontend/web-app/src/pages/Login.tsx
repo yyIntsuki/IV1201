@@ -29,28 +29,26 @@ const Login = () => {
     });
 
     return (
-        <>
-            <Card sx={{ minWidth: 400, p: 2 }}>
-                <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <Typography variant="h1">{t("login.title")}</Typography>
-                    <Typography variant="subtitle1">{t("login.subtitle")}</Typography>
+        <Card sx={{ minWidth: 400, p: 2 }}>
+            <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <Typography variant="h1">{t("login.title")}</Typography>
+                <Typography variant="subtitle1">{t("login.subtitle")}</Typography>
 
-                    <LoginForm
-                        data={formData}
-                        touched={touched}
-                        fieldErrors={fieldErrors}
-                        handleChange={handleChange}
-                        handleBlur={handleBlur}
-                        handleSubmit={handleSubmit}
-                        isFormValid={isFormValid}
-                    />
+                <LoginForm
+                    data={formData}
+                    touched={touched}
+                    fieldErrors={fieldErrors}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    handleSubmit={handleSubmit}
+                    isFormValid={isFormValid}
+                />
 
-                    <Typography variant="subtitle1">
-                        <Trans i18nKey="login.noAccount" components={{ 1: <Link href="/register" /> }} />
-                    </Typography>
-                </CardContent>
-            </Card>
-        </>
+                <Typography variant="subtitle1">
+                    <Trans i18nKey="login.noAccount" components={{ 1: <Link href="/register" /> }} />
+                </Typography>
+            </CardContent>
+        </Card>
     );
 };
 

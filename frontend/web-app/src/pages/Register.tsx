@@ -51,40 +51,36 @@ const Register = () => {
 
     if (success) {
         return (
-            <>
-                <Card sx={{ display: "inline-block", p: 2 }}>
-                    <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                        <Typography variant="h3">{t("register.successTitle")}</Typography>
-                        <Typography variant="body1">{t("register.successMessage")}</Typography>
-                    </CardContent>
-                </Card>
-            </>
+            <Card sx={{ display: "inline-block", p: 2 }}>
+                <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                    <Typography variant="h3">{t("register.successTitle")}</Typography>
+                    <Typography variant="body1">{t("register.successMessage")}</Typography>
+                </CardContent>
+            </Card>
         );
     }
 
     return (
-        <>
-            <Card sx={{ display: "inline-block", p: 2 }}>
-                <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <Typography variant="h1">{t("register.title")}</Typography>
-                    <Typography variant="subtitle1">{t("register.subtitle")}</Typography>
+        <Card sx={{ display: "inline-block", p: 2 }}>
+            <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <Typography variant="h1">{t("register.title")}</Typography>
+                <Typography variant="subtitle1">{t("register.subtitle")}</Typography>
 
-                    <RegisterForm
-                        data={formData}
-                        touched={touched}
-                        fieldErrors={fieldErrors}
-                        handleChange={handleChange}
-                        handleBlur={handleBlur}
-                        handleSubmit={handleSubmit}
-                        isFormValid={isFormValid}
-                    />
+                <RegisterForm
+                    data={formData}
+                    touched={touched}
+                    fieldErrors={fieldErrors}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    handleSubmit={handleSubmit}
+                    isFormValid={isFormValid}
+                />
 
-                    <Typography variant="subtitle1">
-                        <Trans i18nKey="register.haveAccount" components={{ 1: <Link href="/login" /> }} />
-                    </Typography>
-                </CardContent>
-            </Card>
-        </>
+                <Typography variant="subtitle1">
+                    <Trans i18nKey="register.haveAccount" components={{ 1: <Link href="/login" /> }} />
+                </Typography>
+            </CardContent>
+        </Card>
     );
 };
 

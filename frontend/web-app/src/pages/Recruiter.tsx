@@ -32,35 +32,33 @@ const Recruiter = () => {
     };
 
     return (
-        <>
-            <Card sx={{ display: "inline-block", p: 2 }}>
-                <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <Stack>
-                        <Typography variant="h2">{t("recruiter.title")}</Typography>
-                        <Typography variant="body1">{t("recruiter.subtitle")}</Typography>
-                    </Stack>
+        <Card sx={{ display: "inline-block", p: 2 }}>
+            <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <Stack>
+                    <Typography variant="h2">{t("recruiter.title")}</Typography>
+                    <Typography variant="body1">{t("recruiter.subtitle")}</Typography>
+                </Stack>
 
-                    <ApplicationsTable
-                        applications={paginatedApps}
-                        totalCount={applications.length}
-                        page={page}
-                        rowsPerPage={rowsPerPage}
-                        onPageChange={setPage}
-                        onRowsPerPageChange={(rows) => {
-                            setRowsPerPage(rows);
-                            setPage(0);
-                        }}
-                        onRowClick={handleRowClick}
-                    />
+                <ApplicationsTable
+                    applications={paginatedApps}
+                    totalCount={applications.length}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    onPageChange={setPage}
+                    onRowsPerPageChange={(rows) => {
+                        setRowsPerPage(rows);
+                        setPage(0);
+                    }}
+                    onRowClick={handleRowClick}
+                />
 
-                    <ApplicationDetailsDialog
-                        application={selectedApplication}
-                        onClose={() => setSelectedApplication(null)}
-                        onStatusChange={handleStatusChange}
-                    />
-                </CardContent>
-            </Card>
-        </>
+                <ApplicationDetailsDialog
+                    application={selectedApplication}
+                    onClose={() => setSelectedApplication(null)}
+                    onStatusChange={handleStatusChange}
+                />
+            </CardContent>
+        </Card>
     );
 };
 
