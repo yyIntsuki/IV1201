@@ -13,7 +13,7 @@ const ProtectedRoute = ({ allowedRoles }: { allowedRoles?: Role[] }) => {
 
     if (!isLoggedIn) return <Navigate to={ROUTES.LOGIN} replace />;
 
-    if (allowedRoles && !allowedRoles.includes(role!)) return <Navigate to={getRoute(role!)} replace />;
+    if (allowedRoles && !allowedRoles.includes(role!)) return <Navigate to={getRoute(role)} replace />;
 
     return <Outlet />;
 };

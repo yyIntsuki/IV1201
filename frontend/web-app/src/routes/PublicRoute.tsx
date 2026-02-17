@@ -9,7 +9,7 @@ import getRoute from "@/utils/route-navigator";
 const PublicRoute = () => {
     const { isLoggedIn, role } = useAuth();
 
-    if (isLoggedIn) return <Navigate to={getRoute(role!)} replace />;
+    if (isLoggedIn) return <Navigate to={getRoute(role)} replace />;
 
     return <Outlet />;
 };

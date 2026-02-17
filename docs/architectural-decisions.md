@@ -98,9 +98,7 @@ To make componnets easier to work with, the views splits out components that it 
 
 ### Layout
 
-The app uses a Header, MainLayout, Footer format. It may not look like it first but due to how little information that is required to be shown on the screen by specifications. The header and footer elements are transparent, but fixed at the page top respectively bottom.
-
-By having a layout, we eliminate the need of rewriting same components on each page. We could technically abstract login and register forms even further but I think currently it is not strictly necessary, as it is not a big priority.
+The app uses a Header, MainLayout, Footer format. It may not look like it first but due to how little information that is required to be shown on the screen by specifications. The header and footer elements are transparent, but fixed at the page top respectively bottom. By having a layout, we eliminate the need of rewriting same components on each page.
 
 ### Types
 
@@ -122,6 +120,10 @@ Currently, the app uses i18next for internationalization. The implemented langua
 
 The i18next framework helps setting up a simple translation module that can be easily maintained, and all the language texts are put in one place, i.e. /locales.
 
+### Hooks
+
+Hooks are used to provide a concentrated functionality of certain modules. They are great for reducing redundant and duplicated code, whether it is rendering or logic. For instance, use-auth and use-error are used globally in the frontend, which benefits from a hook that can be called anywhere within the app with their respective contexts that wraps the entire app. Then use-form is one that helps with redundant form creation which would be redundant as they would've been using the same code in Login and Register pages.
+
 </details>
 
 ## Backend
@@ -129,7 +131,6 @@ The i18next framework helps setting up a simple translation module that can be e
 <details>
 
 <summary>Collapsed Section</summary>
-
 
 ### Architecture
 
@@ -158,3 +159,4 @@ PostgreSQL is used as the relational database. The core tables are:
 The API uses JSON for request/response bodies and consistent error handling. Validation is performed both at the schema level (Pydantic) and in the service layer for business rules.
 
 </details>
+
