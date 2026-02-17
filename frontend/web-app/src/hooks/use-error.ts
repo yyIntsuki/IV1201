@@ -46,7 +46,6 @@ const useError = (): UseErrorResult => {
 
         if (error instanceof Error && error.message) return error.message;
 
-        console.log(error)
         return t("errors.server");
     };
 
