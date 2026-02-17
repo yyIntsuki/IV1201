@@ -43,18 +43,16 @@ const Applicant = () => {
             return;
         }
 
-        let submitData: ApplicationSubmission;
+        const submitData: ApplicationSubmission = {
+            userId,
+            competenceProfile: competenceList.map((c) => ({
+                competence: c.competence,
+                yearsOfExperience: c.yearsOfExperience,
+            })),
+            availability: availabilityList.map((a) => ({ fromDate: a.fromDate, toDate: a.toDate })),
+        };
 
         try {
-            submitData = {
-                userId,
-                competenceProfile: competenceList.map((c) => ({
-                    competence: c.competence,
-                    yearsOfExperience: c.yearsOfExperience,
-                })),
-                availability: availabilityList.map((a) => ({ fromDate: a.fromDate, toDate: a.toDate })),
-            };
-
             submitData.competenceProfile.forEach((c) => {
                 CompetenceParser.competenceToId(c.competence);
             });
