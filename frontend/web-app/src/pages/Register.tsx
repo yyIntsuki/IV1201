@@ -87,7 +87,7 @@ const Register = () => {
             await registerService.register(formData);
             setSuccess(true);
         } catch (error) {
-            showApiError(error);
+            showApiError(error, "register");
         }
     };
 
@@ -109,8 +109,8 @@ const Register = () => {
             <>
                 <Card sx={{ display: "inline-block", p: 2 }}>
                     <CardContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                        <Typography variant="h3">{t("register.success_title")}</Typography>
-                        <Typography variant="body1">{t("register.success_message")}</Typography>
+                        <Typography variant="h3">{t("register.successTitle")}</Typography>
+                        <Typography variant="body1">{t("register.successMessage")}</Typography>
                     </CardContent>
                 </Card>
             </>
@@ -135,7 +135,7 @@ const Register = () => {
                     />
 
                     <Typography variant="subtitle1">
-                        <Trans i18nKey="register.have_account" components={{ 1: <Link href="/login" /> }} />
+                        <Trans i18nKey="register.haveAccount" components={{ 1: <Link href="/login" /> }} />
                     </Typography>
                 </CardContent>
             </Card>

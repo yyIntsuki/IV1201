@@ -7,16 +7,23 @@
         "register": "Register"
     },
     "errors": {
-        "network": "Unable to connect to server. Please check your internet connection.",
-        "server": "Server error occurred. Please try again later.",
-        "authentication": "Invalid username or password.",
-        "registration": "Something went wrong during registration."
+        "network": "Unable to connect to the server. Please check your internet connection.",
+        "server": "Something went wrong on our side. Please try again later.",
+        "unauthorized": "You are not authorized to perform this action.",
+        "login": {
+            "authentication": "Invalid username or password."
+        },
+        "registration": {
+            "emailExists": "An account with this email already exists.",
+            "usernameExists": "This username is already taken.",
+            "pnrExists": "An account with this personal number already exists."
+        }
     },
     "login": {
         "title": "Login",
         "subtitle": "Please log in to access the application",
         "submit": "Log in",
-        "no_account": "Don't have an account? Please <1>register</1>.",
+        "noAccount": "Don't have an account? Please <1>register</1>.",
         "error": "Invalid username or password.",
         "fields": {
             "username": {
@@ -33,9 +40,9 @@
     "register": {
         "title": "Register",
         "subtitle": "Please register to apply",
-        "have_account": "Already have an account? <1>Log in</1>.",
-        "success_title": "Registration Successful!",
-        "success_message": "You will be redirected to the login page shortly. If not, click <1>here</1>.",
+        "haveAccount": "Already have an account? <1>Log in</1>.",
+        "successTitle": "Registration Successful!",
+        "successMessage": "You will be redirected to the login page shortly. If not, click <1>here</1>.",
         "submit": "Register",
         "fields": {
             "firstName": {
@@ -130,8 +137,8 @@
         },
         "errors": {
             "missingUserId": "We couldn't identify your account. Please log in again.",
-            "missingData": "Please add at least one skill and one availability period before submitting.",
-            "invalidCompetence": "One or more of your selected skills is invalid. Please review and try again."
+            "missingData": "Please add at least one expertise and one availability period before submitting.",
+            "invalidCompetence": "One or more of your selected expertise is invalid. Please review and try again."
         }
     },
     "pagination": {

@@ -89,7 +89,7 @@ const Login = () => {
                     />
 
                     <Typography variant="subtitle1">
-                        <Trans i18nKey="login.no_account" components={{ 1: <Link href="/register" /> }} />
+                        <Trans i18nKey="login.noAccount" components={{ 1: <Link href="/register" /> }} />
                     </Typography>
                 </CardContent>
             </Card>

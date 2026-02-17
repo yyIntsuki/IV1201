@@ -7,16 +7,23 @@
         "register": "Registrera"
     },
     "errors": {
-        "network": "Kan inte ansluta till servern. Vänligen kontrollera din internetanslutning.",
+        "network": "Det gick inte att ansluta till servern. Kontrollera din internetanslutning.",
         "server": "Ett serverfel uppstod. Vänligen försök igen senare.",
-        "authentication": "Ogiltigt användarnamn eller lösenord.",
-        "registration": "Något gick fel under registreringen."
+        "unauthorized": "Du har inte behörighet att utföra denna åtgärd.",
+        "login": {
+            "authentication": "Felaktigt användarnamn eller lösenord."
+        },
+        "registration": {
+            "emailExists": "Ett konto med denna e-postadress finns redan.",
+            "usernameExists": "Detta användarnamn är redan upptaget.",
+            "pnrExists": "Ett konto med detta personnummer finns redan."
+        }
     },
     "login": {
         "title": "Inloggning",
         "subtitle": "Vänligen logga in för att komma åt applikationen",
         "submit": "Logga in",
-        "no_account": "Har inget konto? Vänligen <1>registrera</1>.",
+        "noAccount": "Har inget konto? Vänligen <1>registrera</1>.",
         "fields": {
             "username": {
                 "label": "Användarnamn",
@@ -32,9 +39,9 @@
     "register": {
         "title": "Registrera",
         "subtitle": "Vänligen registrera dig för att ansöka",
-        "have_account": "Har redan ett konto? <1>Logga in</1>.",
-        "success_title": "Registrering lyckades!",
-        "success_message": "Du kommer snart att skickas till inloggningssidan. Om inte, klicka <1>här</1>.",
+        "haveAccount": "Har redan ett konto? <1>Logga in</1>.",
+        "successTitle": "Registrering lyckades!",
+        "successMessage": "Du kommer snart att skickas till inloggningssidan. Om inte, klicka <1>här</1>.",
         "submit": "Registrera",
         "fields": {
             "firstName": {
@@ -84,7 +91,6 @@
                     "roller coaster operation": "Berg- och dalbanedrift"
                 },
                 "yearsOfExperience": "{{count}} år",
-                "yearsOfExperience_plural": "{{count}} år",
                 "availability": "Tillgänglighet",
                 "fromTo": "{{from}} → {{to}}",
                 "accept": "Godkänn",

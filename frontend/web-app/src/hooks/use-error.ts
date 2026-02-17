@@ -26,9 +26,17 @@ const useError = (): UseErrorResult => {
         if (isApiError(error)) {
             if (error.isNetworkError) return t("errors.network");
 
+            if (error.status === 400 && scope === "register") {
+                const msg = error.message?.toLowerCase() ?? "";
+
+                if (msg.includes("email")) return t("errors.registration.emailExists");
+                if (msg.includes("username")) return t("errors.registration.usernameExists");
+                if (msg.includes("personal")) return t("errors.registration.pnrExists");
+            }
+
             if (error.status === 401)
                 return scope === "login"
-                    ? t("errors.authentication")
+                    ? t("errors.login.authentication")
                     : t("errors.unauthorized");
 
             if (error.status && error.status >= 500) return t("errors.server");
@@ -38,6 +46,7 @@ const useError = (): UseErrorResult => {
 
         if (error instanceof Error && error.message) return error.message;
 
+        console.log(error)
         return t("errors.server");
     };
 
