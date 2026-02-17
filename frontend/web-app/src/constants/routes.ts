@@ -1,3 +1,6 @@
+/**
+ * Route constants to avoid hard-coding URL redirections in the code.
+ */
 const ROUTES = {
     HOME: "/",
     LOGIN: "/login",

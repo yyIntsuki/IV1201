@@ -3,6 +3,12 @@ export interface ApiError extends Error {
     isNetworkError: boolean;
 }
 
+/**
+ * Receives and specifies the API error such that it can be easily used in the frontend API error handling.
+ * @param message the error message
+ * @param options error status code and if it is a network error
+ * @returns a more specified API error
+ */
 export const createApiError = (
     message: string,
     options: { status?: number; isNetworkError?: boolean } = {},

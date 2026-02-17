@@ -10,7 +10,7 @@ const savedLanguage = localStorage.getItem(STORAGE_KEYS.LANGUAGE);
 /**
  * Uses and initiates i18next as the translation module.
  */
-i18n.use(initReactI18next).init({
+void i18n.use(initReactI18next).init({
     lng: savedLanguage || "en",
     debug: true,
 
@@ -19,8 +19,6 @@ i18n.use(initReactI18next).init({
 });
 
 /* Language persistance */
-i18n.on("languageChanged", (lng) => {
-    localStorage.setItem(STORAGE_KEYS.LANGUAGE, lng);
-});
+i18n.on("languageChanged", (lng) => localStorage.setItem(STORAGE_KEYS.LANGUAGE, lng));
 
 export default i18n;
