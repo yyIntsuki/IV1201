@@ -43,23 +43,18 @@ const Applicant = () => {
             return;
         }
 
-        const submitData: ApplicationSubmission = {
-            userId,
-            competenceProfile: competenceList.map((c) => ({
-                competence: c.competence,
-                yearsOfExperience: c.yearsOfExperience,
-            })),
-            availability: availabilityList.map((a) => ({ fromDate: a.fromDate, toDate: a.toDate })),
-        };
+        const isCompetenceListValid = competenceList.every((c) => CompetenceParser.isValidCompetence(c.competence));
 
-        try {
-            submitData.competenceProfile.forEach((c) => {
-                CompetenceParser.competenceToId(c.competence);
-            });
-        } catch {
+        if (!isCompetenceListValid) {
             showError(t("applicant.errors.invalidCompetence"));
             return;
         }
+
+        const submitData: ApplicationSubmission = {
+            userId,
+            competenceProfile: competenceList,
+            availability: availabilityList,
+        };
 
         try {
             startLoading();

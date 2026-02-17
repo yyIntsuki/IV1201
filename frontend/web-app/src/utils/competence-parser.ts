@@ -27,6 +27,15 @@ const CompetenceParser = {
         if (index === -1) throw new Error(`Invalid competence: ${competence}`);
         return index + 1;
     },
+
+    /**
+     * Checks if competence is valid
+     * @param value value to test
+     * @returns true if is valid competence
+     */
+    isValidCompetence(value: unknown): value is Competence {
+        return typeof value === "string" && COMPETENCE.includes(value as Competence);
+    },
 };
 
 export default CompetenceParser;
