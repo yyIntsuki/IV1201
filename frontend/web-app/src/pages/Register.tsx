@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation, Trans } from "react-i18next";
+import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
 import useForm from "@/hooks/use-form";
 import registerService from "@/services/register-service";
@@ -19,8 +20,10 @@ const Register = () => {
 
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const validator = formValidator(t);
+    const { startLoading, stopLoading } = useLoading();
     const { showApiError } = useError();
+
+    const validator = formValidator(t);
     const { formData, touched, fieldErrors, handleChange, handleBlur, handleSubmit, isFormValid } = useForm<Account>({
         initialValues: { firstName: "", lastName: "", email: "", personNumber: "", username: "", password: "" },
         validators: {
@@ -33,10 +36,13 @@ const Register = () => {
         },
         onSubmit: async (data) => {
             try {
+                startLoading();
                 await registerService.register(data);
                 setSuccess(true);
             } catch (error) {
                 showApiError(error, "register");
+            } finally {
+                stopLoading();
             }
         },
     });

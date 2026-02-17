@@ -1,6 +1,7 @@
 import { useTranslation, Trans } from "react-i18next";
-import useAuth from "@/hooks/use-auth";
+import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
+import useAuth from "@/hooks/use-auth";
 import useForm from "@/hooks/use-form";
 import LoginForm from "@/components/login/LoginForm";
 import type { LoginData } from "@/types/account";
@@ -13,17 +14,22 @@ import Link from "@mui/material/Link";
 
 const Login = () => {
     const { t } = useTranslation();
-    const validators = formValidator(t);
-    const { login } = useAuth();
+    const { startLoading, stopLoading } = useLoading();
     const { showApiError } = useError();
+    const { login } = useAuth();
+    
+    const validators = formValidator(t);
     const { formData, touched, fieldErrors, handleChange, handleBlur, handleSubmit, isFormValid } = useForm<LoginData>({
         initialValues: { username: "", password: "" },
         validators: { username: validators.validateUsername, password: validators.validatePassword },
         onSubmit: async ({ username, password }) => {
             try {
+                startLoading();
                 await login(username, password);
             } catch (error) {
                 showApiError(error, "login");
+            } finally {
+                stopLoading();
             }
         },
     });

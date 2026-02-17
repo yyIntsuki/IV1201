@@ -2,8 +2,11 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import Router from "./Router";
+import LoadingProvider from "./loading/LoadingProvider";
 import ErrorProvider from "@/errors/ErrorProvider";
 import AuthProvider from "@/auth/AuthProvider";
+
+import LoadingScreen from "./components/loading/LoadingScreen";
 
 import "./i18n";
 
@@ -19,11 +22,14 @@ createRoot(document.getElementById("root")!).render(
         <ThemeProvider theme={theme}>
             <CssBaseline />
 
-            <ErrorProvider>
-                <AuthProvider>
-                    <Router />
-                </AuthProvider>
-            </ErrorProvider>
+            <LoadingProvider>
+                <ErrorProvider>
+                    <AuthProvider>
+                        <LoadingScreen />
+                        <Router />
+                    </AuthProvider>
+                </ErrorProvider>
+            </LoadingProvider>
         </ThemeProvider>
     </StrictMode>,
 );

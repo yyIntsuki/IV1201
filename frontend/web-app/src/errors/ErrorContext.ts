@@ -5,7 +5,7 @@ interface ErrorContextType {
 }
 
 /**
- * Error context to provide session state throughout the app.
+ * Error context to provide error state throughout the app.
  */
 const ErrorContext = createContext<ErrorContextType | undefined>(undefined);
 

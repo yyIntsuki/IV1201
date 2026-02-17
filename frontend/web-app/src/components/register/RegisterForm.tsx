@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import useLoading from "@/hooks/use-loading";
 import type { Account } from "@/types/account";
 
 import Box from "@mui/material/Box";
@@ -30,6 +31,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 }) => {
     const { t } = useTranslation();
 
+    const { loading } = useLoading();
+
     const fields: (keyof Account)[] = ["firstName", "lastName", "email", "personNumber", "username", "password"];
 
     return (
@@ -58,7 +61,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
                     </Grid>
                 ))}
             </Grid>
-            <Button variant="contained" type="submit" disabled={!isFormValid}>
+            <Button variant="contained" type="submit" disabled={!isFormValid || loading}>
                 {t("register.submit")}
             </Button>
         </Box>
