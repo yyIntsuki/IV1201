@@ -12,7 +12,7 @@ interface RegisterFormProps {
     fieldErrors: Partial<Record<keyof Account, string>>;
     handleChange: (field: keyof Account, value: string) => void;
     handleBlur: (field: keyof Account) => void;
-    handleSubmit: (e: React.FormEvent) => void;
+    handleSubmit: (e: React.FormEvent) => void | Promise<void>;
     isFormValid: boolean;
 }
 
@@ -38,7 +38,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             sx={{ display: "flex", flexDirection: "column", gap: 1, maxWidth: 600 }}
             autoComplete="off"
             noValidate
-            onSubmit={handleSubmit}>
+            onSubmit={(e) => void handleSubmit(e)}>
             <Grid container spacing={2} columns={6}>
                 {fields.map((field) => (
                     <Grid key={field} size={{ sm: 3 }}>

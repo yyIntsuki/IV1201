@@ -11,7 +11,7 @@ interface LoginFormProps {
     fieldErrors: Partial<Record<keyof LoginData, string>>;
     handleChange: (field: keyof LoginData, value: string) => void;
     handleBlur: (field: keyof LoginData) => void;
-    handleSubmit: (e: React.FormEvent) => void;
+    handleSubmit: (e: React.FormEvent) => void | Promise<void>;
     isFormValid: boolean;
 }
 
@@ -37,7 +37,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
             sx={{ display: "flex", flexDirection: "column", gap: 1 }}
             autoComplete="off"
             noValidate
-            onSubmit={handleSubmit}>
+            onSubmit={(e) => void handleSubmit(e)}>
             {fields.map((field) => (
                 <TextField
                     key={field}
