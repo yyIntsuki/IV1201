@@ -49,9 +49,9 @@ When a user creates a new user account, the request flows through all layers:
 
 ```
 IV1201/
-├── backend/                    # FastAPI backend
-│   ├── main.py                # Application entry point
-│   ├── requirements.txt       # Python dependencies
+├── backend/                  # FastAPI backend
+│   ├── main.py               # Application entry point
+│   ├── requirements.txt      # Python dependencies
 │   ├── app/
 │   │   ├── api/              # Presentation Layer
 │   │   │   ├── routes/       # HTTP endpoints
@@ -70,14 +70,21 @@ IV1201/
 │       │   ├── auth/         # AuthContext
 │       │   ├── components/   # Components used in pages
 │       │   ├── constants/    # Constant definition
+│       │   ├── errors/       # Global error handling
 │       │   ├── hooks/        # Hooks for functional abstraction
+│       │   ├── layout/       # Defines a base layout for pages
+│       │   ├── loading/      # Global loading handling
+│       │   ├── locales/      # i18n locale JSON files
 │       │   ├── pages/        # UI pages view
 │       │   ├── routes/       # URL routing
-│       │   ├── servoces/     # Services functiosn
+│       │   ├── services/     # Services functiosn
 │       │   ├── types/        # Type definitions
 │       │   ├── utils/        # Utility functions
+│       │   ├── i18n.ts       # Internationalization
 │       │   ├── main.tsx      # Main component
 │       │   └── Router.tsx    # Main router
+│       ├── .env              # Used to set API URL to backend
+│       ├── .prettierrc       # Formatting rules
 │       ├── package.json
 │       └── README.md
 │
@@ -88,15 +95,19 @@ IV1201/
 ## Technology Stack
 
 ### Backend
+
 - **FastAPI** - Modern Python web framework
 - **PostgreSQL** - Relational database
 - **SQLAlchemy** - ORM model for database operations
 - **Pydantic** - Data validation
 
 ### Frontend
+
 - **React** - UI library
 - **TypeScript** - Type-safe JavaScript
 - **Vite** - Build tool and development server
+- MaterialUI - Styling library
+- i18next - Internationalization library
 
 ## Quick Start
 
@@ -117,9 +128,10 @@ createdb iv1201_db
 
 ```bash
 cd backend
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
+
+python -m venv venv             # First time only
+source venv/bin/activate        # Windows: venv\Scripts\activate
+pip install -r requirements.txt # First time or requirements outdated
 
 # Configure environment
 cp .env.example .env
@@ -130,13 +142,14 @@ uvicorn main:app --reload
 ```
 
 Backend will run at `http://localhost:8000`
+
 - API Documentation: `http://localhost:8000/docs`
 
 ### 3. Setup Frontend
 
 ```bash
 cd frontend/web-app
-npm install
+npm install # First time or dependencies outdated
 
 # Run the development server
 npm run dev
@@ -151,14 +164,14 @@ Frontend will run at `http://localhost:5173`
 3. Start the frontend server (port 5173)
 4. Open http://localhost:5173 in your browser
 5. Try creating a user:
-   - Fill in the form
-   - Click "Create User"
-   - Watch the request flow through all layers
-   - See the new user appear in the list
+   - Fill in the registration form
+   - Click "Register"
+   - You should now be redirected to the Applicant page
 
 ## API Endpoints
 
 ### Users
+
 - `POST /api/v1/users` - Create new user
 - `GET /api/v1/users` - Get all users
 - `GET /api/v1/users/{id}` - Get user by ID
@@ -168,6 +181,7 @@ Frontend will run at `http://localhost:5173`
 ## Key Features Demonstrating Layer Integration
 
 ### Create User Flow
+
 ```
 User Input (Frontend)
   → Form Validation (Frontend)
@@ -182,6 +196,7 @@ User Input (Frontend)
 ```
 
 ### Get Users Flow
+
 ```
 User Click "Refresh" (Frontend)
   → HTTP GET Request
@@ -197,26 +212,30 @@ User Click "Refresh" (Frontend)
 ## Development
 
 ### Backend Development
+
 ```bash
 cd backend
+source venv/bin/activate  # Windows: venv\Scripts\activate
 uvicorn main:app --reload
 ```
+
 Changes will hot-reload automatically.
 
 ### Frontend Development
+
 ```bash
 cd frontend/web-app
 npm run dev
 ```
+
 Vite provides instant HMR (Hot Module Replacement), with React-SWC plugin.
 
 ## Documentation
 
 - [Backend Documentation](backend/README.md)
-- [Frontend Documentation](frontend/web-app/README.md)
+- [Frontend Web App Documentation](frontend/web-app/README.md)
 - [Architectural Decisions](docs/architectural-decisions.md)
 
 ## License
 
 See [LICENSE](LICENSE) file for details.
-
