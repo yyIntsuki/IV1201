@@ -15,6 +15,14 @@ class AvailabilityInput(BaseModel):
 	to_date: date = Field(..., description="End date")
 
 
+class AvailabilityOutput(BaseModel):
+	user_id: int = Field(..., description="User ID")
+	name: str = Field(..., description="User first name")
+	surname: str = Field(..., description="User last name")
+	from_date: date = Field(..., description="Start date")
+	to_date: date = Field(..., description="End date")
+
+
 class ApplicationCreate(BaseModel):
 	user_id: int = Field(..., description="Applicant user ID")
 	competence_profile: list[CompetenceProfileInput]

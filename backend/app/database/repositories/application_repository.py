@@ -4,7 +4,7 @@ Handles all database operations for applications.
 """
 import logging
 from app.database.connection import database
-
+from app.api.schemas.application_schemas import AvailabilityOutput
 
 class ApplicationRepository:
 	"""
@@ -58,3 +58,23 @@ class ApplicationRepository:
 					},
 				)
 		return True
+	
+
+	async def get_availabilities(self) -> list[dict]:
+		"""
+		Fetch all availability entries.
+		"""
+		query = """
+			SELECT
+				availability.person_id AS user_id,
+				person.name,
+				person.surname,
+				availability.from_date,
+				availability.to_date
+			FROM availability
+			JOIN person ON person.person_id = availability.person_id
+			WHERE availability.to_date >= CURRENT_DATE
+			ORDER BY availability_id DESC
+		"""
+		results = await database.fetch_all(query=query)
+		return results

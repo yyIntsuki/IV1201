@@ -2,7 +2,7 @@
 Application service - Business Logic Layer.
 Contains business logic and coordinates between presentation and data layers.
 """
-from app.api.schemas.application_schemas import ApplicationCreate
+from app.api.schemas.application_schemas import ApplicationCreate, AvailabilityOutput
 from app.database.repositories.application_repository import ApplicationRepository
 
 
@@ -45,3 +45,10 @@ class ApplicationService:
 		if not success:
 			raise ValueError("Failed to submit application")
 		return True
+
+	async def get_availabilities(self) -> list[AvailabilityOutput]:
+		"""
+		Return all availability entries.
+		"""
+		results = await self.repository.get_availabilities()
+		return [AvailabilityOutput(**dict(item)) for item in results]
