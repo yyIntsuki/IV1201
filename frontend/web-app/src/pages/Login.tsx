@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation, Trans } from "react-i18next";
 import useAuth from "@/hooks/use-auth";
 import useError from "@/hooks/use-error";
+import useForm from "@/hooks/use-form";
 import LoginForm from "@/components/login/LoginForm";
 import type { LoginData } from "@/types/account";
 import formValidator from "@/utils/form-validator";
@@ -13,63 +13,23 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 
 const Login = () => {
-    const [formData, setFormData] = useState<LoginData>({ username: "", password: "" });
-    const [touched, setTouched] = useState<Record<keyof LoginData, boolean>>({ username: false, password: false });
-    const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof LoginData, string>>>({});
-
     const navigate = useNavigate();
     const { t } = useTranslation();
     const validators = formValidator(t);
     const { role, login } = useAuth();
     const { showApiError } = useError();
-
-    /* Maps each field to its validator function */
-    const fieldValidators: Record<keyof LoginData, (val: string) => string | null> = {
-        username: validators.validateUsername,
-        password: validators.validatePassword,
-    };
-
-    /* Updates formData and clears any previous error for that field */
-    const handleChange = (field: "username" | "password", value: string) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
-        if (fieldErrors[field]) setFieldErrors((prev) => ({ ...prev, [field]: "" }));
-    };
-
-    /* Called when a field loses focus (onBlur), and marks field as touched and validates it */
-    const handleBlur = (field: "username" | "password") => {
-        setTouched((prev) => ({ ...prev, [field]: true }));
-        const error = fieldValidators[field](formData[field]);
-        if (error) setFieldErrors((prev) => ({ ...prev, [field]: error }));
-    };
-
-    /* Called when the form is submitted. Validates all fields, sets errors, and attempts login */
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        setTouched({ username: true, password: true });
-
-        // Validate all fields dynamically
-        const newErrors: Partial<Record<"username" | "password", string>> = {};
-        (Object.keys(fieldValidators) as (keyof typeof fieldValidators)[]).forEach((field) => {
-            const error = fieldValidators[field](formData[field]);
-            if (error) newErrors[field] = error;
-        });
-
-        setFieldErrors(newErrors);
-
-        if (Object.keys(newErrors).length > 0) return;
-
-        try {
-            await login(formData.username, formData.password);
-            navigate(role === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
-        } catch (error) {
-            showApiError(error, "login");
-        }
-    };
-
-    const isFormValid = (Object.keys(fieldValidators) as (keyof typeof fieldValidators)[]).every(
-        (field) => !fieldValidators[field](formData[field]),
-    );
+    const { formData, touched, fieldErrors, handleChange, handleBlur, handleSubmit, isFormValid } = useForm<LoginData>({
+        initialValues: { username: "", password: "" },
+        validators: { username: validators.validateUsername, password: validators.validatePassword },
+        onSubmit: async ({ username, password }) => {
+            try {
+                await login(username, password);
+                navigate(role === "recruiter" ? "/recruiter" : "/applicant", { replace: true });
+            } catch (error) {
+                showApiError(error, "login");
+            }
+        },
+    });
 
     return (
         <>

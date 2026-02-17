@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation, Trans } from "react-i18next";
 import useError from "@/hooks/use-error";
+import useForm from "@/hooks/use-form";
 import registerService from "@/services/register-service";
 import RegisterForm from "@/components/register/RegisterForm";
 import type { Account } from "@/types/account";
@@ -13,87 +14,31 @@ import CardContent from "@mui/material/CardContent";
 import Link from "@mui/material/Link";
 
 const Register = () => {
-    const [formData, setFormData] = useState<Account>({
-        firstName: "",
-        lastName: "",
-        email: "",
-        personNumber: "",
-        username: "",
-        password: "",
-    });
-    const [touched, setTouched] = useState<Record<keyof Account, boolean>>({
-        firstName: false,
-        lastName: false,
-        email: false,
-        personNumber: false,
-        username: false,
-        password: false,
-    });
-    const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof Account, string>>>({});
     const [success, setSuccess] = useState(false);
 
     const navigate = useNavigate();
     const { t } = useTranslation();
     const validator = formValidator(t);
     const { showApiError } = useError();
-
-    /* Maps each field to its validator function */
-    const fieldValidators: Record<keyof Account, (val: string) => string | null> = {
-        firstName: validator.validateFirstName,
-        lastName: validator.validateLastName,
-        email: validator.validateEmail,
-        personNumber: validator.validatePersonNumber,
-        username: validator.validateUsername,
-        password: validator.validatePassword,
-    };
-
-    /* Updates formData and clears any previous error for that field */
-    const handleChange = (field: keyof Account, value: string) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
-        if (fieldErrors[field]) setFieldErrors((prev) => ({ ...prev, [field]: "" })); // clear previous error on change
-    };
-
-    /* Called when a field loses focus (onBlur), and marks field as touched and validates it */
-    const handleBlur = (field: keyof Account) => {
-        setTouched((prev) => ({ ...prev, [field]: true }));
-        const error = fieldValidators[field](formData[field]);
-        if (error) setFieldErrors((prev) => ({ ...prev, [field]: error }));
-    };
-
-    /* Called when the form is submitted. Validates all fields, sets errors, and attempts login */
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        // Validate all fields dynamically
-        const newErrors: Partial<Record<keyof Account, string>> = {};
-        (Object.keys(formData) as (keyof Account)[]).forEach((field) => {
-            const error = fieldValidators[field](formData[field]);
-            if (error) newErrors[field] = error;
-        });
-
-        setFieldErrors(newErrors);
-        setTouched({
-            firstName: true,
-            lastName: true,
-            email: true,
-            personNumber: true,
-            username: true,
-            password: true,
-        });
-
-        if (Object.keys(newErrors).length > 0) return;
-
-        try {
-            await registerService.register(formData);
-            setSuccess(true);
-        } catch (error) {
-            showApiError(error, "register");
-        }
-    };
-
-    const isFormValid = (Object.keys(formData) as (keyof Account)[]).every(
-        (field) => !fieldValidators[field](formData[field]),
-    );
+    const { formData, touched, fieldErrors, handleChange, handleBlur, handleSubmit, isFormValid } = useForm<Account>({
+        initialValues: { firstName: "", lastName: "", email: "", personNumber: "", username: "", password: "" },
+        validators: {
+            firstName: validator.validateFirstName,
+            lastName: validator.validateLastName,
+            email: validator.validateEmail,
+            personNumber: validator.validatePersonNumber,
+            username: validator.validateUsername,
+            password: validator.validatePassword,
+        },
+        onSubmit: async (data) => {
+            try {
+                await registerService.register(data);
+                setSuccess(true);
+            } catch (error) {
+                showApiError(error, "register");
+            }
+        },
+    });
 
     useEffect(() => {
         if (success) {
