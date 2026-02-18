@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import type { Competence, Availability } from "@/types/application-record";
+import type { Competence, Availability } from "@/types/application";
 
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";

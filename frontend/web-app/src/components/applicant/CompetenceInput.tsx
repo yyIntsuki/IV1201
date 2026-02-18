@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import COMPETENCE from "@/constants/competence";
-import type { Competence } from "@/types/application-record";
+import type { Competence } from "@/types/application";
 
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
