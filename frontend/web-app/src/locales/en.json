@@ -24,11 +24,10 @@
         "subtitle": "Please log in to access the application",
         "submit": "Log in",
         "noAccount": "Don't have an account? Please <1>register</1>.",
-        "error": "Invalid username or password.",
         "fields": {
-            "username": {
-                "label": "Username",
-                "placeholder": "Enter your username"
+            "identifier": {
+                "label": "Username or email",
+                "placeholder": "Enter your username or email"
             },
             "password": {
                 "label": "Password",
@@ -157,6 +156,7 @@
         "usernameRequired": "Username is required.",
         "usernameTooShort": "Username must be at least 4 characters.",
         "passwordRequired": "Password is required.",
-        "passwordTooShort": "Password must be at least 8 characters."
+        "passwordTooShort": "Password must be at least 8 characters.",
+        "identifierRequired": "Username or email is required"
     }
 }

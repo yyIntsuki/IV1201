@@ -1,16 +1,11 @@
 /**
- * Represents one account, used for registration.
+ * Represents one account in the system.
  */
 export interface Account {
-    firstName: string;          // name
-    lastName: string;           // surname
-    personNumber: string;       // pnr
-    email: string;              // email
-    username: string;           // username
-    password: string;           // password
+    firstName: string;
+    lastName: string;
+    personNumber: string;
+    email: string;
+    username: string;
+    password: string;
 }
-
-/**
- * Represents login data.
- */
-export type LoginData = Pick<Account, "username" | "password">;

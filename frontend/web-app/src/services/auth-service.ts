@@ -22,8 +22,8 @@ const authService = {
     /**
      * Handles the login API call, and if successful sets token to local storage.
      */
-    async login(username: string, password: string) {
-        const loginResponse = await loginApi(username, password);
+    async login(identifier: string, password: string) {
+        const loginResponse = await loginApi(identifier, password);
         localStorage.setItem(STORAGE_KEYS.TOKEN, loginResponse.access_token);
     },
 

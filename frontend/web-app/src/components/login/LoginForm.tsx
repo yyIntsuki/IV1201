@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import useLoading from "@/hooks/use-loading";
-import type { LoginData } from "@/types/account";
+import type { LoginData } from "@/types/login";
 
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -32,7 +32,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
     const { loading } = useLoading();
 
-    const fields: (keyof LoginData)[] = ["username", "password"];
+    const fields: (keyof LoginData)[] = ["identifier", "password"];
 
     return (
         <Box

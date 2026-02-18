@@ -16,6 +16,7 @@ const formValidator = (t: TFunction) => ({
         return null;
     },
 
+    /* Most likely unused after migrating to identifier requests */
     validateEmail: (value: string): string | null => {
         if (!value.trim()) return t("validation.emailRequired");
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -53,6 +54,7 @@ const formValidator = (t: TFunction) => ({
         return null;
     },
 
+    /* Most likely unused after migrating to identifier requests */
     validateUsername: (value: string): string | null => {
         if (!value.trim()) return t("validation.usernameRequired");
         if (value.length < 4) return t("validation.usernameTooShort");
@@ -62,6 +64,22 @@ const formValidator = (t: TFunction) => ({
     validatePassword: (value: string): string | null => {
         if (!value.trim()) return t("validation.passwordRequired");
         if (value.length < 8) return t("validation.passwordTooShort");
+        return null;
+    },
+
+    /* Identifier is used instead and to avoid creating another object,
+     * we don't re-use functions that were defined before.
+     */
+    validateIdentifier: (value: string): string | null => {
+        if (!value.trim()) return t("validation.identifierRequired");
+
+        if (value.includes("@")) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) return t("validation.emailInvalid");
+            return null;
+        }
+
+        if (value.length < 4) return t("validation.usernameTooShort");
         return null;
     },
 });

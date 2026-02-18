@@ -3,7 +3,7 @@ import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
 import useAuth from "@/hooks/use-auth";
 import useForm from "@/hooks/use-form";
-import type { LoginData } from "@/types/account";
+import type { LoginData } from "@/types/login";
 import formValidator from "@/utils/form-validator";
 import LoginForm from "@/components/login/LoginForm";
 
@@ -20,12 +20,12 @@ const Login = () => {
 
     const validators = formValidator(t);
     const { formData, touched, fieldErrors, handleChange, handleBlur, handleSubmit, isFormValid } = useForm<LoginData>({
-        initialValues: { username: "", password: "" },
-        validators: { username: validators.validateUsername, password: validators.validatePassword },
-        onSubmit: async ({ username, password }) => {
+        initialValues: { identifier: "", password: "" },
+        validators: { identifier: validators.validateIdentifier, password: validators.validatePassword },
+        onSubmit: async ({ identifier, password }) => {
             try {
                 startLoading();
-                await login(username, password);
+                await login(identifier, password);
             } catch (error) {
                 showApiError(error, "login");
             } finally {

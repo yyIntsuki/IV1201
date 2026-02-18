@@ -25,9 +25,9 @@
         "submit": "Logga in",
         "noAccount": "Har inget konto? Vänligen <1>registrera</1>.",
         "fields": {
-            "username": {
-                "label": "Användarnamn",
-                "placeholder": "Ange ditt användarnamn"
+            "identifier": {
+                "label": "Användarnamn eller e-postadress",
+                "placeholder": "Ange ditt användarnamn eller e-postadress"
             },
             "password": {
                 "label": "Lösenord",
@@ -156,6 +156,7 @@
         "usernameRequired": "Användarnamn krävs.",
         "usernameTooShort": "Användarnamn måste vara minst 4 tecken.",
         "passwordRequired": "Lösenord krävs.",
-        "passwordTooShort": "Lösenordet måste vara minst 8 tecken."
+        "passwordTooShort": "Lösenordet måste vara minst 8 tecken.",
+        "identifierRequired": "Användarnamn or e-postadress krävs."
     }
 }
