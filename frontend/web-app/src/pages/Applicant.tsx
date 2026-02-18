@@ -4,7 +4,7 @@ import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
 import STORAGE_KEYS from "@/constants/storage-keys";
 import type { Competence, Availability, ApplicationSubmission } from "@/types/application";
-import applicationService from "@/services/application-service";
+import applicantService from "@/services/applicant-service";
 import { getUserIdFromJwt } from "@/utils/jwt-decoder";
 import CompetenceParser from "@/utils/competence-parser";
 import AvailabilityInput from "@/components/applicant/AvailabilityInput";
@@ -58,7 +58,7 @@ const Applicant = () => {
 
         try {
             startLoading();
-            await applicationService.submitApplication(submitData);
+            await applicantService.submitApplication(submitData);
             setStep(4);
         } catch (error) {
             showApiError(error);
