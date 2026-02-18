@@ -41,7 +41,7 @@ export type ApplicationStatus = "accepted" | "rejected" | "unhandled";
  * Represents the application submission used for Recruiter.
  */
 export interface ApplicationRecord extends ApplicationCore {
-    id: string;
+    userId: number;
     fullName: string;
     status: ApplicationStatus;
 }

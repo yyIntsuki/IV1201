@@ -25,25 +25,18 @@ const Recruiter = () => {
         const loadAvailabilities = async () => {
             try {
                 const data = await fetchAvailabilities();
-                const grouped = data.reduce<Record<number, { fullName: string; availability: { fromDate: string; toDate: string }[] }>>(
-                    (acc, item) => {
-                        if (!acc[item.user_id]) {
-                            acc[item.user_id] = {
-                                fullName: `${item.name} ${item.surname}`,
-                                availability: [],
-                            };
-                        }
-                        acc[item.user_id].availability.push({
-                            fromDate: item.from_date,
-                            toDate: item.to_date,
-                        });
-                        return acc;
-                    },
-                    {}
-                );
+                const grouped = data.reduce<
+                    Record<number, { fullName: string; availability: { fromDate: string; toDate: string }[] }>
+                >((acc, item) => {
+                    if (!acc[item.user_id]) {
+                        acc[item.user_id] = { fullName: `${item.name} ${item.surname}`, availability: [] };
+                    }
+                    acc[item.user_id].availability.push({ fromDate: item.from_date, toDate: item.to_date });
+                    return acc;
+                }, {});
 
                 const mapped: ApplicationRecord[] = Object.entries(grouped).map(([userId, entry]) => ({
-                    id: userId,
+                    userId: Number(userId),
                     fullName: entry.fullName,
                     status: "unhandled",
                     competenceProfile: [],
@@ -56,7 +49,7 @@ const Recruiter = () => {
             }
         };
 
-        loadAvailabilities();
+        void loadAvailabilities();
     }, []);
 
     const handleRowClick = (app: ApplicationRecord) => setSelectedApplication(app);
@@ -64,7 +57,9 @@ const Recruiter = () => {
     const handleStatusChange = (status: ApplicationStatus) => {
         if (!selectedApplication) return;
 
-        setApplications((prev) => prev.map((app) => (app.id === selectedApplication.id ? { ...app, status } : app)));
+        setApplications((prev) =>
+            prev.map((app) => (app.userId === selectedApplication.userId ? { ...app, status } : app)),
+        );
 
         setSelectedApplication({ ...selectedApplication, status });
     };
