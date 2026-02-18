@@ -8,12 +8,12 @@ export interface LoginResponse {
 
 /**
  * Fetches the login API endpoint.
- * @param identifier username or email
+ * @param identifier username or email, currently still username as backend expects "username" in JSON
  * @param password
  * @returns login response with JWT and role ID
  */
 const loginApi = async (identifier: string, password: string): Promise<LoginResponse> => {
-    return apiRequest<LoginResponse>("/api/v1/login", { method: "POST", params: { identifier, password } });
+    return apiRequest<LoginResponse>("/api/v1/login", { method: "POST", params: { username: identifier, password } });
 };
 
 export default loginApi;
