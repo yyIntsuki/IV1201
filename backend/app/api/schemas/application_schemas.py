@@ -33,3 +33,4 @@ class ApplicationCreate(BaseModel):
 
 class AvailabilityStatusUpdate(BaseModel):
 	status: str = Field(..., description="New application status")
+	expected_status: str = Field(..., description="Current status expected by client")

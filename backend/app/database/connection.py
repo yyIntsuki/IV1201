@@ -12,10 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Database URL configuration
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://postgres:postgres@localhost:5432/iv1201_db"
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Create database instance for async operations
 database = databases.Database(DATABASE_URL)

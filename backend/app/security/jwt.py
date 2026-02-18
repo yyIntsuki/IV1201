@@ -5,11 +5,11 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, Dict
 import os
 
-from jose import jwt, JWTError
+from jose import jwt
 
-ALGORITHM = "HS256"
-JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "change-me")
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ALGORITHM = os.getenv("JWT_ALGORITHM")
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
 
 
 def create_access_token(data: Dict[str, Any]) -> str:

@@ -82,7 +82,7 @@ class ApplicationRepository:
 		return results
 
 
-	async def update_availability_status(self, availability_id: int, status: str) -> bool:
+	async def update_availability_status(self, availability_id: int, status: str, expected_status: str) -> bool:
 		"""
 		Update status for a single availability entry.
 		"""
@@ -90,12 +90,14 @@ class ApplicationRepository:
 			UPDATE availability
 			SET status = :status
 			WHERE availability_id = :availability_id
+			AND status = :expected_status
 		"""
-		await database.execute(
+		result = await database.execute(
 			query=query,
 			values={
 				"availability_id": availability_id,
 				"status": status,
+				"expected_status": expected_status,
 			},
 		)
-		return True
+		return result > 0

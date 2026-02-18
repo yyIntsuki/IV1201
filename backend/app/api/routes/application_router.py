@@ -62,9 +62,16 @@ async def update_availability_status(availability_id: int, payload: Availability
     Update status for a single application entry.
     """
     try:
-        success = await application_service.update_availability_status(availability_id, payload.status)
+        success = await application_service.update_availability_status(
+            availability_id,
+            payload.status,
+            payload.expected_status,
+        )
         if not success:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Application not found")
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Status update aborted: application was modified by another user",
+            )
         return success
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
