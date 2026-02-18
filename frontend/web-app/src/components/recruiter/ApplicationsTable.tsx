@@ -59,7 +59,7 @@ const ApplicationsTable: React.FC<ApplicationsTableProps> = ({
                     </TableHead>
                     <TableBody>
                         {applications.map((app) => (
-                            <TableRow key={app.id} hover sx={{ cursor: "pointer" }} onClick={() => onRowClick(app)}>
+                            <TableRow key={app.userId} hover sx={{ cursor: "pointer" }} onClick={() => onRowClick(app)}>
                                 <TableCell>{app.fullName}</TableCell>
                                 <TableCell align="center">
                                     <ApplicationStatusChip status={app.status} />
