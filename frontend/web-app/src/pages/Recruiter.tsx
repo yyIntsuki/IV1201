@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import useLoading from "@/hooks/use-loading";
 import type { ApplicationRecord, ApplicationStatus } from "@/types/application";
 import ApplicationsTable from "@/components/recruiter/ApplicationsTable";
 import ApplicationDetailsDialog from "@/components/recruiter/ApplicationDetailsDialog";
@@ -15,6 +16,7 @@ const Recruiter = () => {
     const [selectedApplication, setSelectedApplication] = useState<ApplicationRecord | null>(null);
 
     const { t } = useTranslation();
+    const { startLoading, stopLoading } = useLoading();
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -22,8 +24,9 @@ const Recruiter = () => {
     const paginatedApps = applications.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
     useEffect(() => {
-        const loadAvailabilities = async () => {
+        void (async () => {
             try {
+                startLoading();
                 const data = await fetchAvailabilities();
                 const grouped = data.reduce<
                     Record<number, { fullName: string; availability: { fromDate: string; toDate: string }[] }>
@@ -46,11 +49,11 @@ const Recruiter = () => {
                 setApplications(mapped);
             } catch (error) {
                 console.error("Failed to load availabilities", error);
+            } finally {
+                stopLoading();
             }
-        };
-
-        void loadAvailabilities();
-    }, []);
+        });
+    });
 
     const handleRowClick = (app: ApplicationRecord) => setSelectedApplication(app);
 
