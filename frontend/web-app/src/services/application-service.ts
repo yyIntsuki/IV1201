@@ -1,5 +1,5 @@
 import type { ApplicationSubmission } from "@/types/application";
-import { submitApplicationApi, type ApplicationPayload } from "@/api/application-api";
+import { submitApplicationApi, type ApplicationPayload } from "@/api/submit-application-api";
 import CompetenceParser from "@/utils/competence-parser";
 
 /**
