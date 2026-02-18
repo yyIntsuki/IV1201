@@ -6,6 +6,7 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Applicant from "@/pages/Applicant";
 import Recruiter from "@/pages/Recruiter";
+import NotFound from "@/pages/NotFound";
 
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import PublicRoute from "@/routes/PublicRoute";
@@ -33,6 +34,8 @@ function Router() {
                     <Route element={<ProtectedRoute allowedRoles={["recruiter"]} />}>
                         <Route path="/recruiter" element={<Recruiter />} />
                     </Route>
+
+                    <Route path="*" element={<NotFound />} />
                 </Route>
             </Routes>
         </BrowserRouter>

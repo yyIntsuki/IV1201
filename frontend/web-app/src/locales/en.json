@@ -140,6 +140,11 @@
             "invalidCompetence": "One or more of your selected expertise is invalid. Please review and try again."
         }
     },
+    "notFound": {
+        "title": "Page Not Found",
+        "message": "Sorry, the page you are looking for does not exist.",
+        "goBack": "Go Back"
+    },
     "pagination": {
         "rowsPerPage": "Rows per page",
         "displayedRows": "{{from}}–{{to}} of {{count}}",
