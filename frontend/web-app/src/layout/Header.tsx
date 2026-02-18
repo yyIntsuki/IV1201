@@ -21,7 +21,9 @@ const Header = () => (
         }}>
         <Box sx={{ display: "flex", gap: 2 }}>
             <Attractions fontSize="large" />
-            <Typography variant="h6">Amusement Park</Typography>
+            <Typography variant="h6" sx={{ userSelect: "none" }}>
+                Amusement Park
+            </Typography>
         </Box>
 
         <Box sx={{ display: "flex", gap: 2 }}>

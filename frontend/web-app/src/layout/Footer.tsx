@@ -16,7 +16,9 @@ const Footer = () => (
             p: 2,
             zIndex: 10,
         }}>
-        <Typography variant="caption">© 2026 Amusement Park</Typography>
+        <Typography variant="caption" sx={{ userSelect: "none" }}>
+            © 2026 Amusement Park
+        </Typography>
     </Box>
 );
 
