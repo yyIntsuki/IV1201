@@ -10,8 +10,7 @@ const NotFound = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
 
-    /* Navigates back, with edge case handling if user lands directly on non-existent page */
-    const handleGoBack = () => (window.history.length > 1 ? void navigate(-1) : void navigate("/"));
+    const handleGoBack = () => void navigate(-1);
 
     return (
         <Card sx={{ display: "inline-block", p: 2 }}>
