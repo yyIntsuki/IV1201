@@ -140,6 +140,11 @@
             "invalidCompetence": "En eller flera av de valda kompetenserna är ogiltiga. Kontrollera och försök igen."
         }
     },
+    "notFound": {
+        "title": "Sidan kunde inte hittas",
+        "message": "Tyvärr, sidan du letar efter finns inte.",
+        "goBack": "Gå tillbaka"
+    },
     "pagination": {
         "rowsPerPage": "Rader per sida",
         "displayedRows": "{{from}}–{{to}} av {{count}}",
