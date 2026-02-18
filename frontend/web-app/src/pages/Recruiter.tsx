@@ -4,6 +4,7 @@ import type { ApplicationRecord, ApplicationStatus } from "@/types/application";
 import ApplicationsTable from "@/components/recruiter/ApplicationsTable";
 import ApplicationDetailsDialog from "@/components/recruiter/ApplicationDetailsDialog";
 import fetchAvailabilities from "@/api/availability-api";
+import updateAvailabilityStatus from "@/api/availability-status-api";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -50,14 +51,22 @@ const Recruiter = () => {
 
     const handleRowClick = (app: ApplicationRecord) => setSelectedApplication(app);
 
-    const handleStatusChange = (status: ApplicationStatus) => {
+    const handleStatusChange = async (status: ApplicationStatus) => {
         if (!selectedApplication) return;
 
-        setApplications((prev) =>
-            prev.map((app) => (app.applicationId === selectedApplication.applicationId ? { ...app, status } : app)),
-        );
+        try {
+            await updateAvailabilityStatus(selectedApplication.applicationId, { status });
 
-        setSelectedApplication({ ...selectedApplication, status });
+            setApplications((prev) =>
+                prev.map((app) =>
+                    app.applicationId === selectedApplication.applicationId ? { ...app, status } : app,
+                ),
+            );
+
+            setSelectedApplication({ ...selectedApplication, status });
+        } catch (error) {
+            console.error("Failed to update status", error);
+        }
     };
 
     return (

@@ -80,3 +80,22 @@ class ApplicationRepository:
 		"""
 		results = await database.fetch_all(query=query)
 		return results
+
+
+	async def update_availability_status(self, availability_id: int, status: str) -> bool:
+		"""
+		Update status for a single availability entry.
+		"""
+		query = """
+			UPDATE availability
+			SET status = :status
+			WHERE availability_id = :availability_id
+		"""
+		await database.execute(
+			query=query,
+			values={
+				"availability_id": availability_id,
+				"status": status,
+			},
+		)
+		return True

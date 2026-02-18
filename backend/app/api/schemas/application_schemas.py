@@ -29,3 +29,7 @@ class ApplicationCreate(BaseModel):
 	user_id: int = Field(..., description="Applicant user ID")
 	competence_profile: list[CompetenceProfileInput]
 	availability: list[AvailabilityInput]
+
+
+class AvailabilityStatusUpdate(BaseModel):
+	status: str = Field(..., description="New application status")

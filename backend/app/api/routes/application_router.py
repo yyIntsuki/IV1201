@@ -4,7 +4,7 @@ Handles HTTP requests and responses.
 """
 from fastapi import APIRouter, HTTPException, status, Depends
 
-from app.api.schemas.application_schemas import ApplicationCreate, AvailabilityOutput
+from app.api.schemas.application_schemas import ApplicationCreate, AvailabilityOutput, AvailabilityStatusUpdate
 from app.services.application_service import ApplicationService
 from app.security.dependencies import get_current_user
 
@@ -41,11 +41,34 @@ async def submit_application(payload: ApplicationCreate):
 )
 async def get_availabilities():
     """
-    Get all availabilities for the current user.
+    Get all applications for the current user.
     
     Requires a valid JWT token.
     """
     try:
         return await application_service.get_availabilities()
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
+
+
+@router.patch(
+    "/availabilities/{availability_id}/status",
+    response_model=bool,
+    status_code=status.HTTP_200_OK,
+    dependencies=[Depends(get_current_user)],
+)
+async def update_availability_status(availability_id: int, payload: AvailabilityStatusUpdate):
+    """
+    Update status for a single application entry.
+    """
+    try:
+        success = await application_service.update_availability_status(availability_id, payload.status)
+        if not success:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Application not found")
+        return success
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    except HTTPException:
+        raise
     except Exception:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")

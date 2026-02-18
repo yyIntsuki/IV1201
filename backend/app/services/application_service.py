@@ -52,3 +52,12 @@ class ApplicationService:
 		"""
 		results = await self.repository.get_availabilities()
 		return [AvailabilityOutput(**dict(item)) for item in results]
+
+	async def update_availability_status(self, availability_id: int, status: str) -> bool:
+		"""
+		Update availability status.
+		"""
+		allowed = {"accepted", "rejected", "unhandled"}
+		if status not in allowed:
+			raise ValueError("Invalid status")
+		return await self.repository.update_availability_status(availability_id, status)
