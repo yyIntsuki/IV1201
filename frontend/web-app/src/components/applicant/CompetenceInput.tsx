@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import COMPETENCE from "@/constants/competence";
+import type { Competence as CompetenceType } from "@/types/competence";
 import type { Competence } from "@/types/application";
 
 import Typography from "@mui/material/Typography";
@@ -23,7 +24,7 @@ interface CompetenceInputProps {
  * Component that handles competence input in the applicant page.
  */
 const CompetenceInput: React.FC<CompetenceInputProps> = ({ value, onChange, onValidityChange }) => {
-    const [currentCompetence, setCurrentCompetence] = useState("");
+    const [currentCompetence, setCurrentCompetence] = useState<CompetenceType | null>(null);
     const [currentYearsOfExperience, setCurrentYearsOfExperience] = useState(1);
 
     const { t } = useTranslation();
@@ -31,7 +32,7 @@ const CompetenceInput: React.FC<CompetenceInputProps> = ({ value, onChange, onVa
     const addCompetence = () => {
         if (currentCompetence && currentYearsOfExperience > 0) {
             onChange([...value, { competence: currentCompetence, yearsOfExperience: currentYearsOfExperience }]);
-            setCurrentCompetence("");
+            setCurrentCompetence(null);
             setCurrentYearsOfExperience(1);
         }
     };
@@ -55,8 +56,8 @@ const CompetenceInput: React.FC<CompetenceInputProps> = ({ value, onChange, onVa
                     select
                     label={t("applicant.applicationForm.expertise.selectLabel")}
                     fullWidth
-                    value={currentCompetence}
-                    onChange={(e) => setCurrentCompetence(e.target.value)}>
+                    value={currentCompetence ?? ""}
+                    onChange={(e) => setCurrentCompetence(e.target.value as CompetenceType)}>
                     {COMPETENCE.filter((competence) => !value.some((exp) => exp.competence === competence)).map(
                         (competence) => (
                             <MenuItem key={competence} value={competence}>
