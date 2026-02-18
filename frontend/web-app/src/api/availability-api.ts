@@ -1,11 +1,13 @@
 import apiRequest from "./client";
 
 export interface AvailabilityResponse {
+    availability_id: number;
     user_id: number;
     name: string;
     surname: string;
     from_date: string;
     to_date: string;
+    status: string;
 }
 
 /**

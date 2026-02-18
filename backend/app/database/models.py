@@ -32,6 +32,7 @@ class Availability(Base):
     person_id = Column(Integer, nullable=False)
     from_date = Column(Date, nullable=False)
     to_date = Column(Date, nullable=False)
+    status = Column(String(255), nullable=False, default="unhandled")
 
 
 class Competence(Base):

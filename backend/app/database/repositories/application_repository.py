@@ -66,11 +66,13 @@ class ApplicationRepository:
 		"""
 		query = """
 			SELECT
+				availability.availability_id,
 				availability.person_id AS user_id,
 				person.name,
 				person.surname,
 				availability.from_date,
-				availability.to_date
+				availability.to_date,
+				availability.status
 			FROM availability
 			JOIN person ON person.person_id = availability.person_id
 			WHERE availability.to_date >= CURRENT_DATE
