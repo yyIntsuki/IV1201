@@ -7,14 +7,9 @@ export interface AvailabilityStatusPayload {
 /**
  * Update availability status by id.
  */
-const updateAvailabilityStatus = async (
+export const updateAvailabilityStatusApi = async (
     availabilityId: number,
     payload: AvailabilityStatusPayload,
 ): Promise<boolean> => {
-    return apiRequest<boolean>(`/api/v1/availabilities/${availabilityId}/status`, {
-        method: "PATCH",
-        data: payload,
-    });
+    return apiRequest<boolean>(`/api/v1/availabilities/${availabilityId}/status`, { method: "PATCH", data: payload });
 };
-
-export default updateAvailabilityStatus;

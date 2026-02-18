@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import useLoading from "@/hooks/use-loading";
+import useError from "@/hooks/use-error";
+import recruiterService from "@/services/recruiter-service";
 import type { ApplicationRecord, ApplicationStatus } from "@/types/application";
 import ApplicationsTable from "@/components/recruiter/ApplicationsTable";
 import ApplicationDetailsDialog from "@/components/recruiter/ApplicationDetailsDialog";
-import fetchAvailabilities from "@/api/availability-api";
-import updateAvailabilityStatus from "@/api/availability-status-api";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -16,6 +17,8 @@ const Recruiter = () => {
     const [selectedApplication, setSelectedApplication] = useState<ApplicationRecord | null>(null);
 
     const { t } = useTranslation();
+    const { startLoading, stopLoading } = useLoading();
+    const { showApiError } = useError();
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -23,31 +26,19 @@ const Recruiter = () => {
     const paginatedApps = applications.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
     useEffect(() => {
-        const loadAvailabilities = async () => {
+        const loadApplications = async () => {
             try {
-                const data = await fetchAvailabilities();
-                const mapped: ApplicationRecord[] = data.map((item) => ({
-                    applicationId: item.availability_id,
-                    userId: item.user_id,
-                    fullName: `${item.name} ${item.surname}`,
-                    status: item.status as ApplicationStatus,
-                    competenceProfile: [],
-                    availability: [
-                        {
-                            fromDate: item.from_date,
-                            toDate: item.to_date,
-                        },
-                    ],
-                }));
-
-                setApplications(mapped);
+                startLoading();
+                const apps = await recruiterService.getApplications();
+                setApplications(apps);
             } catch (error) {
-                console.error("Failed to load availabilities", error);
+                showApiError(error);
+            } finally {
+                stopLoading();
             }
         };
-
-        void loadAvailabilities();
-    }, []);
+        void loadApplications();
+    }, [startLoading, stopLoading, showApiError]);
 
     const handleRowClick = (app: ApplicationRecord) => setSelectedApplication(app);
 
@@ -55,17 +46,16 @@ const Recruiter = () => {
         if (!selectedApplication) return;
 
         try {
-            await updateAvailabilityStatus(selectedApplication.applicationId, { status });
-
+            startLoading();
+            await recruiterService.setApplicationStatus(selectedApplication.applicationId, status);
             setApplications((prev) =>
-                prev.map((app) =>
-                    app.applicationId === selectedApplication.applicationId ? { ...app, status } : app,
-                ),
+                prev.map((app) => (app.applicationId === selectedApplication.applicationId ? { ...app, status } : app)),
             );
-
             setSelectedApplication({ ...selectedApplication, status });
         } catch (error) {
-            console.error("Failed to update status", error);
+            showApiError(error);
+        } finally {
+            stopLoading();
         }
     };
 
@@ -93,7 +83,7 @@ const Recruiter = () => {
                 <ApplicationDetailsDialog
                     application={selectedApplication}
                     onClose={() => setSelectedApplication(null)}
-                    onStatusChange={handleStatusChange}
+                    onStatusChange={(status) => void handleStatusChange(status)}
                 />
             </CardContent>
         </Card>

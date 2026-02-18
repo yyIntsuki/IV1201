@@ -6,9 +6,9 @@ import LoadingContext from "@/loading/LoadingContext";
  * @returns The loading context.
  */
 const useLoading = () => {
-    const ctx = useContext(LoadingContext);
-    if (!ctx) throw new Error("useLoading must be used within LoadingProvider");
-    return ctx;
+    const context = useContext(LoadingContext);
+    if (!context) throw new Error("useLoading must be used within LoadingProvider");
+    return context;
 };
 
 export default useLoading;

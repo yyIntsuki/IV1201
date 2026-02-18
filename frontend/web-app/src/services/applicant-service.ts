@@ -19,7 +19,7 @@ const toApiPayload = (data: ApplicationSubmission): ApplicationPayload => ({
 /**
  * Service to handle applicant application submission.
  */
-const applicationService = {
+const applicantService = {
     /**
      * Submits a new application by calling the backend API.
      */
@@ -28,4 +28,4 @@ const applicationService = {
     },
 };
 
-export default applicationService;
+export default applicantService;

@@ -13,8 +13,6 @@ export interface AvailabilityResponse {
 /**
  * Fetch all availability entries.
  */
-const fetchAvailabilities = async (): Promise<AvailabilityResponse[]> => {
+export const fetchAvailabilitiesApi = async (): Promise<AvailabilityResponse[]> => {
     return apiRequest<AvailabilityResponse[]>("/api/v1/availabilities", { method: "GET" });
 };
-
-export default fetchAvailabilities;
