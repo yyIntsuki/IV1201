@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import ErrorContext from "@/errors/ErrorContext";
 import { isApiError } from "@/api/api-error";
@@ -22,37 +22,43 @@ const useError = (): UseErrorResult => {
     /**
      * Determines the appropriate error message based on the error type.
      */
-    const getApiErrorMessage = (error: unknown, scope?: string): string => {
-        if (isApiError(error)) {
-            if (error.isNetworkError) return t("errors.network");
+    const getApiErrorMessage = useCallback(
+        (error: unknown, scope?: string): string => {
+            if (isApiError(error)) {
+                if (error.isNetworkError) return t("errors.network");
 
-            if (error.status === 400 && scope === "register") {
-                const msg = error.message?.toLowerCase() ?? "";
+                if (error.status === 400 && scope === "register") {
+                    const msg = error.message?.toLowerCase() ?? "";
 
-                if (msg.includes("email")) return t("errors.registration.emailExists");
-                if (msg.includes("username")) return t("errors.registration.usernameExists");
-                if (msg.includes("personal")) return t("errors.registration.pnrExists");
+                    if (msg.includes("email")) return t("errors.registration.emailExists");
+                    if (msg.includes("username")) return t("errors.registration.usernameExists");
+                    if (msg.includes("personal")) return t("errors.registration.pnrExists");
+                }
+
+                if (error.status === 401)
+                    return scope === "login" ? t("errors.login.authentication") : t("errors.unauthorized");
+
+                if (error.status && error.status >= 500) return t("errors.server");
+
+                return error.message || t("errors.server");
             }
 
-            if (error.status === 401)
-                return scope === "login" ? t("errors.login.authentication") : t("errors.unauthorized");
+            if (error instanceof Error && error.message) return error.message;
 
-            if (error.status && error.status >= 500) return t("errors.server");
-
-            return error.message || t("errors.server");
-        }
-
-        if (error instanceof Error && error.message) return error.message;
-
-        return t("errors.server");
-    };
+            return t("errors.server");
+        },
+        [t],
+    );
 
     /**
      * Handles API errors by determining the appropriate message and displaying it.
      */
-    const showApiError = (error: unknown, scope?: string): void => {
-        context.showError(getApiErrorMessage(error, scope));
-    };
+    const showApiError = useCallback(
+        (error: unknown, scope?: string): void => {
+            context.showError(getApiErrorMessage(error, scope));
+        },
+        [context, getApiErrorMessage],
+    );
 
     return { showError: context.showError, showApiError, getApiErrorMessage };
 };

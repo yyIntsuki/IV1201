@@ -23,12 +23,9 @@ const apiRequest = async <T>(path: string, options?: AxiosRequestConfig): Promis
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
             const data = error.response?.data as { message?: string; detail?: string } | undefined;
-
             const message = data?.detail ?? data?.message ?? `HTTP error ${error.response?.status ?? ""}`.trim();
-
             throw createApiError(message, { status: error.response?.status, isNetworkError: !error.response });
         }
-
         throw createApiError("Unexpected error", { isNetworkError: true });
     }
 };

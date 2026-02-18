@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import ErrorContext from "./ErrorContext";
 import ErrorToast from "@/components/error/ErrorToast";
 
@@ -10,18 +10,20 @@ const ErrorProvider = ({ children }: { children: React.ReactNode }) => {
     const [message, setMessage] = useState<string | null>(null);
     const [open, setOpen] = useState<boolean>(false);
 
-    const showError = (msg: string) => {
+    const showError = useCallback((msg: string) => {
         setMessage(msg);
         setOpen(true);
-    };
+    }, []);
 
-    const handleClose = () => setOpen(false);
-
+    const handleClose = useCallback(() => setOpen(false), []);
     /* Clears message after transition finishes */
-    const handleExited = () => setMessage(null);
+    const handleExited = useCallback(() => setMessage(null), []);
+
+    /* Stabilize the context object to avoid re-renders */
+    const value = useMemo(() => ({ showError }), [showError]);
 
     return (
-        <ErrorContext.Provider value={{ showError }}>
+        <ErrorContext.Provider value={value}>
             {children}
             <ErrorToast message={message} open={open} onClose={handleClose} onExited={handleExited} />
         </ErrorContext.Provider>
