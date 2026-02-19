@@ -24,8 +24,8 @@ const recruiterService = {
     /**
      * Update status of an application.
      */
-    async setApplicationStatus(applicationId: number, status: ApplicationStatus): Promise<void> {
-        const payload: AvailabilityStatusPayload = { status };
+    async setApplicationStatus(applicationId: number, status: ApplicationStatus, expectedStatus: ApplicationStatus): Promise<void> {
+        const payload: AvailabilityStatusPayload = { status, expected_status: expectedStatus };
         await updateAvailabilityStatusApi(applicationId, payload);
     },
 };

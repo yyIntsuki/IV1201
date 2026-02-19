@@ -2,6 +2,7 @@ import apiRequest from "./client";
 
 export interface AvailabilityStatusPayload {
     status: "accepted" | "rejected" | "unhandled";
+    expected_status: "accepted" | "rejected" | "unhandled";
 }
 
 /**

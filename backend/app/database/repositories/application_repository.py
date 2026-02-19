@@ -92,7 +92,7 @@ class ApplicationRepository:
 			WHERE availability_id = :availability_id
 			AND status = :expected_status
 		"""
-		result = await database.execute(
+		await database.execute(
 			query=query,
 			values={
 				"availability_id": availability_id,
@@ -100,4 +100,4 @@ class ApplicationRepository:
 				"expected_status": expected_status,
 			},
 		)
-		return result > 0
+		return True

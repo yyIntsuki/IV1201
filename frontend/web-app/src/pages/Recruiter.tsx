@@ -42,12 +42,12 @@ const Recruiter = () => {
 
     const handleRowClick = (app: ApplicationRecord) => setSelectedApplication(app);
 
-    const handleStatusChange = async (status: ApplicationStatus) => {
+    const handleStatusChange = async (status: ApplicationStatus, expectedStatus: ApplicationStatus) => {
         if (!selectedApplication) return;
 
         try {
             startLoading();
-            await recruiterService.setApplicationStatus(selectedApplication.applicationId, status);
+            await recruiterService.setApplicationStatus(selectedApplication.applicationId, status, expectedStatus);
             setApplications((prev) =>
                 prev.map((app) => (app.applicationId === selectedApplication.applicationId ? { ...app, status } : app)),
             );
@@ -83,7 +83,7 @@ const Recruiter = () => {
                 <ApplicationDetailsDialog
                     application={selectedApplication}
                     onClose={() => setSelectedApplication(null)}
-                    onStatusChange={(status) => void handleStatusChange(status)}
+                    onStatusChange={(status) => selectedApplication && void handleStatusChange(status, selectedApplication.status)}
                 />
             </CardContent>
         </Card>
