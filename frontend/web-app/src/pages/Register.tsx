@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Link from "@mui/material/Link";
+import { Link as RouterLink } from "react-router";
 
 const Register = () => {
     const [success, setSuccess] = useState(false);
@@ -82,7 +83,10 @@ const Register = () => {
                 />
 
                 <Typography variant="subtitle1">
-                    <Trans i18nKey="register.haveAccount" components={{ 1: <Link href="/login" /> }} />
+                    <Trans
+                        i18nKey="register.haveAccount"
+                        components={{ 1: <Link component={RouterLink} to="/login" /> }}
+                    />
                 </Typography>
             </CardContent>
         </Card>

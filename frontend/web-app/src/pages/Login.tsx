@@ -11,6 +11,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
+import { Link as RouterLink } from "react-router";
 
 const Login = () => {
     const { t } = useTranslation();
@@ -51,7 +52,10 @@ const Login = () => {
                 />
 
                 <Typography variant="subtitle1">
-                    <Trans i18nKey="login.noAccount" components={{ 1: <Link href="/register" /> }} />
+                    <Trans
+                        i18nKey="login.noAccount"
+                        components={{ 1: <Link component={RouterLink} to="/register" /> }}
+                    />
                 </Typography>
             </CardContent>
         </Card>
