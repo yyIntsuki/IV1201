@@ -51,7 +51,7 @@ async def get_availabilities():
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
 
 
-@router.patch(
+@router.post(
     "/availabilities/{availability_id}/status",
     response_model=bool,
     status_code=status.HTTP_200_OK,
