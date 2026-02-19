@@ -1,4 +1,4 @@
-import Attractions from "@mui/icons-material/attractions";
+import Attractions from "@mui/icons-material/Attractions";
 
 import LogoutButton from "@/components/header/LogoutButton";
 import LanguageToggleButton from "@/components/header/LanguageToggleButton";
