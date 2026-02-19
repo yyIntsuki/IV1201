@@ -18,6 +18,8 @@ services:
         generateValue: true
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
         value: "60"
+      - key: CORS_ORIGINS
+        value: https://amusementpark-gmqp.onrender.com
 
   - type: web
     name: iv1201-frontend
@@ -29,7 +31,7 @@ services:
     nodeVersion: 24.13.0
     envVars:
       - key: VITE_API_BASE_URL
-        value: https://amusementparkjp.onrender.com/
+        value: https://amusementparkjp.onrender.com/api/v1
 
   - type: pserv
     name: amusementparkjp
