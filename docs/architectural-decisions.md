@@ -124,6 +124,11 @@ The i18next framework helps setting up a simple translation module that can be e
 
 Hooks are used to provide a concentrated functionality of certain modules. They are great for reducing redundant and duplicated code, whether it is rendering or logic. For instance, use-auth and use-error are used globally in the frontend, which benefits from a hook that can be called anywhere within the app with their respective contexts that wraps the entire app. Then use-form is one that helps with redundant form creation which would be redundant as they would've been using the same code in Login and Register pages.
 
+
+### Browser compatibility
+
+At each major implementation or change of a page, or component of pages. A check is done to ensure the frontend application is shown consistently between different browsers. Currently the tested browsers are Brave and Microsoft Edge.
+
 </details>
 
 ## Backend
@@ -163,4 +168,3 @@ The API uses JSON for request/response bodies and consistent error handling. Val
 The backend restricts CORS to only the HTTP methods and headers required by the implemented API endpoints. Allowed methods include GET, POST, PUT, and DELETE, corresponding to the defined routes, while OPTIONS is permitted for browser preflight requests. Allowed headers are limited to Authorization, Content-Type, and Accept to support JWT-based authentication and JSON request bodies. This reduces the attack surface by preventing unnecessary methods and headers.
 
 </details>
-
