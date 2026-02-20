@@ -5,8 +5,7 @@ import useForm from "@/hooks/use-form";
 /**
  * Unit tests for the useForm custom hook.
  *
- * These tests ensure that the useForm hook behaves correctly for form state management,
- * validation, and submission.
+ * These tests ensure that the useForm hook behaves correctly for form state management, validation, and submission.
  */
 describe("useForm", () => {
     const initialValues = { email: "", password: "" };

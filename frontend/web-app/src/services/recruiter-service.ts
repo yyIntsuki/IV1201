@@ -9,7 +9,7 @@ const recruiterService = {
     /**
      * Fetch all applications.
      */
-    async getApplications(): Promise<ApplicationRecord[]> {
+    getApplications: async (): Promise<ApplicationRecord[]> => {
         const data: AvailabilityResponse[] = await fetchAvailabilitiesApi();
         return data.map((item) => ({
             applicationId: item.availability_id,
@@ -24,7 +24,11 @@ const recruiterService = {
     /**
      * Update status of an application.
      */
-    async setApplicationStatus(applicationId: number, status: ApplicationStatus, expectedStatus: ApplicationStatus): Promise<void> {
+    setApplicationStatus: async (
+        applicationId: number,
+        status: ApplicationStatus,
+        expectedStatus: ApplicationStatus,
+    ): Promise<void> => {
         const payload: AvailabilityStatusPayload = { status, expected_status: expectedStatus };
         await updateAvailabilityStatusApi(applicationId, payload);
     },

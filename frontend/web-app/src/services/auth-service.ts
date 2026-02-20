@@ -10,7 +10,7 @@ const authService = {
      * Gets the current JWT from local storage, if exists.
      * @returns the JWT
      */
-    getToken(): string | null {
+    getToken: (): string | null => {
         const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
         if (!token || isJwtExpired(token)) {
             localStorage.removeItem(STORAGE_KEYS.TOKEN);
@@ -22,7 +22,7 @@ const authService = {
     /**
      * Handles the login API call, and if successful sets token to local storage.
      */
-    async login(identifier: string, password: string) {
+    login: async (identifier: string, password: string) => {
         const loginResponse = await loginApi(identifier, password);
         localStorage.setItem(STORAGE_KEYS.TOKEN, loginResponse.access_token);
     },
@@ -30,7 +30,7 @@ const authService = {
     /**
      * Handles logout, by removing the token from local storage, hence ending the session.
      */
-    logout() {
+    logout: () => {
         localStorage.removeItem(STORAGE_KEYS.TOKEN);
     },
 };

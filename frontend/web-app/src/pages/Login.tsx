@@ -3,6 +3,7 @@ import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
 import useAuth from "@/hooks/use-auth";
 import useForm from "@/hooks/use-form";
+import ROUTES from "@/constants/routes";
 import type { LoginData } from "@/types/login";
 import formValidator from "@/utils/form-validator";
 import LoginForm from "@/components/login/LoginForm";
@@ -51,7 +52,7 @@ const Login = () => {
                 />
 
                 <Typography variant="subtitle1">
-                    <Trans i18nKey="login.noAccount" components={{ 1: <Link href="/register" /> }} />
+                    <Trans i18nKey="login.noAccount" components={{ 1: <Link href={ROUTES.REGISTER} /> }} />
                 </Typography>
             </CardContent>
         </Card>

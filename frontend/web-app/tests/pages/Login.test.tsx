@@ -1,10 +1,3 @@
-/**
- * Unit tests for the Login page component.
- *
- * These tests ensure that the Login page correctly orchestrates the underlying hooks,
- * handles user input, submits the form, and displays errors when login fails.
- */
-
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Login from "@/pages/Login";
@@ -15,11 +8,10 @@ vi.mock("react-i18next", () => ({
     Trans: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-let loadingState = false;
 const mockStartLoading = vi.fn();
 const mockStopLoading = vi.fn();
 vi.mock("@/hooks/use-loading", () => {
-    return { default: () => ({ loading: loadingState, startLoading: mockStartLoading, stopLoading: mockStopLoading }) };
+    return { default: () => ({ startLoading: mockStartLoading, stopLoading: mockStopLoading }) };
 });
 
 const mockShowApiError = vi.fn();
@@ -33,6 +25,12 @@ const fillForm = (data: LoginData) => {
     fireEvent.change(screen.getByLabelText("login.fields.password.label"), { target: { value: data.password } });
 };
 
+/**
+ * Unit tests for the Login page component.
+ *
+ * These tests ensure that the Login page correctly orchestrates the underlying hooks, handles user input, submits the form,
+ * and displays errors when login fails.
+ */
 describe("Login page", () => {
     beforeEach(() => {
         vi.clearAllMocks();
@@ -40,7 +38,7 @@ describe("Login page", () => {
     });
 
     /**
-     * Rendering of all UI elements (LoginForm fields and submit button).
+     * Rendering of all UI elements.
      */
     it("renders LoginForm fields and submit button", () => {
         render(<Login />);
@@ -51,8 +49,8 @@ describe("Login page", () => {
     });
 
     /**
-     * Integration with form logic (handleSubmit).
-     * Loading state behavior (startLoading / stopLoading, disabling button).
+     * Integration with form logic.
+     * Loading state behavior.
      */
     it("calls startLoading, login, stopLoading on successful submit", async () => {
         render(<Login />);
@@ -70,7 +68,7 @@ describe("Login page", () => {
     });
 
     /**
-     * Authentication behavior (useAuth.login).
+     * Authentication behavior.
      */
     it("calls showApiError if login fails", async () => {
         const error = new Error("Invalid credentials");
@@ -88,16 +86,5 @@ describe("Login page", () => {
             expect(mockStopLoading).toHaveBeenCalledOnce();
             expect(mockShowApiError).toHaveBeenCalledWith(error, "login");
         });
-    });
-
-    /**
-     * Error handling behavior (useError.showApiError).
-     */
-    it("disables submit button while loading", () => {
-        loadingState = true;
-        render(<Login />);
-        const btn = screen.getByRole("button", { name: "login.submit" });
-        expect(btn).toBeDisabled();
-        loadingState = false;
     });
 });

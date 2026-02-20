@@ -23,7 +23,7 @@ const applicantService = {
     /**
      * Submits a new application by calling the backend API.
      */
-    async submitApplication(data: ApplicationSubmission): Promise<void> {
+    submitApplication: async (data: ApplicationSubmission): Promise<void> => {
         await submitApplicationApi(toApiPayload(data));
     },
 };

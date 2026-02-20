@@ -8,7 +8,7 @@ const registerService = {
     /**
      * Registers a new account by calling the backend API.
      */
-    async register(account: Account): Promise<void> {
+    register: async (account: Account): Promise<void> => {
         await registerApi(account);
     },
 };
