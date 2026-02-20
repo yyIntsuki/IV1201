@@ -6,7 +6,7 @@ This is a documentation of some of the architectural decisions made in the team,
 
 <details>
 
-<summary>Collapsed Section</summary>
+<summary>Collapsed section</summary>
 
 ### How to take decisions
 
@@ -22,7 +22,7 @@ Frontend, backend, database.
 
 <details>
 
-<summary>Collapsed Section</summary>
+<summary>Collapsed section</summary>
 
 ### Build tool
 
@@ -48,7 +48,7 @@ Visual Studio Code will be used by both members in the team.
 
 <details>
 
-<summary>Collapsed Section</summary>
+<summary>Collapsed section</summary>
 
 The backend server will be built with FastAPI, in Python.
 
@@ -60,7 +60,7 @@ The database that is used for this project is a relational database, with Postgr
 
 <details>
 
-<summary>Collapsed Section</summary>
+<summary>Collapsed section</summary>
 
 Since each of the two team members are responsible separately for frontend and backend, the code styles are mainly up to each individual. Stick to the common coding styles that are used in each language. For variable names that are used on both ends, like when it comes to API calls, and data structure, if possible it should use the same variable names to avoid confusion.
 
@@ -70,7 +70,7 @@ Since each of the two team members are responsible separately for frontend and b
 
 <details>
 
-<summary>Collapsed Section</summary>
+<summary>Collapsed section</summary>
 
 ### Build tool and language
 
@@ -130,7 +130,7 @@ Hooks are used to provide a concentrated functionality of certain modules. They 
 
 <details>
 
-<summary>Collapsed Section</summary>
+<summary>Collapsed section</summary>
 
 ### Architecture
 
@@ -154,9 +154,13 @@ PostgreSQL is used as the relational database. The core tables are:
 - `competence_profile`
 - `availability`
 
-### API Design
+### API design
 
 The API uses JSON for request/response bodies and consistent error handling. Validation is performed both at the schema level (Pydantic) and in the service layer for business rules.
+
+### CORS and HTTP methods
+
+The backend restricts CORS to only the HTTP methods and headers required by the implemented API endpoints. Allowed methods include GET, POST, PUT, and DELETE, corresponding to the defined routes, while OPTIONS is permitted for browser preflight requests. Allowed headers are limited to Authorization, Content-Type, and Accept to support JWT-based authentication and JSON request bodies. This reduces the attack surface by preventing unnecessary methods and headers.
 
 </details>
 
