@@ -13,13 +13,6 @@ const t = ((key: string) => key) as unknown as TFunction;
 describe("formValidator", () => {
     const validators = formValidator(t);
 
-    /**
-     * validateIdentifier:
-     *  - Returns error for empty input
-     *  - Returns error for invalid email
-     *  - Returns error for short username
-     *  - Accepts valid email and username
-     */
     describe("validateIdentifier", () => {
         it("returns error when empty", () => {
             expect(validators.validateIdentifier("")).toBe("validation.identifierRequired");
@@ -42,12 +35,6 @@ describe("formValidator", () => {
         });
     });
 
-    /**
-     * validatePassword:
-     *  - Returns error for empty input
-     *  - Returns error for too short password
-     *  - Accepts valid password
-     */
     describe("validatePassword", () => {
         it("returns error when empty", () => {
             expect(validators.validatePassword("")).toBe("validation.passwordRequired");
@@ -62,11 +49,6 @@ describe("formValidator", () => {
         });
     });
 
-    /**
-     * validateFirstName:
-     *  - Returns error for empty input
-     *  - Accepts non-empty input
-     */
     describe("validateFirstName", () => {
         it("returns error when empty", () => {
             expect(validators.validateFirstName("")).toBe("validation.firstNameRequired");
@@ -77,11 +59,6 @@ describe("formValidator", () => {
         });
     });
 
-    /**
-     * validateLastName:
-     *  - Returns error for empty input
-     *  - Accepts non-empty input
-     */
     describe("validateLastName", () => {
         it("returns error when empty", () => {
             expect(validators.validateLastName("")).toBe("validation.lastNameRequired");
@@ -92,12 +69,6 @@ describe("formValidator", () => {
         });
     });
 
-    /**
-     * validateEmail:
-     *  - Returns error for empty input
-     *  - Returns error for invalid format
-     *  - Accepts valid email
-     */
     describe("validateEmail", () => {
         it("returns error when empty", () => {
             expect(validators.validateEmail("")).toBe("validation.emailRequired");
@@ -112,13 +83,6 @@ describe("formValidator", () => {
         });
     });
 
-    /**
-     * validatePersonNumber:
-     *  - Returns error for empty input
-     *  - Returns error for invalid format
-     *  - Returns error for impossible dates
-     *  - Accepts valid person number
-     */
     describe("validatePersonNumber", () => {
         it("returns error when empty", () => {
             expect(validators.validatePersonNumber("")).toBe("validation.personNumberRequired");
