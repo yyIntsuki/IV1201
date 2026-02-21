@@ -50,7 +50,6 @@ describe("Login page", () => {
 
     /**
      * Integration with form logic.
-     * Loading state behavior.
      */
     it("calls startLoading, login, stopLoading on successful submit", async () => {
         render(<Login />);

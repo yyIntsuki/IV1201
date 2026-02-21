@@ -55,9 +55,7 @@ describe("useForm", () => {
     });
 
     /**
-     * handleSubmit:
-     *  - Prevents submission when form is invalid
-     *  - Calls onSubmit with form data when form is valid
+     * Prevents submission when form is invalid.
      */
     it("does not call onSubmit when form is invalid", async () => {
         const onSubmit = vi.fn();
@@ -72,6 +70,9 @@ describe("useForm", () => {
         expect(result.current.touched).toEqual({ email: true, password: true });
     });
 
+    /**
+     * Calls onSubmit with form data when form is valid.
+     */
     it("calls onSubmit with form data when form is valid", async () => {
         const onSubmit = vi.fn();
 
