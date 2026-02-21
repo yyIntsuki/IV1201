@@ -1,8 +1,7 @@
-import { describe, it, expect, vi, beforeEach, type MockedFunction } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import Register from "@/pages/Register";
-import registerService from "@/services/register-service";
 import type { Account } from "@/types/account";
 
 vi.mock("react-i18next", () => ({
@@ -19,8 +18,8 @@ vi.mock("@/hooks/use-loading", () => ({
 const mockShowApiError = vi.fn();
 vi.mock("@/hooks/use-error", () => ({ default: () => ({ showApiError: mockShowApiError }) }));
 
-const mockRegister = registerService.register as MockedFunction<(account: Account) => Promise<void>>;
-vi.mock("@/services/register-service", () => ({ default: { register: vi.fn() } }));
+const mockRegister = vi.hoisted(() => vi.fn());
+vi.mock("@/services/register-service", () => ({ default: { register: mockRegister } }));
 
 const fillForm = (data: Account) => {
     fireEvent.change(screen.getByLabelText("register.fields.firstName.label"), { target: { value: data.firstName } });
@@ -68,7 +67,7 @@ describe("Register page", () => {
 
     /**
      * Integration with form logic.
-     * 
+     *
      * Loading state behavior, success message display, and service call verification.
      */
     it("calls startLoading, register, stopLoading, and shows success on successful submit", async () => {

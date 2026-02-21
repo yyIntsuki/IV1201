@@ -1,0 +1,72 @@
+import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
+import applicantService from "@/services/applicant-service";
+import { submitApplicationApi } from "@/api/submit-application-api";
+import type { ApplicationSubmission } from "@/types/application";
+import CompetenceParser from "@/utils/competence-parser";
+
+vi.mock("@/api/submit-application-api", () => ({ submitApplicationApi: vi.fn() }));
+
+/**
+ * Unit tests for the applicantService module.
+ *
+ * These tests ensure that the applicantService correctly transforms the submission data and interacts with the API,
+ * as well as properly propagating errors from the API.
+ */
+describe("applicantService", () => {
+    const mockApi = submitApplicationApi as unknown as Mock;
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
+    /**
+     * Call submitApplicationApi with correct payload,
+     * ensuring that the service correctly transforms the input data.
+     */
+    it("should call submitApplicationApi with correct payload", async () => {
+        const submission: ApplicationSubmission = {
+            userId: 123,
+            competenceProfile: [
+                { competence: "ticket sales", yearsOfExperience: 3 },
+                { competence: "lotteries", yearsOfExperience: 2 },
+            ],
+            availability: [{ fromDate: "2026-01-01", toDate: "2026-01-15" }],
+        };
+
+        vi.spyOn(CompetenceParser, "competenceToId").mockImplementation((c) => {
+            const map: Record<string, number> = { "ticket sales": 1, lotteries: 2 };
+            return map[c];
+        });
+
+        mockApi.mockResolvedValue(true);
+
+        await applicantService.submitApplication(submission);
+
+        expect(mockApi).toHaveBeenCalledOnce();
+        expect(mockApi).toHaveBeenCalledWith({
+            user_id: 123,
+            competence_profile: [
+                { competence_id: 1, years_of_experience: 3 },
+                { competence_id: 2, years_of_experience: 2 },
+            ],
+            availability: [{ from_date: "2026-01-01", to_date: "2026-01-15" }],
+        });
+    });
+
+    /**
+     * Make sure API error propagation works correctly,
+     * ensuring that any errors thrown by the API are correctly propagated to the caller of the service.
+     */
+    it("should propagate API errors", async () => {
+        const submission: ApplicationSubmission = {
+            userId: 123,
+            competenceProfile: [{ competence: "ticket sales", yearsOfExperience: 3 }],
+            availability: [{ fromDate: "2026-01-01", toDate: "2026-01-15" }],
+        };
+
+        const error = new Error("API failed");
+        mockApi.mockRejectedValue(error);
+
+        await expect(applicantService.submitApplication(submission)).rejects.toThrow("API failed");
+    });
+});
