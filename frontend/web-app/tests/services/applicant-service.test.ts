@@ -1,4 +1,3 @@
-import { describe, it, expect, vi, beforeEach, type Mock } from "vitest";
 import applicantService from "@/services/applicant-service";
 import { submitApplicationApi } from "@/api/submit-application-api";
 import type { ApplicationSubmission } from "@/types/application";
@@ -13,7 +12,7 @@ vi.mock("@/api/submit-application-api", () => ({ submitApplicationApi: vi.fn() }
  * as well as properly propagating errors from the API.
  */
 describe("applicantService", () => {
-    const mockApi = submitApplicationApi as unknown as Mock;
+    const submitApplicationApiMock = vi.mocked(submitApplicationApi);
 
     beforeEach(() => {
         vi.clearAllMocks();
@@ -38,12 +37,12 @@ describe("applicantService", () => {
             return map[c];
         });
 
-        mockApi.mockResolvedValue(true);
+        submitApplicationApiMock.mockResolvedValue(true);
 
         await applicantService.submitApplication(submission);
 
-        expect(mockApi).toHaveBeenCalledOnce();
-        expect(mockApi).toHaveBeenCalledWith({
+        expect(submitApplicationApiMock).toHaveBeenCalledOnce();
+        expect(submitApplicationApiMock).toHaveBeenCalledWith({
             user_id: 123,
             competence_profile: [
                 { competence_id: 1, years_of_experience: 3 },
@@ -65,7 +64,7 @@ describe("applicantService", () => {
         };
 
         const error = new Error("API failed");
-        mockApi.mockRejectedValue(error);
+        submitApplicationApiMock.mockRejectedValue(error);
 
         await expect(applicantService.submitApplication(submission)).rejects.toThrow("API failed");
     });

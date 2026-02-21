@@ -1,4 +1,3 @@
-import { describe, it, expect, vi } from "vitest";
 import registerApi from "@/api/register-api";
 import type { Account } from "@/types/account";
 

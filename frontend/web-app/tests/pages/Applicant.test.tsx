@@ -1,13 +1,19 @@
 import React from "react";
-import { vi, describe, test, beforeEach, expect, type Mock } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Applicant from "@/pages/Applicant";
 import applicantService from "@/services/applicant-service";
 import { getUserIdFromJwt } from "@/utils/jwt-decoder";
 import type { Competence, Availability } from "@/types/application";
 
+vi.mock("react-i18next", () => ({
+    useTranslation: () => ({ t: (key: string) => key }),
+    Trans: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
+const submitApplicationMock = vi.mocked(applicantService.submitApplication);
 vi.mock("@/services/applicant-service", () => ({ default: { submitApplication: vi.fn() } }));
 
+const getUserIdMock = vi.mocked(getUserIdFromJwt);
 vi.mock("@/utils/jwt-decoder", () => ({ getUserIdFromJwt: vi.fn(() => 2) }));
 
 const startLoadingMock = vi.fn();
@@ -68,7 +74,7 @@ describe("Applicant Page", () => {
     beforeEach(() => {
         vi.clearAllMocks();
         localStorage.setItem("TOKEN", "dummy-token");
-        (applicantService.submitApplication as unknown as Mock).mockResolvedValue({});
+        submitApplicationMock.mockResolvedValue(undefined);
     });
 
     /**
@@ -87,10 +93,10 @@ describe("Applicant Page", () => {
         fireEvent.click(screen.getByText(/submit/i));
 
         await waitFor(() => {
-            expect(applicantService.submitApplication).toHaveBeenCalledTimes(1);
+            expect(submitApplicationMock).toHaveBeenCalledTimes(1);
         });
 
-        expect(screen.getByText("applicant.applicationForm.submitted.title")).toBeInTheDocument();
+        expect(await screen.findByText("applicant.applicationForm.submitted.title")).toBeInTheDocument();
         expect(screen.getByText("applicant.applicationForm.submitted.message")).toBeInTheDocument();
 
         expect(startLoadingMock).toHaveBeenCalled();
@@ -103,20 +109,22 @@ describe("Applicant Page", () => {
      * Test that an error is shown when the user ID cannot be extracted from the JWT, and that the application is not submitted.
      */
     test("shows error when userId is missing", async () => {
-        (getUserIdFromJwt as unknown as Mock).mockReturnValueOnce(null);
+        getUserIdMock.mockReturnValueOnce(null);
 
         render(<Applicant />);
 
         fireEvent.click(screen.getByText(/next/i));
         await waitFor(() => screen.getByTestId("availability-input"));
+
         fireEvent.click(screen.getByText(/next/i));
         await waitFor(() => screen.getByTestId("review-summary-list"));
+
         fireEvent.click(screen.getByText(/submit/i));
 
         await waitFor(() => {
             expect(showErrorMock).toHaveBeenCalled();
         });
 
-        expect(applicantService.submitApplication).not.toHaveBeenCalled();
+        expect(submitApplicationMock).not.toHaveBeenCalled();
     });
 });
