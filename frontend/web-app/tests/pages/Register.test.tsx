@@ -68,6 +68,7 @@ describe("Register page", () => {
 
     /**
      * Integration with form logic.
+     * 
      * Loading state behavior, success message display, and service call verification.
      */
     it("calls startLoading, register, stopLoading, and shows success on successful submit", async () => {
