@@ -1,9 +1,11 @@
 import authService from "@/services/auth-service";
-import loginApi from "@/api/login-api";
 import STORAGE_KEYS from "@/constants/storage-keys";
-import * as jwtDecoder from "@/utils/jwt-decoder";
 
-vi.mock("@/api/login-api", () => ({ default: vi.fn() }));
+const loginApiMock = vi.hoisted(() => vi.fn());
+vi.mock("@/api/login-api", () => ({ default: loginApiMock }));
+
+const isJwtExpiredMock = vi.hoisted(() => vi.fn());
+vi.mock("@/utils/jwt-decoder", () => ({ isJwtExpired: isJwtExpiredMock }));
 
 /**
  * Tests for authService module, covering token retrieval, login, and logout functionality.
@@ -28,7 +30,7 @@ describe("authService", () => {
             const token = "valid-token";
 
             localStorage.setItem(STORAGE_KEYS.TOKEN, token);
-            vi.spyOn(jwtDecoder, "isJwtExpired").mockReturnValue(false);
+            isJwtExpiredMock.mockReturnValue(false);
 
             const result = authService.getToken();
 
@@ -39,7 +41,7 @@ describe("authService", () => {
             const token = "expired-token";
 
             localStorage.setItem(STORAGE_KEYS.TOKEN, token);
-            vi.spyOn(jwtDecoder, "isJwtExpired").mockReturnValue(true);
+            isJwtExpiredMock.mockReturnValue(true);
 
             const result = authService.getToken();
 
@@ -60,11 +62,11 @@ describe("authService", () => {
         it("calls loginApi and stores access token in localStorage", async () => {
             const fakeResponse = { access_token: "jwt-token", token_type: "bearer", role_id: 2 };
 
-            vi.mocked(loginApi).mockResolvedValueOnce(fakeResponse);
+            loginApiMock.mockResolvedValueOnce(fakeResponse);
 
             await authService.login("user", "password");
 
-            expect(loginApi).toHaveBeenCalledWith("user", "password");
+            expect(loginApiMock).toHaveBeenCalledWith("user", "password");
             expect(localStorage.getItem(STORAGE_KEYS.TOKEN)).toBe("jwt-token");
         });
     });

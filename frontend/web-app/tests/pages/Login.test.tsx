@@ -7,17 +7,17 @@ vi.mock("react-i18next", () => ({
     Trans: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-const mockStartLoading = vi.fn();
-const mockStopLoading = vi.fn();
-vi.mock("@/hooks/use-loading", () => {
-    return { default: () => ({ startLoading: mockStartLoading, stopLoading: mockStopLoading }) };
-});
+const startLoadingMock = vi.fn();
+const stopLoadingMock = vi.fn();
+vi.mock("@/hooks/use-loading", () => ({
+    default: () => ({ startLoading: startLoadingMock, stopLoading: stopLoadingMock }),
+}));
 
-const mockShowApiError = vi.fn();
-vi.mock("@/hooks/use-error", () => ({ default: () => ({ showApiError: mockShowApiError }) }));
+const showApiErrorMock = vi.fn();
+vi.mock("@/hooks/use-error", () => ({ default: () => ({ showApiError: showApiErrorMock }) }));
 
-const mockLogin = vi.fn();
-vi.mock("@/hooks/use-auth", () => ({ default: () => ({ login: mockLogin }) }));
+const loginMock = vi.fn();
+vi.mock("@/hooks/use-auth", () => ({ default: () => ({ login: loginMock }) }));
 
 const fillForm = (data: LoginData) => {
     fireEvent.change(screen.getByLabelText("login.fields.identifier.label"), { target: { value: data.identifier } });
@@ -33,7 +33,7 @@ const fillForm = (data: LoginData) => {
 describe("Login page", () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        mockLogin.mockResolvedValue(undefined);
+        loginMock.mockResolvedValue(undefined);
     });
 
     /**
@@ -52,16 +52,17 @@ describe("Login page", () => {
      */
     it("calls startLoading, login, stopLoading on successful submit", async () => {
         render(<Login />);
+
         const formData = { identifier: "user123", password: "password123" };
         fillForm(formData);
 
         fireEvent.submit(screen.getByRole("button", { name: "login.submit" }));
 
         await waitFor(() => {
-            expect(mockStartLoading).toHaveBeenCalledOnce();
-            expect(mockLogin).toHaveBeenCalledWith(formData.identifier, formData.password);
-            expect(mockStopLoading).toHaveBeenCalledOnce();
-            expect(mockShowApiError).not.toHaveBeenCalled();
+            expect(startLoadingMock).toHaveBeenCalledOnce();
+            expect(loginMock).toHaveBeenCalledWith(formData.identifier, formData.password);
+            expect(stopLoadingMock).toHaveBeenCalledOnce();
+            expect(showApiErrorMock).not.toHaveBeenCalled();
         });
     });
 
@@ -70,19 +71,20 @@ describe("Login page", () => {
      */
     it("calls showApiError if login fails", async () => {
         const error = new Error("Invalid credentials");
-        mockLogin.mockRejectedValueOnce(error);
+        loginMock.mockRejectedValueOnce(error);
 
         render(<Login />);
+
         const formData = { identifier: "user123", password: "password123" };
         fillForm(formData);
 
         fireEvent.submit(screen.getByRole("button", { name: "login.submit" }));
 
         await waitFor(() => {
-            expect(mockStartLoading).toHaveBeenCalledOnce();
-            expect(mockLogin).toHaveBeenCalledWith(formData.identifier, formData.password);
-            expect(mockStopLoading).toHaveBeenCalledOnce();
-            expect(mockShowApiError).toHaveBeenCalledWith(error, "login");
+            expect(startLoadingMock).toHaveBeenCalledOnce();
+            expect(loginMock).toHaveBeenCalledWith(formData.identifier, formData.password);
+            expect(stopLoadingMock).toHaveBeenCalledOnce();
+            expect(showApiErrorMock).toHaveBeenCalledWith(error, "login");
         });
     });
 });

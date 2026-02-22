@@ -1,9 +1,8 @@
 import registerApi from "@/api/register-api";
 import type { Account } from "@/types/account";
 
-vi.mock("@/api/client", () => ({ default: vi.fn() }));
-
-import apiRequest from "@/api/client";
+const apiRequestMock = vi.hoisted(() => vi.fn());
+vi.mock("@/api/client", () => ({ default: apiRequestMock }));
 
 /**
  * Unit tests for the registerApi function.
@@ -24,8 +23,8 @@ describe("registerApi", () => {
 
         await registerApi(account);
 
-        expect(apiRequest).toHaveBeenCalledOnce();
-        expect(apiRequest).toHaveBeenCalledWith("/api/v1/users", {
+        expect(apiRequestMock).toHaveBeenCalledOnce();
+        expect(apiRequestMock).toHaveBeenCalledWith("/api/v1/users", {
             method: "POST",
             data: {
                 name: "Jane",

@@ -1,13 +1,12 @@
 import apiRequest from "@/api/client";
 import STORAGE_KEYS from "@/constants/storage-keys";
 
-const mockAxiosRequest = vi.hoisted(() => vi.fn());
-
+const axiosRequestMock = vi.hoisted(() => vi.fn());
 vi.mock("axios", () => {
     return {
         __esModule: true, // Necessary to properly mock an ES module
         default: {
-            create: vi.fn(() => mockAxiosRequest),
+            create: vi.fn(() => axiosRequestMock),
             isAxiosError: (error: unknown): boolean =>
                 typeof error === "object" &&
                 error !== null &&
@@ -33,7 +32,7 @@ describe("apiRequest", () => {
      * ensuring that the function correctly extracts and returns the expected data from the response.
      */
     it("returns response.data on success", async () => {
-        mockAxiosRequest.mockResolvedValueOnce({ data: { ok: true } });
+        axiosRequestMock.mockResolvedValueOnce({ data: { ok: true } });
 
         const result = await apiRequest<{ ok: boolean }>("/test");
 
@@ -46,11 +45,11 @@ describe("apiRequest", () => {
      */
     it("adds Authorization header when token exists", async () => {
         localStorage.setItem(STORAGE_KEYS.TOKEN, "jwt-token");
-        mockAxiosRequest.mockResolvedValueOnce({ data: {} });
+        axiosRequestMock.mockResolvedValueOnce({ data: {} });
 
         await apiRequest("/secure");
 
-        const callArg = mockAxiosRequest.mock.calls[0][0] as { headers?: Record<string, string> };
+        const callArg = axiosRequestMock.mock.calls[0][0] as { headers?: Record<string, string> };
 
         expect(callArg.headers?.Authorization).toBe("Bearer jwt-token");
     });
@@ -59,7 +58,7 @@ describe("apiRequest", () => {
      * Throws an ApiError with the correct properties for HTTP errors, including status and message,
      */
     it("throws ApiError for HTTP errors", async () => {
-        mockAxiosRequest.mockRejectedValueOnce({
+        axiosRequestMock.mockRejectedValueOnce({
             isAxiosError: true,
             response: { status: 401, data: { message: "Unauthorized" } },
         });
@@ -76,7 +75,7 @@ describe("apiRequest", () => {
      * Throws an ApiError marked as a network error when the error is an Axios error without a response.
      */
     it("throws network ApiError when no response", async () => {
-        mockAxiosRequest.mockRejectedValueOnce({ isAxiosError: true, response: undefined });
+        axiosRequestMock.mockRejectedValueOnce({ isAxiosError: true, response: undefined });
 
         await expect(apiRequest("/offline")).rejects.toMatchObject({ name: "ApiError", isNetworkError: true });
     });

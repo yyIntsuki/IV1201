@@ -1,20 +1,15 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Applicant from "@/pages/Applicant";
-import applicantService from "@/services/applicant-service";
-import { getUserIdFromJwt } from "@/utils/jwt-decoder";
 import type { Competence, Availability } from "@/types/application";
 
-vi.mock("react-i18next", () => ({
-    useTranslation: () => ({ t: (key: string) => key }),
-    Trans: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-}));
+vi.mock("react-i18next", () => ({ useTranslation: () => ({ t: (key: string) => key }) }));
 
-const submitApplicationMock = vi.mocked(applicantService.submitApplication);
-vi.mock("@/services/applicant-service", () => ({ default: { submitApplication: vi.fn() } }));
+const submitApplicationMock = vi.hoisted(() => vi.fn());
+vi.mock("@/services/applicant-service", () => ({ default: { submitApplication: submitApplicationMock } }));
 
-const getUserIdMock = vi.mocked(getUserIdFromJwt);
-vi.mock("@/utils/jwt-decoder", () => ({ getUserIdFromJwt: vi.fn(() => 2) }));
+const getUserIdMock = vi.hoisted(() => vi.fn<() => number | null>(() => 2));
+vi.mock("@/utils/jwt-decoder", () => ({ getUserIdFromJwt: getUserIdMock }));
 
 const startLoadingMock = vi.fn();
 const stopLoadingMock = vi.fn();

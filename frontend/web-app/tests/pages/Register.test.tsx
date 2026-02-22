@@ -8,17 +8,17 @@ vi.mock("react-i18next", () => ({
     Trans: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
-const mockStartLoading = vi.fn();
-const mockStopLoading = vi.fn();
+const startLoadingMock = vi.fn();
+const stopLoadingMock = vi.fn();
 vi.mock("@/hooks/use-loading", () => ({
-    default: () => ({ startLoading: mockStartLoading, stopLoading: mockStopLoading }),
+    default: () => ({ startLoading: startLoadingMock, stopLoading: stopLoadingMock }),
 }));
 
-const mockShowApiError = vi.fn();
-vi.mock("@/hooks/use-error", () => ({ default: () => ({ showApiError: mockShowApiError }) }));
+const showApiErrorMock = vi.fn();
+vi.mock("@/hooks/use-error", () => ({ default: () => ({ showApiError: showApiErrorMock }) }));
 
-const mockRegister = vi.hoisted(() => vi.fn());
-vi.mock("@/services/register-service", () => ({ default: { register: mockRegister } }));
+const registerMock = vi.hoisted(() => vi.fn());
+vi.mock("@/services/register-service", () => ({ default: { register: registerMock } }));
 
 const fillForm = (data: Account) => {
     fireEvent.change(screen.getByLabelText("register.fields.firstName.label"), { target: { value: data.firstName } });
@@ -40,7 +40,7 @@ const fillForm = (data: Account) => {
 describe("Register page", () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        mockRegister.mockResolvedValue(undefined);
+        registerMock.mockResolvedValue(undefined);
     });
 
     /**
@@ -89,9 +89,9 @@ describe("Register page", () => {
         fireEvent.submit(screen.getByRole("button", { name: "register.submit" }));
 
         await waitFor(() => {
-            expect(mockStartLoading).toHaveBeenCalledOnce();
-            expect(mockRegister).toHaveBeenCalledWith(expect.objectContaining(formData));
-            expect(mockStopLoading).toHaveBeenCalledOnce();
+            expect(startLoadingMock).toHaveBeenCalledOnce();
+            expect(registerMock).toHaveBeenCalledWith(expect.objectContaining(formData));
+            expect(stopLoadingMock).toHaveBeenCalledOnce();
             expect(screen.getByText("register.successTitle")).toBeInTheDocument();
         });
     });
@@ -103,7 +103,7 @@ describe("Register page", () => {
      */
     it("calls showApiError if registration fails", async () => {
         const error = new Error("Email already exists");
-        mockRegister.mockRejectedValueOnce(error);
+        registerMock.mockRejectedValueOnce(error);
 
         render(
             <MemoryRouter>
@@ -124,10 +124,10 @@ describe("Register page", () => {
         fireEvent.submit(screen.getByRole("button", { name: "register.submit" }));
 
         await waitFor(() => {
-            expect(mockStartLoading).toHaveBeenCalledOnce();
-            expect(mockRegister).toHaveBeenCalledWith(expect.objectContaining(formData));
-            expect(mockStopLoading).toHaveBeenCalledOnce();
-            expect(mockShowApiError).toHaveBeenCalledWith(error, "register");
+            expect(startLoadingMock).toHaveBeenCalledOnce();
+            expect(registerMock).toHaveBeenCalledWith(expect.objectContaining(formData));
+            expect(stopLoadingMock).toHaveBeenCalledOnce();
+            expect(showApiErrorMock).toHaveBeenCalledWith(error, "register");
         });
     });
 });

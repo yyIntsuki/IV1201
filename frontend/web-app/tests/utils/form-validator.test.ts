@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import type { TFunction } from "i18next";
 import formValidator from "@/utils/form-validator";
 
-const t = ((key: string) => key) as unknown as TFunction;
+const t = ((key: string) => key) as TFunction;
 
 /**
  * Unit tests for the formValidator utility functions.

@@ -1,9 +1,12 @@
 import applicantService from "@/services/applicant-service";
-import { submitApplicationApi } from "@/api/submit-application-api";
 import type { ApplicationSubmission } from "@/types/application";
-import CompetenceParser from "@/utils/competence-parser";
+import type { Competence } from "@/types/competence";
 
-vi.mock("@/api/submit-application-api", () => ({ submitApplicationApi: vi.fn() }));
+const submitApplicationApiMock = vi.hoisted(() => vi.fn());
+vi.mock("@/api/submit-application-api", () => ({ submitApplicationApi: submitApplicationApiMock }));
+
+const competenceToIdMock = vi.hoisted(() => vi.fn<(c: Competence) => number>());
+vi.mock("@/utils/competence-parser", () => ({ default: { competenceToId: competenceToIdMock } }));
 
 /**
  * Unit tests for the applicantService module.
@@ -12,8 +15,6 @@ vi.mock("@/api/submit-application-api", () => ({ submitApplicationApi: vi.fn() }
  * as well as properly propagating errors from the API.
  */
 describe("applicantService", () => {
-    const submitApplicationApiMock = vi.mocked(submitApplicationApi);
-
     beforeEach(() => {
         vi.clearAllMocks();
     });
@@ -32,9 +33,9 @@ describe("applicantService", () => {
             availability: [{ fromDate: "2026-01-01", toDate: "2026-01-15" }],
         };
 
-        vi.spyOn(CompetenceParser, "competenceToId").mockImplementation((c) => {
+        competenceToIdMock.mockImplementation((competence) => {
             const map: Record<string, number> = { "ticket sales": 1, lotteries: 2 };
-            return map[c];
+            return map[competence];
         });
 
         submitApplicationApiMock.mockResolvedValue(true);
