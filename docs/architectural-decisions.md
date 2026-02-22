@@ -74,60 +74,93 @@ Since each of the two team members are responsible separately for frontend and b
 
 ### Build tool and language
 
-Vite is used as the build tool for the frontend. It provides a dev server that includes enhancements for development such as the Hot Module Replacement (HMR). The React SWC plugin, a Rust-based compiler that replaces Babel in React project, offering greater compilation and build times. It may not be necessary since the project isn't large but it is used as it is easy to include in the project.
+The frontend is built using **Vite**, which provides a fast development server with **Hot Module Replacement** (HMR) for immediate feedback during development. Vite offers a modern, minimal configuration and significantly improves startup and rebuild times compared to traditional bundlers.
+
+The project uses the **React SWC plugin**, a Rust-based compiler that replaces Babel. While the application itself is not large enough to strictly require this optimization, SWC is included due to its ease of integration and improved compilation performance, which benefits long-term maintainability and scalability.
 
 ### Architecture
 
-All relevant source files are in /src, which then is divided into folders that handle different kinds of functionalities in the frontend. It is a great way to separate concerns and organize functionality individually to avoid messy code structure.
+All frontend source code resides in the `/src` directory and is organized by responsibility. This structure enforces separation of concerns by grouping logic into folders based on functionality rather than technical type alone.
 
-### Router
+The architecture encourages clear ownership of responsibilities; reduced coupling between UI, logic, and data access; easier navigation and long-term maintainability.
 
-The router uses the 'react-router' module which allows route definitions and protected routes, which allows preventing users to access pages they do not have access in the application state, such as a logged in user accessing the /login page.
+This structure minimizes the risk of a monolithic or unstructured codebase as the application evolves.
+
+### Routing
+
+Client-side routing is implemented using **React Router**. Routes are centrally defined and include support for protected routes.
+
+Protected routing is used to prevent users from accessing views that are not valid for their authentication state, such as preventing authenticated users from navigating to the login page or unauthenticated users from accessing restricted pages.
 
 ### Authentication
 
-The user authorizes by logging in, which fetches a login response from the API. If user successfully log in, the session is stored in form of a AuthContext, which is accessible by a useAuth hook. The AuthProvider decides which authorization service it uses, currently there is only one such service. By separating it into a service gives the opportunity to test multiple methods of authentication, if needed.
+Authentication is handled through a dedicated authentication layer built around a React context (`AuthContext`) and accessed via a `useAuth` hook.
 
-The app uses JWT (JSON Web Token) as a secure way to store authentication session. This token is provided by the backend. It is encrypted and then stored in the frontend client's local storage. Due to its encrypted nature, the user cannot get access to pages they aren't allowed to. For instance an applicant cannot modify the JWT to authorize themselves as recruiter.
+When a user logs in, credentials are sent to the backend API. Upon successful authentication, a **JSON Web Token** (JWT) is returned and stored securely in the browser’s local storage. This token represents the authenticated session and is used for authorization in subsequent API requests.
 
-### Views
+The authentication logic is abstracted behind a service layer, allowing the application to support multiple authentication strategies in the future if required. This separation also improves testability and reduces coupling between authentication logic and UI components.
 
-The views of the frontend are put in /pages, which handles UI that is presented to the user, and interaction logic. The interactions should call functions from other parts of the code to return relevant data, and not directly from the code in /pages.
+JWTs are validated server-side, meaning users cannot escalate privileges by modifying client-side data. For example, an applicant cannot authorize themselves as a recruiter by tampering with the token.
 
-To make componnets easier to work with, the views splits out components that it uses to separate concerns. This helps the architectural abstraction and maintenance. Despite being a bit more complex to set up.
+### Views and components
+
+Application views are located in the `/pages` directory. Each page is responsible for rendering user-facing UI, handling interaction flow, and delegating business logic to services or hooks.
+
+To improve maintainability and readability, pages are composed of smaller, reusable components. While this introduces a slightly higher initial setup cost, it significantly improves clarity, testability, and reuse as the application grows.
 
 ### Layout
 
-The app uses a Header, MainLayout, Footer format. It may not look like it first but due to how little information that is required to be shown on the screen by specifications. The header and footer elements are transparent, but fixed at the page top respectively bottom. By having a layout, we eliminate the need of rewriting same components on each page.
+The application follows a shared layout structure consisting of a header, main content area, and footer. These elements are implemented once and reused across all pages.
+
+Although the header and footer are visually minimal and transparent due to the application requirements, the layout abstraction eliminates duplication and ensures consistent structure across views.
 
 ### Types
 
-Types are used as definitions to data structures. They are used to define data that is used in various places in the app, which may be used elsewhere than just that one page. This can help with data consistency across the app.
+TypeScript types are used extensively to define shared data structures across the application. These types act as a single source of truth for data models exchanged between components, services, and API layers.
+
+This approach improves data consistency, reduces runtime errors, and makes refactoring safer and more predictable.
 
 ### Naming conventions
 
-The actual syntax namings should follow the most regular conventions. However, there are no such strict rules for file namings. In this regard, the frontend uses PascalCase for everything that are used like components and types, then kebab-case for everything else.
+Component and type definitions use **PascalCase**, following common React and TypeScript conventions. Other files, such as services, hooks, and utilities, use **kebab-case**.
+
+While file naming rules are not strictly enforced, consistent conventions are followed to improve readability and developer experience.
 
 ### Error handling
 
-Currently, the logic (non-UI) error handling are done by catching errors in try-catch blocks. This should be the recommended approach, especially for logic errors.
+Non-UI logic errors are handled using standard **try–catch** blocks, which is the recommended approach for asynchronous operations and service-level logic.
 
-The UI errors (such as login fail, registration fail) are handled in the form as an error context, which provides a hook to display an error toast at the bottom of the screen showing the error message. By using the hook, we eliminate the need to implement the error logic in each view that needs it.
+User-facing errors (e.g. login or registration failures) are handled through a centralized error context. This context exposes a hook that allows any view to trigger an error toast notification.
+
+By centralizing UI error handling, the application avoids duplicated error logic and ensures a consistent user experience across all views.
 
 ### Localization
 
-Currently, the app uses i18next for internationalization. The implemented languages are English and Swedish. This can be toggled in the top right corner using a button group.
+The application uses **i18next** for internationalization. Currently supported languages are English and Swedish, which can be toggled via a button group in the top-right corner of the UI.
 
-The i18next framework helps setting up a simple translation module that can be easily maintained, and all the language texts are put in one place, i.e. /locales.
+All translation strings are stored centrally in the `/locales` directory, making the system easy to maintain and extend with additional languages.
 
 ### Hooks
 
-Hooks are used to provide a concentrated functionality of certain modules. They are great for reducing redundant and duplicated code, whether it is rendering or logic. For instance, use-auth and use-error are used globally in the frontend, which benefits from a hook that can be called anywhere within the app with their respective contexts that wraps the entire app. Then use-form is one that helps with redundant form creation which would be redundant as they would've been using the same code in Login and Register pages.
+Custom hooks are used to encapsulate reusable logic and shared behavior. Examples include authentication, error handling, loading state management, and form handling.
 
+Hooks reduce code duplication and improve composability. For example, form logic shared between the Login and Register pages is extracted into a reusable hook instead of being reimplemented in each view.
+
+### Testing
+
+The frontend follows a layered testing strategy focused primarily on logic and orchestration rather than UI rendering.
+
+Service-level tests are prioritized to verify data transformation correctness, API integration behavior, and error propagation.
+
+By testing services independently of React components, the test suite avoids unnecessary complexity related to multi-step UI flows and component composition. This approach ensures that core business logic is reliable without tightly coupling tests to implementation details of the UI.
+
+Where appropriate, page-level tests are used to verify orchestration behavior (e.g. interaction between hooks and services), while component rendering is kept minimal in tests to reduce brittleness and maintenance overhead.
 
 ### Browser compatibility
 
-At each major implementation or change of a page, or component of pages. A check is done to ensure the frontend application is shown consistently between different browsers. Currently the tested browsers are Brave and Microsoft Edge.
+After major feature implementations or UI changes, the application is manually verified across multiple browsers to ensure consistent behavior and appearance. Currently tested browsers include **Brave** and **Microsoft Edge**.
+
+This helps identify browser-specific issues early and ensures a consistent user experience across supported platforms.
 
 </details>
 
