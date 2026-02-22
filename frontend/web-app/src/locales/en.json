@@ -19,6 +19,9 @@
             "pnrExists": "An account with this personal number already exists."
         }
     },
+    "loading": {
+        "slowMessage": "This may take a while… please hang on…"
+    },
     "login": {
         "title": "Login",
         "subtitle": "Please log in to access the application",

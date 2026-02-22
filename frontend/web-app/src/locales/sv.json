@@ -19,6 +19,9 @@
             "pnrExists": "Ett konto med detta personnummer finns redan."
         }
     },
+    "loading": {
+        "slowMessage": "Detta kan ta en stund… håll kvar…"
+    },
     "login": {
         "title": "Inloggning",
         "subtitle": "Vänligen logga in för att komma åt applikationen",
