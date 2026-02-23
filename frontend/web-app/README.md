@@ -52,19 +52,19 @@ cp .env.example .env
 npm run dev
 ```
 
-The app will be available at **<http://localhost:5173>** with Hot Module Replacement (HMR) enabled — changes to source files reflect immediately in the browser without a full reload.
+The app will be available at **[http://localhost:5173](http://localhost:5173)** with Hot Module Replacement (HMR) enabled — changes to source files reflect immediately in the browser without a full reload.
 
 ---
 
 ## Available Scripts
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the development server with HMR |
-| `npm run build` | Type-check and compile a production build into `dist/` |
-| `npm run preview` | Serve the production build locally for verification |
-| `npm run test` | Run all tests once using Vitest |
-| `npm run lint` | Run ESLint across all source files |
+| Command           | Description                                           |
+| ----------------- | ----------------------------------------------------- |
+| `npm run dev`     | Start the development server with HMR                 |
+| `npm run build`   | Type-check and compile a production build into`dist/` |
+| `npm run preview` | Serve the production build locally for verification   |
+| `npm run test`    | Run all tests once using Vitest                       |
+| `npm run lint`    | Run ESLint across all source files                    |
 
 ---
 
@@ -123,8 +123,8 @@ AuthProvider
 
 Configuration is done via a `.env` file in this directory. See `.env.example` for the required variables.
 
-| Variable | Description | Example |
-| --- | --- | --- |
+| Variable            | Description                 | Example                 |
+| ------------------- | --------------------------- | ----------------------- |
 | `VITE_API_BASE_URL` | Base URL of the backend API | `http://127.0.0.1:8000` |
 
 > All Vite environment variables must be prefixed with `VITE_` to be accessible in the browser bundle. They are read at build time, not runtime.
@@ -202,7 +202,7 @@ To add a new language, see [Add a new language](#add-a-new-language).
 
 ## Styling
 
-The app uses **Material UI (MUI)** as its component library. Components such as `Button`, `TextField`, `Card`, `Typography`, and `Stack` are imported directly from `@mui/material`. Inline `sx` props are used for layout and spacing adjustments — there are no global CSS files beyond `src/style.css` which handles base resets.
+The app uses **Material UI (MUI)** as its component library. Components such as `Button`, `TextField`, `Card`, `Typography`, and `Stack` are imported directly from `@mui/material`. Inline `sx` props are used for layout and spacing adjustments — there are no global CSS files.
 
 ---
 
@@ -342,7 +342,7 @@ To verify the production build locally before deploying:
 npm run preview
 ```
 
-This serves `dist/` at **<http://localhost:4173>**.
+This serves `dist/` at **[http://localhost:4173](http://localhost:4173)**.
 
 > **Important:** The `VITE_API_BASE_URL` in your `.env` must point to the production backend URL before building. Environment variables are baked into the bundle at build time.
 
