@@ -2,10 +2,17 @@
 User API routes - Presentation Layer.
 Handles HTTP requests and responses.
 """
+
 from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List
 
-from app.api.schemas.user_schemas import UserCreate, UserResponse, UserUpdate, TokenResponse
+from app.api.schemas.user_schemas import (
+    UserCreate,
+    UserResponse,
+    UserUpdate,
+    TokenResponse,
+    LoginRequest,
+)
 from app.services.user_service import UserService
 from app.security.jwt import create_access_token
 from app.security.dependencies import get_current_user
@@ -22,7 +29,7 @@ user_service = UserService()
 async def create_user(user_data: UserCreate):
     """
     Create a new user.
-    
+
     This endpoint demonstrates the full stack flow:
     1. HTTP POST request (Presentation Layer)
     2. Business logic validation (Business Logic Layer)
@@ -34,7 +41,10 @@ async def create_user(user_data: UserCreate):
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error",
+        )
 
 
 @router.get(
@@ -45,14 +55,17 @@ async def create_user(user_data: UserCreate):
 async def get_all_users():
     """
     Get all users from the database.
-    
+
     Demonstrates full stack flow from HTTP GET to database query.
     """
     try:
         users = await user_service.get_all_users()
         return users
     except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error",
+        )
 
 
 @router.get(
@@ -63,18 +76,23 @@ async def get_all_users():
 async def get_user(user_id: int):
     """
     Get a specific user by ID.
-    
+
     Demonstrates parameterized request flow through all layers.
     """
     try:
         user = await user_service.get_user_by_id(user_id)
         if not user:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+            )
         return user
     except HTTPException:
         raise
     except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error",
+        )
 
 
 @router.put(
@@ -85,20 +103,25 @@ async def get_user(user_id: int):
 async def update_user(user_id: int, user_data: UserUpdate):
     """
     Update a user's information.
-    
+
     Demonstrates update operation flow through all layers.
     """
     try:
         user = await user_service.update_user(user_id, user_data)
         if not user:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+            )
         return user
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except HTTPException:
         raise
     except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error",
+        )
 
 
 @router.delete(
@@ -109,36 +132,51 @@ async def update_user(user_id: int, user_data: UserUpdate):
 async def delete_user(user_id: int):
     """
     Delete a user.
-    
+
     Demonstrates delete operation flow through all layers.
     """
     try:
         success = await user_service.delete_user(user_id)
         if not success:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+            )
     except HTTPException:
         raise
     except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error",
+        )
+
 
 @router.post(
     "/login",
     response_model=TokenResponse,
     status_code=status.HTTP_200_OK,
 )
-async def login_user(username: str, password: str):
+async def login_user(credentials: LoginRequest):
     """
     User login endpoint.
-    
+
     Demonstrates authentication flow through all layers.
     """
     try:
-        user_detail = await user_service.authenticate_user(username=username, password=password)
+        user_detail = await user_service.authenticate_user(
+            username=credentials.username, password=credentials.password
+        )
         if not user_detail:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-        access_token = create_access_token({"role_id": user_detail["role_id"], "user_id": user_detail["user_id"]})
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
+            )
+        access_token = create_access_token(
+            {"role_id": user_detail["role_id"], "user_id": user_detail["user_id"]}
+        )
         return TokenResponse(access_token=access_token, token_type="bearer")
     except HTTPException:
         raise
     except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error",
+        )
