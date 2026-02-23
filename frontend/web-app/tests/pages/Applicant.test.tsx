@@ -21,6 +21,9 @@ const showErrorMock = vi.fn();
 const showApiErrorMock = vi.fn();
 vi.mock("@/hooks/use-error", () => ({ default: () => ({ showError: showErrorMock, showApiError: showApiErrorMock }) }));
 
+const tokenMock = vi.fn();
+vi.mock("@/hooks/use-auth", () => ({ default: () => ({ token: tokenMock }) }));
+
 vi.mock("@/components/applicant/CompetenceInput", () => ({
     default: function CompetenceInputMock({
         onChange,

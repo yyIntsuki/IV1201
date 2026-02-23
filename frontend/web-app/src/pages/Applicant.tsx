@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
-import STORAGE_KEYS from "@/constants/storage-keys";
+import useAuth from "@/hooks/use-auth";
 import type { Competence, Availability, ApplicationSubmission } from "@/types/application";
 import applicantService from "@/services/applicant-service";
 import { getUserIdFromJwt } from "@/utils/jwt-decoder";
@@ -29,9 +29,10 @@ const Applicant = () => {
     const { t } = useTranslation();
     const { startLoading, stopLoading } = useLoading();
     const { showError, showApiError } = useError();
+    const { token } = useAuth();
 
     const handleSubmit = async () => {
-        const userId = getUserIdFromJwt(localStorage.getItem(STORAGE_KEYS.TOKEN) || "");
+        const userId = getUserIdFromJwt(token || "");
 
         if (!userId) {
             showError(t("applicant.errors.missingUserId"));
