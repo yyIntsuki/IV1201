@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import AuthContext from "./AuthContext";
 import authService from "@/services/auth-service";
 import { getJwtRemainingTime, getRoleFromJwt, isJwtExpired } from "@/utils/jwt-decoder";
@@ -17,19 +17,18 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setToken(authService.getToken());
     };
 
-    const logout = () => {
+    const logout = useCallback(() => {
         authService.logout();
         setToken(null);
-    };
+    }, []);
 
     /* Logs out user when JWT is expired, starts counting only if there is a valid token. */
     useEffect(() => {
         if (!token || isJwtExpired(token)) return;
-
         const remainingTime = getJwtRemainingTime(token);
         const timer = setTimeout(logout, remainingTime);
         return () => clearTimeout(timer);
-    }, [token]);
+    }, [token, logout]);
 
     /* Derives the login state and role from the JWT instead of storing in local storage */
     const isLoggedIn = !!token && !isJwtExpired(token);
