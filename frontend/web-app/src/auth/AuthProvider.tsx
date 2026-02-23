@@ -12,6 +12,11 @@ import parseRole from "@/utils/role-parser";
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [token, setToken] = useState<string | null>(authService.getToken());
 
+    /**
+     * Logs a user in by calling the authService.login method and updating the local state with the received token.
+     * @param {string} username The username of the user
+     * @param {string} password The password of the user
+     */
     const login = async (username: string, password: string) => {
         await authService.login(username, password);
         setToken(authService.getToken());

@@ -7,8 +7,9 @@ import { isJwtExpired } from "@/utils/jwt-decoder";
  */
 const authService = {
     /**
-     * Gets the current JWT from local storage, if exists.
-     * @returns the JWT
+     * Retrieves the authentication token from local storage.
+     * If the token is expired or does not exist, it is removed from local storage and null is returned
+     * @returns {string | null} The authentication token if it exists and is not expired, null otherwise
      */
     getToken: (): string | null => {
         const token = localStorage.getItem(STORAGE_KEYS.TOKEN);

@@ -5,6 +5,7 @@ export interface ApiError extends Error {
 
 /**
  * Receives and specifies the API error such that it can be easily used in the frontend API error handling.
+ *
  * @param message the error message
  * @param options error status code and if it is a network error
  * @returns a more specified API error
@@ -22,6 +23,13 @@ export const createApiError = (
     return error;
 };
 
+/**
+ * Checks if an error is an instance of ApiError.
+ * This is used to identify if an error is an API error or not.
+ * 
+ * @param error the error to check
+ * @returns true if the error is an ApiError, false otherwise
+ */
 export const isApiError = (error: unknown): error is ApiError => {
     return error instanceof Error && error.name === "ApiError";
 };

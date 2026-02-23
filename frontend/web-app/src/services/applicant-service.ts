@@ -3,9 +3,10 @@ import { submitApplicationApi, type ApplicationPayload } from "@/api/submit-appl
 import CompetenceParser from "@/utils/competence-parser";
 
 /**
- * Converts the submission data from frontend to be backend-compatible.
+ * Maps an ApplicationSubmission object to an ApplicationPayload object.
+ * This function is used to correctly format the submission data for the API.
  * @param data the submission data for the application from Applicant page
- * @returns the corresponding payload for API use
+ * @returns an ApplicationPayload object containing user_id, competence_profile and availability
  */
 const toApiPayload = (data: ApplicationSubmission): ApplicationPayload => ({
     user_id: data.userId,
@@ -21,7 +22,9 @@ const toApiPayload = (data: ApplicationSubmission): ApplicationPayload => ({
  */
 const applicantService = {
     /**
-     * Submits a new application by calling the backend API.
+     * Submits a job application using the given payload.
+     * @param data the submission data for the application from Applicant page
+     * @returns a promise that resolves to void if the submission was successful
      */
     submitApplication: async (data: ApplicationSubmission): Promise<void> => {
         await submitApplicationApi(toApiPayload(data));

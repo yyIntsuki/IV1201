@@ -7,9 +7,12 @@ import type { Competence } from "@/types/competence";
  */
 const CompetenceParser = {
     /**
-     * Convert API numeric ID to frontend string Competence
+     * Maps a numeric competence ID to its string representation.
+     * Throws an error if the ID is invalid.
+     *
      * @param id numeric competence ID (1-based)
-     * @returns Competence string
+     * @returns corresponding string representation of the competence
+     * @throws Error if the ID is invalid
      */
     idToCompetence(id: number): Competence {
         const competence = COMPETENCE[id - 1];
@@ -18,9 +21,12 @@ const CompetenceParser = {
     },
 
     /**
-     * Convert frontend string Competence to API numeric ID
-     * @param competence Competence string
+     * Maps a string representation of a competence to its numeric ID.
+     * Throws an error if the competence is invalid.
+     *
+     * @param competence string representation of the competence
      * @returns numeric competence ID (1-based)
+     * @throws Error if the competence is invalid
      */
     competenceToId(competence: Competence): number {
         const index = COMPETENCE.indexOf(competence);
@@ -29,9 +35,12 @@ const CompetenceParser = {
     },
 
     /**
-     * Checks if competence is valid
-     * @param value value to test
-     * @returns true if is valid competence
+     * Type guard that checks if a given value is a valid competence string.
+     * This function returns true if the value is a string and is included in the COMPETENCE array,
+     * and false otherwise.
+     * 
+     * @param value the value to check
+     * @returns true if the value is a valid competence string, false otherwise
      */
     isValidCompetence(value: unknown): value is Competence {
         return typeof value === "string" && COMPETENCE.includes(value as Competence);

@@ -5,8 +5,12 @@ import getRoute from "@/utils/route-navigator";
 import ROUTES from "@/constants/routes";
 
 /**
- * ProtectedRoute component to guard routes that require authentication, so that unauthorized users cannot use protected pages.
- * Also ensures recruiters cannot gain access to applicant's page, and vice versa.
+ * A route that checks if the user is logged in and if the user's role is included in the allowed roles.
+ * If the user is not logged in, they are redirected to the login page. If the user's role is not included
+ * in the allowed roles, they are redirected to their respective role's page.
+ *
+ * @param allowedRoles - An array of allowed roles for this route.
+ * @returns A React element to be rendered in the route.
  */
 const ProtectedRoute = ({ allowedRoles }: { allowedRoles?: Role[] }) => {
     const { isLoggedIn, role } = useAuth();

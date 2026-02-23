@@ -6,6 +6,10 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
+/**
+ * Page shown when the user navigates to a non-existent route.
+ * Provides a brief message and a button to go back to the previous page.
+ */
 const NotFound = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();

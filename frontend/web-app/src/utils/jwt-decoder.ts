@@ -8,6 +8,7 @@ export interface JwtPayload {
 
 /**
  * Decode a JWT.
+ * 
  * @param token JWT string
  * @returns decoded payload or null if invalid
  */
@@ -21,6 +22,7 @@ export const decodeJwt = (token: string): JwtPayload | null => {
 
 /**
  * Check if JWT is expired.
+ * 
  * @param token JWT string
  * @returns true if expired or invalid
  */
@@ -31,7 +33,8 @@ export const isJwtExpired = (token: string): boolean => {
 };
 
 /**
- * Returns remaining milliseconds until the token expires
+ * Returns remaining milliseconds until the token expires.
+ * 
  * @param token JWT string
  * @returns milliseconds left, or 0 if expired/invalid
  */
@@ -46,6 +49,7 @@ export const getJwtRemainingTime = (token: string): number => {
 
 /**
  * Extract role from JWT.
+ * 
  * @param token JWT string
  * @returns role_id or null if invalid
  */
@@ -56,6 +60,7 @@ export const getRoleFromJwt = (token: string): number | null => {
 
 /**
  * Extract user ID from JWT.
+ * 
  * @param token JWT string
  * @returns user_id or null if invalid
  */

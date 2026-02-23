@@ -9,6 +9,9 @@ import Box from "@mui/material/Box";
 
 const LOADING_MESSAGE_DELAY_MS = 5000;
 
+/**
+ * A full-screen loading overlay that shows a slow message after a certain delay.
+ */
 const LoadingScreen = () => {
     const { t } = useTranslation();
     const { loading } = useLoading();

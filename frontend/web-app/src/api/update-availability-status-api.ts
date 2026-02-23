@@ -6,7 +6,11 @@ export interface AvailabilityStatusPayload {
 }
 
 /**
- * Update availability status by id.
+ * Updates the status of an availability entry.
+ * 
+ * @param availabilityId the ID of the availability entry
+ * @param payload the payload containing the new status and the expected status
+ * @returns a promise that resolves to true if the status was updated successfully, false otherwise
  */
 export const updateAvailabilityStatusApi = async (
     availabilityId: number,

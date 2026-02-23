@@ -15,6 +15,12 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Link from "@mui/material/Link";
 
+/**
+ * The Register component is responsible for rendering the registration form and handling the submission of the form.
+ * It uses the useForm hook to manage the form state and validation, and the useLoading and useError hooks to handle loading and error states.
+ * When the form is submitted successfully, it sets the success state to true and navigates the user to the login page after a short delay.
+ * If the form submission fails, it shows an API error message.
+ */
 const Register = () => {
     const [success, setSuccess] = useState(false);
 

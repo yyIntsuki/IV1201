@@ -4,6 +4,9 @@ import Footer from "./Footer";
 
 import Container from "@mui/material/Container";
 
+/**
+ * The main layout component that renders a header, a container for the router outlet, and a footer.
+ */
 const MainLayout = () => (
     <>
         <Header />

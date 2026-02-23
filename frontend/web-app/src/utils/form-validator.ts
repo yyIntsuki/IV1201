@@ -2,8 +2,9 @@ import type { TFunction } from "i18next";
 
 /**
  * A form validator, which returns validation errors in the selected locales.
- * @param t the i18next useTranslation hook.
- * @returns the corresponding validation error.
+ * 
+ * @param t the i18next useTranslation hook
+ * @returns the corresponding validation error
  */
 const formValidator = (t: TFunction) => ({
     validateFirstName: (value: string): string | null => {

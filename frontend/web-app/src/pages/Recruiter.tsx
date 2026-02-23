@@ -12,6 +12,11 @@ import CardContent from "@mui/material/CardContent";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
+/**
+ * Component that displays the list of job applications in the recruiter page.
+ * This component contains a table to list the job applications and a dialog to show the details of a job application.
+ * The component also handles the status change of a job application.
+ */
 const Recruiter = () => {
     const [applications, setApplications] = useState<ApplicationRecord[]>([]);
     const [selectedApplication, setSelectedApplication] = useState<ApplicationRecord | null>(null);
@@ -83,7 +88,9 @@ const Recruiter = () => {
                 <ApplicationDetailsDialog
                     application={selectedApplication}
                     onClose={() => setSelectedApplication(null)}
-                    onStatusChange={(status) => selectedApplication && void handleStatusChange(status, selectedApplication.status)}
+                    onStatusChange={(status) =>
+                        selectedApplication && void handleStatusChange(status, selectedApplication.status)
+                    }
                 />
             </CardContent>
         </Card>

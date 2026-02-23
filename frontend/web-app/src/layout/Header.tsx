@@ -5,6 +5,9 @@ import LanguageToggleButton from "@/components/header/LanguageToggleButton";
 
 import { Box, Typography } from "@mui/material";
 
+/**
+ * A sticky header at the top of the page, showing the app title and containing buttons for logging out and switching languages.
+ */
 const Header = () => (
     <Box
         component="header"

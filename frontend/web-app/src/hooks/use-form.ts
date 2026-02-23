@@ -1,21 +1,18 @@
 import { useState, useCallback } from "react";
 
-/**
- * Options for the useForm hook.
- *
- * @template T - Shape of the form data (all fields must be strings)
- * @property initialValues - Initial values for each field
- * @property validators - Validation functions per field, returning a string error or null
- * @property onSubmit - Async function called when form is successfully submitted
- */
 interface UseFormOptions<T> {
     initialValues: T;
     validators: Record<keyof T, (val: string) => string | null>;
     onSubmit: (data: T) => Promise<void>;
 }
 
-/* Helper: validate all fields and return a map of errors.
- * Outside of the useForm hook as it is a purely static helper function.
+/**
+ * Validates all fields of a given form data using provided validators.
+ * Returns an object with field names as keys and validation errors as values.
+ * If a field has no validation error, it will not be present in the returned object.
+ * @param data - The form data to validate.
+ * @param validators - The validators to use when validating the form data.
+ * @returns An object with field names as keys and validation errors as values.
  */
 function validateAllFields<T extends { [K in keyof T]: string }>(
     data: T,
@@ -29,22 +26,44 @@ function validateAllFields<T extends { [K in keyof T]: string }>(
     return errors;
 }
 
-/* Helper: mark all fields as touched
- * Outside of the useForm hook as it is a purely static helper function.
+/**
+ * Marks all fields of a given form data as touched.
+ * Returns an object with field names as keys and boolean values indicating whether the field has been touched.
+ * @param data - The form data to mark as touched.
+ * @returns An object with field names as keys and boolean values indicating whether the field has been touched.
  */
 function markAllFieldsTouched<T extends { [K in keyof T]: string }>(data: T): Record<keyof T, boolean> {
     return Object.fromEntries(Object.keys(data).map((k) => [k, true])) as Record<keyof T, boolean>;
 }
 
 /**
- * Custom hook for managing form state, validation, and submission.
+ * A React hook that manages form state, validation, and submission.
  *
- * Features:
- * - Tracks form values (`formData`)
- * - Tracks which fields have been touched (`touched`)
- * - Tracks validation errors (`fieldErrors`)
- * - Provides handlers: `handleChange`, `handleBlur`, `handleSubmit`
- * - Computes `isFormValid` dynamically
+ * useForm provides several utilities to manage form state and validation:
+ * - formData: The current form data.
+ * - touched: A boolean object tracking which fields have been touched (blurred).
+ * - fieldErrors: A string object tracking validation errors for each field.
+ * - handleChange: A function that updates the value of a field and clears its previous error.
+ * - handleBlur: A function that marks a field as touched and validates it immediately.
+ * - handleSubmit: A function that validates all fields and submits the form if valid.
+ * - isFormValid: A boolean indicating whether all fields are currently valid (no errors).
+ *
+ * @example
+ * const { formData, touched, fieldErrors, handleChange, handleSubmit } = useForm({
+ *     initialValues: { email: "", password: "" },
+ *     validators: {
+ *         email: (val) => val.includes("@") ? null : "Email must contain @",
+ *         password: (val) => val.length >= 8 ? null : "Password must be at least 8 characters",
+ *     },
+ *     onSubmit: async (data) => {
+ *         // Submit form data to server
+ *     },
+ * });
+ *
+ * @param initialValues - The initial values of the form data.
+ * @param validators - An object containing functions to validate each field of the form data.
+ * @param onSubmit - An async function called when the form is submitted with valid data.
+ * @returns An object containing utilities to manage form state and validation.
  */
 const useForm = <T extends { [K in keyof T]: string }>({ initialValues, validators, onSubmit }: UseFormOptions<T>) => {
     const [formData, setFormData] = useState<T>(initialValues);

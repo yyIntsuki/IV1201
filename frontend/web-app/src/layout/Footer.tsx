@@ -1,6 +1,9 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+/**
+ * A small footer at the bottom of the page, showing the copyright information.
+ */
 const Footer = () => (
     <Box
         component="footer"

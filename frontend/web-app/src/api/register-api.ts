@@ -13,8 +13,12 @@ interface RegisterPayload {
 }
 
 /**
- * Sends registration data to the backend.
- * @param account
+ * Registers a new user account by sending a POST request to the backend API.
+ * The payload contains the user's first name, last name, person number, email, username, password, and role.
+ * The role is always set to "applicant".
+ * 
+ * @param account - The user account to register
+ * @returns A promise that resolves when the API call is successful
  */
 const registerApi = async (account: Account): Promise<void> => {
     const payload: RegisterPayload = {

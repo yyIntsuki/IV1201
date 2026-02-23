@@ -13,6 +13,12 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 
+/**
+ * Component that handles user login in the login page.
+ * Uses the useForm hook to manage the form state and validation, and the useLoading and useError hooks to handle loading and error states.
+ * When the form is submitted successfully, it logs the user in and navigates them to the home page after a short delay.
+ * If the form submission fails, it shows an API error message.
+ */
 const Login = () => {
     const { t } = useTranslation();
     const { startLoading, stopLoading } = useLoading();

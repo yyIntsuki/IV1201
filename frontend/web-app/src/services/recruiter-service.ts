@@ -7,7 +7,9 @@ import { updateAvailabilityStatusApi, type AvailabilityStatusPayload } from "@/a
  */
 const recruiterService = {
     /**
-     * Fetch all applications.
+     * Fetch all applications for the recruiter.
+     * Maps the availability entries fetched from the API to ApplicationRecord objects
+     * @returns A promise that resolves to an array of ApplicationRecord objects
      */
     getApplications: async (): Promise<ApplicationRecord[]> => {
         const data: AvailabilityResponse[] = await fetchAvailabilitiesApi();
@@ -22,7 +24,11 @@ const recruiterService = {
     },
 
     /**
-     * Update status of an application.
+     * Update the status of an application entry.
+     * @param {number} applicationId - Application ID to update
+     * @param {ApplicationStatus} status - New status to set
+     * @param {ApplicationStatus} expectedStatus - Expected status of the application entry before update
+     * @returns A promise that resolves to void when the status is updated successfully
      */
     setApplicationStatus: async (
         applicationId: number,

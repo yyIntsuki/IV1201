@@ -11,7 +11,10 @@ export interface AvailabilityResponse {
 }
 
 /**
- * Fetch all availability entries.
+ * Fetch all availability entries from the API.
+ * Returns a list of AvailabilityResponse objects.
+ * 
+ * @returns Promise of AvailabilityResponse list
  */
 export const fetchAvailabilitiesApi = async (): Promise<AvailabilityResponse[]> => {
     return apiRequest<AvailabilityResponse[]>("/api/v1/availabilities", { method: "GET" });

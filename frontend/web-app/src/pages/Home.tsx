@@ -7,6 +7,9 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 
+/**
+ * Home page component.
+ */
 const Home = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();

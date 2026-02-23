@@ -17,6 +17,11 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 
+/**
+ * Represents the page for applicants to submit their job application.
+ * The page consists of three steps: inputting competence, inputting availability, and reviewing the submission.
+ * The page will show an error message if the user ID cannot be extracted from the JWT, or if the application is not submitted with valid data.
+ */
 const Applicant = () => {
     const [competenceList, setCompetenceList] = useState<Competence[]>([]);
     const [availabilityList, setAvailabilityList] = useState<Availability[]>([]);

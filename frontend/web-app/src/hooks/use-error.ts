@@ -10,8 +10,12 @@ interface UseErrorResult {
 }
 
 /**
- * Global error handling hook.
- * Converts API / network errors into user-facing messages.
+ * Hook providing error handling functionality.
+ * Returns an object containing showError and showApiError functions.
+ * showError directly triggers the error toast with the provided message.
+ * showApiError takes an error object and an optional scope string, and determines the appropriate error message based on the error type.
+ * getApiErrorMessage is a helper function that determines the appropriate error message based on the error type.
+ * Use within an ErrorProvider component to properly display errors to the user.
  */
 const useError = (): UseErrorResult => {
     const context = useContext(ErrorContext);
