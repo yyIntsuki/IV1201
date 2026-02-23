@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router";
+import ROUTES from "./constants/routes";
 
-import MainLayout from "./layout/MainLayout";
+import MainLayout from "@/layout/MainLayout";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
@@ -23,16 +24,16 @@ function Router() {
                 <Route element={<MainLayout />}>
                     <Route element={<PublicRoute />}>
                         <Route index element={<Home />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
+                        <Route path={ROUTES.LOGIN} element={<Login />} />
+                        <Route path={ROUTES.REGISTER} element={<Register />} />
                     </Route>
 
                     <Route element={<ProtectedRoute allowedRoles={["applicant"]} />}>
-                        <Route path="/applicant" element={<Applicant />} />
+                        <Route path={ROUTES.APPLICANT} element={<Applicant />} />
                     </Route>
 
                     <Route element={<ProtectedRoute allowedRoles={["recruiter"]} />}>
-                        <Route path="/recruiter" element={<Recruiter />} />
+                        <Route path={ROUTES.RECRUITER} element={<Recruiter />} />
                     </Route>
 
                     <Route path="*" element={<NotFound />} />
