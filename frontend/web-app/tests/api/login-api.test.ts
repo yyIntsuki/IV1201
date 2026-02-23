@@ -27,7 +27,7 @@ describe("loginApi", () => {
         expect(apiRequestMock).toHaveBeenCalledOnce();
         expect(apiRequestMock).toHaveBeenCalledWith("/api/v1/login", {
             method: "POST",
-            params: { username: identifier, password },
+            data: { username: identifier, password },
         });
 
         expect(result).toEqual(mockResponse);
