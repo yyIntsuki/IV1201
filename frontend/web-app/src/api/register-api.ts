@@ -1,5 +1,6 @@
 import apiRequest from "./client";
 import type { Account } from "@/types/account";
+import ROLES from "@/constants/roles";
 
 interface RegisterPayload {
     name: string;
@@ -23,7 +24,7 @@ const registerApi = async (account: Account): Promise<void> => {
         email: account.email,
         username: account.username,
         password: account.password,
-        role_id: 2,
+        role_id: ROLES.applicant,
     };
 
     await apiRequest<void>("/api/v1/users", { method: "POST", data: payload });
