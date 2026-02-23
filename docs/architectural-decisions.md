@@ -86,11 +86,21 @@ The architecture encourages clear ownership of responsibilities; reduced couplin
 
 This structure minimizes the risk of a monolithic or unstructured codebase as the application evolves.
 
+### Naming conventions
+
+Component and type definitions use **PascalCase**, following common React and TypeScript conventions. Other files, such as services, hooks, and utilities, use **kebab-case**.
+
+While file naming rules are not strictly enforced, consistent conventions are followed to improve readability and developer experience.
+
 ### Routing
 
 Client-side routing is implemented using **React Router**. Routes are centrally defined and include support for protected routes.
 
 Protected routing is used to prevent users from accessing views that are not valid for their authentication state, such as preventing authenticated users from navigating to the login page or unauthenticated users from accessing restricted pages.
+
+### Path aliases
+
+All source directories are mapped to `@/`-prefixed path aliases via the Vite configuration (e.g. `@/components`, `@/services`, `@/hooks`). This eliminates fragile relative import paths such as `../../../services` and ensures that imports remain stable when files are moved. It also makes the origin of an import immediately clear from the path prefix alone.
 
 ### Authentication
 
@@ -108,11 +118,21 @@ Application views are located in the `/pages` directory. Each page is responsibl
 
 To improve maintainability and readability, pages are composed of smaller, reusable components. While this introduces a slightly higher initial setup cost, it significantly improves clarity, testability, and reuse as the application grows.
 
+### UI component library
+
+The application uses **Material UI** (MUI) as its primary component library. MUI provides a comprehensive set of accessible, themeable React components that are used throughout the application for inputs, buttons, cards, typography, and layout primitives. Using a component library reduces the need for custom CSS, ensures visual consistency, and speeds up development without sacrificing quality.
+
 ### Layout
 
 The application follows a shared layout structure consisting of a header, main content area, and footer. These elements are implemented once and reused across all pages.
 
 Although the header and footer are visually minimal and transparent due to the application requirements, the layout abstraction eliminates duplication and ensures consistent structure across views.
+
+### API client
+
+All HTTP communication with the backend is handled through a centralized API client built on **Axios** (`src/api/client.ts`). This client provides a generic `apiRequest` helper that automatically attaches the JWT `Authorization` header from local storage, parses responses, and maps Axios errors into structured `ApiError` objects with a consistent shape.
+
+Individual API modules (e.g. `login-api`, `register-api`) call this shared client, keeping the lower-level HTTP logic in one place and allowing API modules to remain focused on their specific endpoint. This separation also makes it straightforward to adapt the client in the future, for example to change token storage or add request retries, without touching individual API files.
 
 ### Types
 
@@ -120,11 +140,23 @@ TypeScript types are used extensively to define shared data structures across th
 
 This approach improves data consistency, reduces runtime errors, and makes refactoring safer and more predictable.
 
-### Naming conventions
+### Constants
 
-Component and type definitions use **PascalCase**, following common React and TypeScript conventions. Other files, such as services, hooks, and utilities, use **kebab-case**.
+Magic strings for routes and local storage keys are avoided by centralizing them in `src/constants/`. `ROUTES` defines all application URL paths as a typed `const` object, and `STORAGE_KEYS` defines local storage key names. This ensures that references to these values are consistent across the codebase and that typos are caught at compile time via TypeScript's `as const` typing.
 
-While file naming rules are not strictly enforced, consistent conventions are followed to improve readability and developer experience.
+### Hooks
+
+Custom hooks are used to encapsulate reusable logic and shared behavior. Examples include authentication, error handling, loading state management, and form handling.
+
+Hooks reduce code duplication and improve composability. For example, form logic shared between the Login and Register pages is extracted into a reusable hook instead of being reimplemented in each view.
+
+### Form validation
+
+Form validation logic is extracted into a dedicated `form-validator` utility rather than inlined into individual form hooks or components. Validators are functions that accept a field value and return either an error string or `null`. The `useForm` hook accepts these validators as configuration, meaning the same validation infrastructure is reused across all forms in the application. This separation keeps validation logic testable in isolation and prevents duplication between the Login and Register flows.
+
+### Loading state
+
+Global loading state is managed through a dedicated `LoadingContext`, analogous to the error context. A `useLoading` hook exposes `startLoading` and `stopLoading` functions, as well as the current `loading` boolean. Pages call these around async operations to control UI feedback such as disabling submit buttons during in-flight requests. Centralizing loading state avoids duplicated local boolean flags across pages and ensures consistent behavior.
 
 ### Error handling
 
@@ -139,12 +171,6 @@ By centralizing UI error handling, the application avoids duplicated error logic
 The application uses **i18next** for internationalization. Currently supported languages are English and Swedish, which can be toggled via a button group in the top-right corner of the UI.
 
 All translation strings are stored centrally in the `/locales` directory, making the system easy to maintain and extend with additional languages.
-
-### Hooks
-
-Custom hooks are used to encapsulate reusable logic and shared behavior. Examples include authentication, error handling, loading state management, and form handling.
-
-Hooks reduce code duplication and improve composability. For example, form logic shared between the Login and Register pages is extracted into a reusable hook instead of being reimplemented in each view.
 
 ### Testing
 
