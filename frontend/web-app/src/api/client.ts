@@ -1,6 +1,6 @@
 import axios, { type AxiosRequestConfig } from "axios";
 import { createApiError } from "./api-error";
-import STORAGE_KEYS from "@/constants/storage-keys";
+import authService from "@/services/auth-service";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
@@ -12,7 +12,7 @@ const apiClient = axios.create({ baseURL: API_BASE_URL, headers: { "Content-Type
  * Returns the response data as a Promise.
  * Throws an ApiError if the request fails, with the error message and status code.
  * If the error is a network error, isNetworkError is set to true.
- * 
+ *
  * @template T The type of the response data
  * @param {string} path The path of the request
  * @param {AxiosRequestConfig} [options] The options for the request
@@ -20,7 +20,7 @@ const apiClient = axios.create({ baseURL: API_BASE_URL, headers: { "Content-Type
  */
 const apiRequest = async <T>(path: string, options?: AxiosRequestConfig): Promise<T> => {
     try {
-        const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
+        const token = authService.getToken();
         const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
         const response = await apiClient({
             url: path,

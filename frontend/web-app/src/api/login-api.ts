@@ -8,7 +8,7 @@ interface LoginResponse {
 /**
  * Logs a user in by making a POST request to /api/v1/login with the provided identifier and password.
  * Returns a Promise that resolves with a LoginResponse object containing the access token and its type.
- * 
+ *
  * @param {string} identifier The username or email address of the user
  * @param {string} password The password of the user
  * @returns {Promise<LoginResponse>} A promise that resolves with a LoginResponse object
