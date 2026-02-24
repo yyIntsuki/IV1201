@@ -1,13 +1,14 @@
 import apiRequest from "./client";
+import type { ApplicationStatus } from "@/types/application";
 
 export interface AvailabilityStatusPayload {
-    status: "accepted" | "rejected" | "unhandled";
-    expected_status: "accepted" | "rejected" | "unhandled";
+    status: ApplicationStatus;
+    expected_status: ApplicationStatus;
 }
 
 /**
  * Updates the status of an availability entry.
- * 
+ *
  * @param availabilityId the ID of the availability entry
  * @param payload the payload containing the new status and the expected status
  * @returns a promise that resolves to true if the status was updated successfully, false otherwise
