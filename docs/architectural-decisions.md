@@ -22,7 +22,7 @@ The two team members are responsible separately for the frontend and backend. Th
 
 ### Version control
 
-Git is used for version control, hosted on GitHub. All significant work is done in branches and merged via pull requests.
+Git is used for version control, hosted on GitHub. All significant work is done in the main branch, aside from the frontend testing branch. There is very little chance of merging issues since the project is managed mainly by two members which work on respective modules of the project. However, if the working team size increases, it is advised to use branches for better review of code that may cause merge conflicts.
 
 ### Build tool — frontend
 

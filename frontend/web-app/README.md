@@ -358,4 +358,4 @@ The frontend is a static site after building. The general steps for deployment a
 
 **CORS:** The backend must have the production frontend URL added to its CORS allowed origins. See the backend README for how to configure this.
 
-**Routing:** Because the app uses client-side routing (React Router), the server must be configured to serve `index.html` for all routes, not just `/`. On Nginx, this is done with a `try_files $uri /index.html;` directive. On Heroku, this is handled automatically by the static buildpack.
+**Routing:** Because the app uses client-side routing (React Router), the server must be configured to serve `index.html` for all routes, not just `/`. On Nginx, this is done with a `try_files $uri /index.html;` directive. On Render, this is handled by accessing the dashboard for redirects.
