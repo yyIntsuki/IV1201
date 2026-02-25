@@ -48,6 +48,7 @@ class ApplicationRepository:
 			WHERE person_id = :person_id
 			AND from_date <= :to_date
 			AND to_date >= :from_date
+			AND (status IS NULL OR status <> 'accepted')
 			ORDER BY from_date ASC
 		"""
 		availability_update = """
@@ -167,6 +168,7 @@ class ApplicationRepository:
 			ORDER BY availability_id DESC
 		"""
 		results = await database.fetch_all(query=query)
+		logging.info(f"Fetched {len(results)} availability entries")
 		return results
 
 
