@@ -1,6 +1,7 @@
 import type { ApplicationRecord, ApplicationStatus } from "@/types/application";
 import { fetchAvailabilitiesApi, type AvailabilityResponse } from "@/api/fetch-availabilities-api";
 import { updateAvailabilityStatusApi, type AvailabilityStatusPayload } from "@/api/update-availability-status-api";
+import { fetchUserCompetenceApi, type CompetenceProfileEntry } from "@/api/fetch-user-competence-api";
 
 /**
  * Service to handle recruiter application listing and managing.
@@ -37,6 +38,14 @@ const recruiterService = {
     ): Promise<void> => {
         const payload: AvailabilityStatusPayload = { status, expected_status: expectedStatus };
         await updateAvailabilityStatusApi(applicationId, payload);
+    },
+    /**
+   * Fetches the competence profile for a specific user.
+   * @param userId The ID of the user whose competence profile to fetch.
+   * @returns Promise resolving to an array of competence profile entries.
+   */
+    getUserCompetence: async (userId: number): Promise<CompetenceProfileEntry[]> => {
+        return fetchUserCompetenceApi(userId);
     },
 };
 

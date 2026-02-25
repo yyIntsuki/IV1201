@@ -9,7 +9,7 @@ from contextlib import asynccontextmanager
 import logging
 import os
 
-from app.api.routes import user_routes, application_router
+from app.api.routes import user_routes, application_router, competence_router
 from app.database.connection import database, engine
 from app.database.models import Base
 
@@ -70,6 +70,7 @@ app.add_middleware(
 # Include routers
 app.include_router(user_routes.router, prefix="/api/v1", tags=["users"])
 app.include_router(application_router.router, prefix="/api/v1", tags=["applications"])
+app.include_router(competence_router.router, prefix="/api/v1", tags=["competence"])
 
 
 @app.get("/")

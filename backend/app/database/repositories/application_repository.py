@@ -2,11 +2,9 @@
 Application repository - Database Layer.
 Handles all database operations for applications.
 """
-import logging
 from datetime import date
 
 from app.database.connection import database
-from app.api.schemas.application_schemas import AvailabilityOutput
 
 class ApplicationRepository:
 	"""
@@ -64,11 +62,6 @@ class ApplicationRepository:
 			for competence in competence_profiles:
 				competence_id = int(competence["competence_id"])
 				years_of_experience = float(competence["years_of_experience"])
-				logging.info(
-					f"Inserting competence profile for user_id={user_id}, "
-					f"competence_id={competence_id}, "
-					f"years_of_experience={years_of_experience}"
-				)
 				existing = await database.fetch_one(
 					query=competence_select,
 					values={
@@ -101,11 +94,6 @@ class ApplicationRepository:
 					from_date_value = date.fromisoformat(from_date_value)
 				if isinstance(to_date_value, str):
 					to_date_value = date.fromisoformat(to_date_value)
-				logging.info(
-					f"Inserting availability for user_id={user_id}, "
-					f"from_date={from_date_value}, "
-					f"to_date={to_date_value}"
-				)
 				overlaps = await database.fetch_all(
 					query=availability_select_overlap,
 					values={
@@ -168,7 +156,6 @@ class ApplicationRepository:
 			ORDER BY availability_id DESC
 		"""
 		results = await database.fetch_all(query=query)
-		logging.info(f"Fetched {len(results)} availability entries")
 		return results
 
 
