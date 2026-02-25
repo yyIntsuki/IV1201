@@ -4,6 +4,7 @@ Handles HTTP requests and responses.
 """
 
 from fastapi import APIRouter, HTTPException, status, Depends
+import logging
 from typing import List
 
 from app.api.schemas.user_schemas import (
@@ -12,10 +13,11 @@ from app.api.schemas.user_schemas import (
     UserUpdate,
     TokenResponse,
     LoginRequest,
+    Users
 )
 from app.services.user_service import UserService
 from app.security.jwt import create_access_token
-from app.security.dependencies import get_current_user
+from app.security.dependencies import get_current_user, require_recruiter
 
 router = APIRouter()
 user_service = UserService()
@@ -41,6 +43,7 @@ async def create_user(user_data: UserCreate):
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except Exception:
+        logging.exception("Failed to create user")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error",
@@ -49,8 +52,8 @@ async def create_user(user_data: UserCreate):
 
 @router.get(
     "/users",
-    response_model=List[UserResponse],
-    dependencies=[Depends(get_current_user)],
+    response_model=List[Users],
+    dependencies=[Depends(require_recruiter)],
 )
 async def get_all_users():
     """
@@ -62,6 +65,7 @@ async def get_all_users():
         users = await user_service.get_all_users()
         return users
     except Exception:
+        logging.exception("Failed to get all users")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error",
@@ -70,7 +74,7 @@ async def get_all_users():
 
 @router.get(
     "/users/{user_id}",
-    response_model=UserResponse,
+    response_model=Users,
     dependencies=[Depends(get_current_user)],
 )
 async def get_user(user_id: int):
@@ -89,6 +93,7 @@ async def get_user(user_id: int):
     except HTTPException:
         raise
     except Exception:
+        logging.exception("Failed to get user %s", user_id)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error",
@@ -118,6 +123,7 @@ async def update_user(user_id: int, user_data: UserUpdate):
     except HTTPException:
         raise
     except Exception:
+        logging.exception("Failed to update user %s", user_id)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error",
@@ -144,6 +150,7 @@ async def delete_user(user_id: int):
     except HTTPException:
         raise
     except Exception:
+        logging.exception("Failed to delete user %s", user_id)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error",
@@ -176,6 +183,7 @@ async def login_user(credentials: LoginRequest):
     except HTTPException:
         raise
     except Exception:
+        logging.exception("Failed to login user")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error",

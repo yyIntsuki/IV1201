@@ -14,7 +14,7 @@ interface LoginResponse {
  * @returns {Promise<LoginResponse>} A promise that resolves with a LoginResponse object
  */
 export const loginApi = async (identifier: string, password: string): Promise<LoginResponse> => {
-    return apiRequest<LoginResponse>("/api/v1/login", { method: "POST", data: { username: identifier, password } });
+    return apiRequest<LoginResponse>("/api/v1/login", { method: "POST", data: { username: identifier, password: password } });
 };
 
 export default loginApi;

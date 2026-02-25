@@ -41,6 +41,15 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+
+@app.middleware("http")
+async def log_unhandled_exceptions(request, call_next):
+    try:
+        return await call_next(request)
+    except Exception:
+        logging.exception("Unhandled error processing %s %s", request.method, request.url.path)
+        raise
+
 # Configure CORS for frontend communication
 cors_origins = os.getenv(
     "CORS_ORIGINS",

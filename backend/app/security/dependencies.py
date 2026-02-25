@@ -2,6 +2,7 @@
 Security dependencies for protected endpoints.
 """
 from typing import Dict, Any
+import os
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -27,3 +28,18 @@ def get_current_user(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired token",
         )
+
+
+def require_recruiter(
+    current_user: Dict[str, Any] = Depends(get_current_user),
+) -> Dict[str, Any]:
+    """
+    Ensure the authenticated user has recruiter role.
+    """
+    recruiter_role_id = int(os.getenv("RECRUITER_ROLE_ID", "1"))
+    if current_user.get("role_id") != recruiter_role_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Recruiter role required",
+        )
+    return current_user

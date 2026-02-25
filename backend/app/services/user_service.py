@@ -8,7 +8,7 @@ import re
 import logging
 
 from app.database.repositories.user_repository import UserRepository
-from app.api.schemas.user_schemas import UserCreate, UserResponse, UserUpdate
+from app.api.schemas.user_schemas import UserCreate, UserResponse, UserUpdate, Users
 
 
 class UserService:
@@ -163,7 +163,7 @@ class UserService:
         
         return UserResponse(**dict(user))
     
-    async def get_user_by_id(self, user_id: int) -> Optional[UserResponse]:
+    async def get_user_by_id(self, user_id: int) -> Optional[Users]:
         """
         Get a user by ID.
         
@@ -175,10 +175,16 @@ class UserService:
         """
         user = await self.repository.get_by_id(user_id)
         if user:
-            return UserResponse(**dict(user))
+            user_data = dict(user)
+            return Users(
+                name=user_data.get('name') or '',
+                surname=user_data.get('surname') or '',
+                pnr=user_data.get('pnr') or None,
+                email=user_data.get('email') or None,
+            )
         return None
     
-    async def get_all_users(self) -> List[UserResponse]:
+    async def get_all_users(self) -> List[Users]:
         """
         Get all users from the database.
         
@@ -186,7 +192,16 @@ class UserService:
             List of all users
         """
         users = await self.repository.get_all()
-        return [UserResponse(**dict(user)) for user in users]
+        response = []
+        for user in users:
+            user_data = dict(user)
+            response.append(Users(
+                name=user_data.get('name') or '',
+                surname=user_data.get('surname') or '',
+                pnr=user_data.get('pnr') or None,
+                email=user_data.get('email') or None,
+            ))
+        return response
     
     async def update_user(self, user_id: int, user_data: UserUpdate) -> Optional[UserResponse]:
         """

@@ -14,10 +14,10 @@ class UserBase(BaseModel):
     surname: str = Field(
         ..., min_length=1, max_length=255, description="User's surname"
     )
-    pnr: str = Field(
-        ..., min_length=1, max_length=255, description="User's personal number"
+    pnr: Optional[str] = Field(
+        None, min_length=1, max_length=255, description="User's personal number"
     )
-    email: EmailStr = Field(..., description="User's email address")
+    email: Optional[EmailStr] = Field(None, description="User's email address")
     role_id: int = Field(..., description="User's role ID")
     username: str = Field(
         ..., min_length=1, max_length=255, description="User's username"
@@ -68,3 +68,13 @@ class LoginRequest(BaseModel):
 
     username: str
     password: str
+
+
+class Users(BaseModel):
+    """Schema for list of users response."""
+
+    name: str
+    surname: str
+    pnr: Optional[str] = None
+    email: Optional[EmailStr] = None
+
