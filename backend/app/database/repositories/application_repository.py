@@ -182,6 +182,12 @@ class ApplicationRepository:
 			WHERE availability_id = :availability_id
 			AND status = :expected_status
 		"""
+		row = await database.fetch_one(
+			query="SELECT status FROM availability WHERE availability_id = :availability_id",
+			values={"availability_id": availability_id},
+		)
+		if row and row["status"] != expected_status:
+			raise ValueError("Status update aborted: application was modified by another user")
 		await database.execute(
 			query=query,
 			values={
