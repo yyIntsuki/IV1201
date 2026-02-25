@@ -2,6 +2,7 @@
 Application API routes - Presentation Layer.
 Handles HTTP requests and responses.
 """
+import logging
 from fastapi import APIRouter, HTTPException, status, Depends
 
 from app.api.schemas.application_schemas import ApplicationCreate, AvailabilityOutput, AvailabilityStatusUpdate
@@ -30,8 +31,11 @@ async def submit_application(payload: ApplicationCreate):
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
-
+        logging.exception("Failed to submit application")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error",
+        )
 
 @router.get(
     "/availabilities",
@@ -48,7 +52,11 @@ async def get_availabilities():
     try:
         return await application_service.get_availabilities()
     except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
+        logging.exception("Failed to get availabilities")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error",
+        )
 
 
 @router.post(
@@ -78,4 +86,8 @@ async def update_availability_status(availability_id: int, payload: Availability
     except HTTPException:
         raise
     except Exception:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal server error")
+        logging.exception("Failed to update availability status for availability_id=%s", availability_id)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error",
+        )
