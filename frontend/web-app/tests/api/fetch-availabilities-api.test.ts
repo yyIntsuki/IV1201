@@ -1,4 +1,4 @@
-import { fetchAvailabilitiesApi, type AvailabilityResponse } from "@/api/fetch-availabilities-api";
+import fetchAvailabilitiesApi from "@/api/fetch-availabilities-api";
 
 const apiRequestMock = vi.hoisted(() => vi.fn());
 vi.mock("@/api/client", () => ({ default: apiRequestMock }));
@@ -15,7 +15,7 @@ describe("fetchAvailabilitiesApi", () => {
     });
 
     it("calls /api/v1/availabilities with GET and returns availability data", async () => {
-        const mockResponse: AvailabilityResponse[] = [
+        const mockResponse = [
             {
                 availability_id: 1,
                 user_id: 2,
@@ -46,9 +46,7 @@ describe("fetchAvailabilitiesApi", () => {
     });
 
     it("returns empty array when no availabilities exist", async () => {
-        const mockResponse: AvailabilityResponse[] = [];
-
-        apiRequestMock.mockResolvedValueOnce(mockResponse);
+        apiRequestMock.mockResolvedValueOnce([]);
 
         const result = await fetchAvailabilitiesApi();
 
@@ -57,9 +55,7 @@ describe("fetchAvailabilitiesApi", () => {
     });
 
     it("propagates API errors", async () => {
-        const error = new Error("Unauthorized");
-
-        apiRequestMock.mockRejectedValueOnce(error);
+        apiRequestMock.mockRejectedValueOnce(new Error("Unauthorized"));
 
         await expect(fetchAvailabilitiesApi()).rejects.toThrow("Unauthorized");
     });

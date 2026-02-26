@@ -1,4 +1,4 @@
-import { updateAvailabilityStatusApi, type AvailabilityStatusPayload } from "@/api/update-availability-status-api";
+import updateAvailabilityStatusApi from "@/api/update-availability-status-api";
 
 const apiRequestMock = vi.hoisted(() => vi.fn());
 vi.mock("@/api/client", () => ({ default: apiRequestMock }));
@@ -15,71 +15,54 @@ describe("updateAvailabilityStatusApi", () => {
     });
 
     it("calls API with correct payload", async () => {
-        const availabilityId = 1;
-        const payload: AvailabilityStatusPayload = { status: "accepted", expected_status: "unhandled" };
-
         apiRequestMock.mockResolvedValueOnce(true);
 
-        const result = await updateAvailabilityStatusApi(availabilityId, payload);
+        const result = await updateAvailabilityStatusApi(1, { status: "accepted", expected_status: "unhandled" });
 
         expect(apiRequestMock).toHaveBeenCalledOnce();
         expect(apiRequestMock).toHaveBeenCalledWith("/api/v1/availabilities/1/status", {
             method: "POST",
-            data: payload,
+            data: { status: "accepted", expected_status: "unhandled" },
         });
         expect(result).toBe(true);
     });
 
     it("handles rejection status update", async () => {
-        const availabilityId = 2;
-        const payload: AvailabilityStatusPayload = { status: "rejected", expected_status: "unhandled" };
-
         apiRequestMock.mockResolvedValueOnce(true);
 
-        const result = await updateAvailabilityStatusApi(availabilityId, payload);
+        const result = await updateAvailabilityStatusApi(2, { status: "rejected", expected_status: "unhandled" });
 
         expect(apiRequestMock).toHaveBeenCalledOnce();
         expect(apiRequestMock).toHaveBeenCalledWith("/api/v1/availabilities/2/status", {
             method: "POST",
-            data: payload,
+            data: { status: "rejected", expected_status: "unhandled" },
         });
         expect(result).toBe(true);
     });
 
     it("handles status change from accepted to rejected", async () => {
-        const availabilityId = 3;
-        const payload: AvailabilityStatusPayload = { status: "rejected", expected_status: "accepted" };
-
         apiRequestMock.mockResolvedValueOnce(true);
 
-        const result = await updateAvailabilityStatusApi(availabilityId, payload);
+        const result = await updateAvailabilityStatusApi(3, { status: "rejected", expected_status: "accepted" });
 
         expect(apiRequestMock).toHaveBeenCalledOnce();
         expect(result).toBe(true);
     });
 
     it("handles status reset to unhandled", async () => {
-        const availabilityId = 4;
-        const payload: AvailabilityStatusPayload = { status: "unhandled", expected_status: "accepted" };
-
         apiRequestMock.mockResolvedValueOnce(true);
 
-        const result = await updateAvailabilityStatusApi(availabilityId, payload);
+        const result = await updateAvailabilityStatusApi(4, { status: "unhandled", expected_status: "accepted" });
 
         expect(apiRequestMock).toHaveBeenCalledOnce();
         expect(result).toBe(true);
     });
 
     it("propagates API errors", async () => {
-        const availabilityId = 1;
-        const payload: AvailabilityStatusPayload = { status: "accepted", expected_status: "unhandled" };
+        apiRequestMock.mockRejectedValueOnce(new Error("Conflict: status already changed"));
 
-        const error = new Error("Conflict: status already changed");
-
-        apiRequestMock.mockRejectedValueOnce(error);
-
-        await expect(updateAvailabilityStatusApi(availabilityId, payload)).rejects.toThrow(
-            "Conflict: status already changed",
-        );
+        await expect(
+            updateAvailabilityStatusApi(1, { status: "accepted", expected_status: "unhandled" }),
+        ).rejects.toThrow("Conflict: status already changed");
     });
 });

@@ -3,7 +3,7 @@ import type { ApplicationSubmission } from "@/types/application";
 import type { Competence } from "@/types/competence";
 
 const submitApplicationApiMock = vi.hoisted(() => vi.fn());
-vi.mock("@/api/submit-application-api", () => ({ submitApplicationApi: submitApplicationApiMock }));
+vi.mock("@/api/submit-application-api", () => ({ default: submitApplicationApiMock }));
 
 const competenceToIdMock = vi.hoisted(() => vi.fn<(c: Competence) => number>());
 vi.mock("@/utils/competence-parser", () => ({ default: { competenceToId: competenceToIdMock } }));
@@ -64,8 +64,8 @@ describe("applicantService", () => {
             availability: [{ fromDate: "2026-01-01", toDate: "2026-01-15" }],
         };
 
-        const error = new Error("API failed");
-        submitApplicationApiMock.mockRejectedValue(error);
+        competenceToIdMock.mockReturnValue(1);
+        submitApplicationApiMock.mockRejectedValue(new Error("API failed"));
 
         await expect(applicantService.submitApplication(submission)).rejects.toThrow("API failed");
     });
