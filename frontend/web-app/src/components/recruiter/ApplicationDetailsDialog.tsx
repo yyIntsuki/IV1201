@@ -1,5 +1,5 @@
-import type { ApplicationRecord, ApplicationStatus, CompetenceEntry } from "@/types/application";
 import { useTranslation } from "react-i18next";
+import type { ApplicationRecord, ApplicationStatus } from "@/types/application";
 import ApplicationStatusChip from "./ApplicationStatusChip";
 
 import Dialog from "@mui/material/Dialog";
@@ -16,7 +16,6 @@ import ListItemText from "@mui/material/ListItemText";
 
 interface ApplicationDetailsDialogProps {
     application: ApplicationRecord | null;
-    competenceProfile: CompetenceEntry[];
     onClose: () => void;
     onStatusChange: (newStatus: ApplicationStatus) => void;
 }
@@ -27,14 +26,13 @@ interface ApplicationDetailsDialogProps {
  */
 const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = ({
     application,
-    competenceProfile,
     onClose,
     onStatusChange,
 }) => {
     const { t } = useTranslation();
 
     if (!application) return null;
-    const { availability, fullName, status } = application;
+    const { competenceProfile, availability, fullName, status } = application;
 
     return (
         <Dialog open={Boolean(application)} onClose={onClose} fullWidth>
@@ -50,9 +48,7 @@ const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = ({
                 <List dense>
                     {competenceProfile.length === 0 ?
                         <ListItem>
-                            <ListItemText
-                                primary={t("recruiter.applications.dialog.noCompetence")}
-                            />
+                            <ListItemText primary={t("recruiter.applications.dialog.noCompetence")} />
                         </ListItem>
                     :   competenceProfile.map((e) => (
                             <ListItem key={e.competence}>

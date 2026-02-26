@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
 import recruiterService from "@/services/recruiter-service";
-import type { ApplicationRecord, ApplicationStatus, CompetenceEntry } from "@/types/application";
+import type { ApplicationRecord, ApplicationStatus } from "@/types/application";
 import ApplicationsTable from "@/components/recruiter/ApplicationsTable";
 import ApplicationDetailsDialog from "@/components/recruiter/ApplicationDetailsDialog";
 
@@ -20,7 +20,6 @@ import Typography from "@mui/material/Typography";
 const Recruiter = () => {
     const [applications, setApplications] = useState<ApplicationRecord[]>([]);
     const [selectedApplication, setSelectedApplication] = useState<ApplicationRecord | null>(null);
-    const [competenceProfile, setCompetenceProfile] = useState<CompetenceEntry[]>([]);
 
     const { t } = useTranslation();
     const { startLoading, stopLoading } = useLoading();
@@ -48,21 +47,15 @@ const Recruiter = () => {
 
     const handleRowClick = async (app: ApplicationRecord) => {
         setSelectedApplication(app);
-        setCompetenceProfile([]);
         try {
             startLoading();
-            const competence = await recruiterService.getUserCompetence(app.userId);
-            setCompetenceProfile(competence);
+            const competenceProfile = await recruiterService.getUserCompetence(app.userId);
+            setSelectedApplication({ ...app, competenceProfile });
         } catch (error) {
             showApiError(error);
         } finally {
             stopLoading();
         }
-    };
-
-    const handleClose = () => {
-        setSelectedApplication(null);
-        setCompetenceProfile([]);
     };
 
     const handleStatusChange = async (status: ApplicationStatus, expectedStatus: ApplicationStatus) => {
@@ -105,8 +98,7 @@ const Recruiter = () => {
 
                 <ApplicationDetailsDialog
                     application={selectedApplication}
-                    competenceProfile={competenceProfile}
-                    onClose={handleClose}
+                    onClose={() => setSelectedApplication(null)}
                     onStatusChange={(status) =>
                         selectedApplication && void handleStatusChange(status, selectedApplication.status)
                     }
