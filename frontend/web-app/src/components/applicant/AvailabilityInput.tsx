@@ -19,6 +19,7 @@ interface AvailabilityInputProps {
 
 /**
  * Component that handles availability input in the applicant page.
+ * Enforces that from_date is today or later, matching backend validation.
  */
 const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange, onValidityChange }) => {
     const [currentFromDate, setCurrentFromDate] = useState("");
@@ -26,6 +27,13 @@ const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange, onVali
 
     const { t } = useTranslation();
 
+    const today = new Date().toISOString().split("T")[0];
+
+    /**
+     * Updates currentFromDate and resets currentToDate if the new from date is later than the current to date.
+     *
+     * @param {string} value - The new from date.
+     */
     const handleStartChange = (value: string) => {
         setCurrentFromDate(value);
         if (currentToDate && value > currentToDate) {
@@ -33,8 +41,15 @@ const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange, onVali
         }
     };
 
+    /**
+     * Adds a new availability entry to the list of availabilities.
+     *
+     * Validates that the from date is today or later and that the to date is later than the from date.
+     * If validation fails, does not add the new availability entry.
+     */
     const addAvailability = () => {
         if (!currentFromDate || !currentToDate) return;
+        if (currentFromDate < today) return;
         if (currentToDate < currentFromDate) return;
 
         onChange([...value, { fromDate: currentFromDate, toDate: currentToDate }]);
@@ -42,15 +57,13 @@ const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange, onVali
         setCurrentToDate("");
     };
 
-    const removeAvailability = (index: number) => {
-        onChange(value.filter((_, i) => i !== index));
-    };
+    const removeAvailability = (index: number) => onChange(value.filter((_, i) => i !== index));
 
-    const isValidRange = currentFromDate && currentToDate && currentFromDate <= currentToDate;
+    const isValidRange =
+        currentFromDate && currentToDate && currentFromDate >= today && currentFromDate <= currentToDate;
 
     useEffect(() => {
-        const isValid = value.length > 0;
-        if (onValidityChange) onValidityChange(isValid);
+        if (onValidityChange) onValidityChange(value.length > 0);
     }, [value, onValidityChange]);
 
     return (
@@ -63,7 +76,7 @@ const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange, onVali
                 <TextField
                     type="date"
                     label={t("applicant.applicationForm.availability.startLabel")}
-                    slotProps={{ inputLabel: { shrink: true } }}
+                    slotProps={{ inputLabel: { shrink: true }, htmlInput: { min: today } }}
                     fullWidth
                     value={currentFromDate}
                     onChange={(e) => handleStartChange(e.target.value)}
@@ -72,7 +85,7 @@ const AvailabilityInput: FC<AvailabilityInputProps> = ({ value, onChange, onVali
                 <TextField
                     type="date"
                     label={t("applicant.applicationForm.availability.endLabel")}
-                    slotProps={{ inputLabel: { shrink: true }, htmlInput: { min: currentFromDate } }}
+                    slotProps={{ inputLabel: { shrink: true }, htmlInput: { min: currentFromDate || today } }}
                     fullWidth
                     value={currentToDate}
                     onChange={(e) => setCurrentToDate(e.target.value)}
