@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
 import useAuth from "@/hooks/use-auth";
-import type { Competence, Availability, ApplicationSubmission } from "@/types/application";
+import type { CompetenceEntry, AvailabilityEntry, ApplicationSubmission } from "@/types/application";
 import applicantService from "@/services/applicant-service";
 import { getUserIdFromJwt } from "@/utils/jwt-decoder";
 import CompetenceParser from "@/utils/competence-parser";
@@ -23,8 +23,8 @@ import ButtonGroup from "@mui/material/ButtonGroup";
  * The page will show an error message if the user ID cannot be extracted from the JWT, or if the application is not submitted with valid data.
  */
 const Applicant = () => {
-    const [competenceList, setCompetenceList] = useState<Competence[]>([]);
-    const [availabilityList, setAvailabilityList] = useState<Availability[]>([]);
+    const [competenceList, setCompetenceList] = useState<CompetenceEntry[]>([]);
+    const [availabilityList, setAvailabilityList] = useState<AvailabilityEntry[]>([]);
 
     const [step, setStep] = useState(1);
     const [isStepValid, setIsStepValid] = useState(false);

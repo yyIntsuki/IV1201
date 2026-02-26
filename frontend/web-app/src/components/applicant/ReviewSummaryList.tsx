@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import type { Competence, Availability } from "@/types/application";
+import type { CompetenceEntry, AvailabilityEntry } from "@/types/application";
 
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
@@ -7,8 +7,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 
 interface ReviewSummaryListProps {
-    competenceList: Competence[];
-    availabilityList: Availability[];
+    competenceList: CompetenceEntry[];
+    availabilityList: AvailabilityEntry[];
 }
 
 /**

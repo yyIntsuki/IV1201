@@ -1,9 +1,8 @@
-import type { ApplicationRecord, ApplicationStatus } from "@/types/application";
+import type { ApplicationRecord, ApplicationStatus, CompetenceEntry } from "@/types/application";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
-import type { CompetenceProfileEntry } from "@/api/fetch-user-competence-api";
 import ApplicationStatusChip from "./ApplicationStatusChip";
 
 import Dialog from "@mui/material/Dialog";
@@ -38,7 +37,7 @@ const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = ({
     const { startLoading, stopLoading } = useLoading();
     const { showApiError } = useError();
 
-    const [competenceProfile, setCompetenceProfile] = useState<CompetenceProfileEntry[]>([]);
+    const [competenceProfile, setCompetenceProfile] = useState<CompetenceEntry[]>([]);
 
     useEffect(() => {
         const fetchCompetenceProfile = async () => {
@@ -78,20 +77,16 @@ const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = ({
                                     primary={t("recruiter.applications.dialog.noCompetence", "No competence found.")}
                                 />
                             </ListItem>
-                        :   competenceProfile.map((e) => {
-                                const competenceKey =
-                                    typeof e.competence === "string" ? e.competence : String(e.competence);
-                                return (
-                                    <ListItem key={competenceKey}>
-                                        <ListItemText
-                                            primary={t(`recruiter.applications.dialog.competence.${competenceKey}`)}
-                                            secondary={t(`recruiter.applications.dialog.yearsOfExperience`, {
-                                                count: e.years_of_experience,
-                                            })}
-                                        />
-                                    </ListItem>
-                                );
-                            })
+                        :   competenceProfile.map((e) => (
+                                <ListItem key={e.competence}>
+                                    <ListItemText
+                                        primary={t(`recruiter.applications.dialog.competence.${e.competence}`)}
+                                        secondary={t(`recruiter.applications.dialog.yearsOfExperience`, {
+                                            count: e.yearsOfExperience,
+                                        })}
+                                    />
+                                </ListItem>
+                            ))
                         }
                     </List>
                 }

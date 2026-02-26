@@ -1,5 +1,5 @@
 import type { ApplicationSubmission } from "@/types/application";
-import { submitApplicationApi, type ApplicationPayload } from "@/api/submit-application-api";
+import submitApplicationApi from "@/api/submit-application-api";
 import CompetenceParser from "@/utils/competence-parser";
 
 /**
@@ -8,7 +8,7 @@ import CompetenceParser from "@/utils/competence-parser";
  * @param data the submission data for the application from Applicant page
  * @returns an ApplicationPayload object containing user_id, competence_profile and availability
  */
-const toApiPayload = (data: ApplicationSubmission): ApplicationPayload => ({
+const toApiPayload = (data: ApplicationSubmission) => ({
     user_id: data.userId,
     competence_profile: data.competenceProfile.map((c) => ({
         competence_id: CompetenceParser.competenceToId(c.competence),

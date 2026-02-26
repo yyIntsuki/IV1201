@@ -1,18 +1,18 @@
-import type { Competence as CompetenceType } from "@/types/competence"; // Alias to avoid confusion
+import type { Competence } from "@/types/competence";
 
 /**
  * Represents one competence in a list of competence.
  * To get the list of available competence, please use constants/competence.
  */
-export interface Competence {
-    competence: CompetenceType;
+export interface CompetenceEntry {
+    competence: Competence;
     yearsOfExperience: number;
 }
 
 /**
  * Represents one availablity in a list of availablities.
  */
-export interface Availability {
+export interface AvailabilityEntry {
     fromDate: string;
     toDate: string;
 }
@@ -21,8 +21,8 @@ export interface Availability {
  * Common base application format.
  */
 export interface ApplicationCore {
-    competenceProfile: Competence[];
-    availability: Availability[];
+    competenceProfile: CompetenceEntry[];
+    availability: AvailabilityEntry[];
 }
 
 /**

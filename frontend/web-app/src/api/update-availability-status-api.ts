@@ -1,7 +1,7 @@
 import apiRequest from "./client";
 import type { ApplicationStatus } from "@/types/application";
 
-export interface AvailabilityStatusPayload {
+interface AvailabilityStatusPayload {
     status: ApplicationStatus;
     expected_status: ApplicationStatus;
 }
@@ -13,9 +13,11 @@ export interface AvailabilityStatusPayload {
  * @param payload the payload containing the new status and the expected status
  * @returns a promise that resolves to true if the status was updated successfully, false otherwise
  */
-export const updateAvailabilityStatusApi = async (
+const updateAvailabilityStatusApi = async (
     availabilityId: number,
     payload: AvailabilityStatusPayload,
 ): Promise<boolean> => {
     return apiRequest<boolean>(`/api/v1/availabilities/${availabilityId}/status`, { method: "POST", data: payload });
 };
+
+export default updateAvailabilityStatusApi;

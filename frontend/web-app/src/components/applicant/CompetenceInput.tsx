@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import COMPETENCE from "@/constants/competence";
-import type { Competence as CompetenceType } from "@/types/competence";
-import type { Competence } from "@/types/application";
+import type { Competence } from "@/types/competence";
+import type { CompetenceEntry } from "@/types/application";
 
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
@@ -15,8 +15,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 
 interface CompetenceInputProps {
-    value: Competence[];
-    onChange: (value: Competence[]) => void;
+    value: CompetenceEntry[];
+    onChange: (value: CompetenceEntry[]) => void;
     onValidityChange?: (isValid: boolean) => void;
 }
 
@@ -24,7 +24,7 @@ interface CompetenceInputProps {
  * Component that handles competence input in the applicant page.
  */
 const CompetenceInput: React.FC<CompetenceInputProps> = ({ value, onChange, onValidityChange }) => {
-    const [currentCompetence, setCurrentCompetence] = useState<CompetenceType | null>(null);
+    const [currentCompetence, setCurrentCompetence] = useState<Competence | null>(null);
     const [currentYearsOfExperience, setCurrentYearsOfExperience] = useState(1);
 
     const { t } = useTranslation();
@@ -57,7 +57,7 @@ const CompetenceInput: React.FC<CompetenceInputProps> = ({ value, onChange, onVa
                     label={t("applicant.applicationForm.expertise.selectLabel")}
                     fullWidth
                     value={currentCompetence ?? ""}
-                    onChange={(e) => setCurrentCompetence(e.target.value as CompetenceType)}>
+                    onChange={(e) => setCurrentCompetence(e.target.value as Competence)}>
                     {COMPETENCE.filter((competence) => !value.some((exp) => exp.competence === competence)).map(
                         (competence) => (
                             <MenuItem key={competence} value={competence}>

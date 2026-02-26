@@ -1,6 +1,6 @@
 import { useState, useEffect, type FC } from "react";
 import { useTranslation } from "react-i18next";
-import type { Availability } from "@/types/application";
+import type { AvailabilityEntry } from "@/types/application";
 
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
@@ -12,8 +12,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 
 interface AvailabilityInputProps {
-    value: Availability[];
-    onChange: (value: Availability[]) => void;
+    value: AvailabilityEntry[];
+    onChange: (value: AvailabilityEntry[]) => void;
     onValidityChange?: (isValid: boolean) => void;
 }
 
