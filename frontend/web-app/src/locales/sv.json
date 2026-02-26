@@ -93,6 +93,7 @@
                     "lotteries": "Lotterier",
                     "roller coaster operation": "Berg- och dalbanedrift"
                 },
+                "noCompetence": "Ingen kompetens hittades.",
                 "yearsOfExperience": "{{count}} år",
                 "availability": "Tillgänglighet",
                 "fromTo": "{{from}} → {{to}}",

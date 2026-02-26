@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
 import recruiterService from "@/services/recruiter-service";
-import type { ApplicationRecord, ApplicationStatus } from "@/types/application";
+import type { ApplicationRecord, ApplicationStatus, CompetenceEntry } from "@/types/application";
 import ApplicationsTable from "@/components/recruiter/ApplicationsTable";
 import ApplicationDetailsDialog from "@/components/recruiter/ApplicationDetailsDialog";
 
@@ -13,13 +13,14 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 /**
- * Component that displays the list of job applications in the recruiter page.
- * This component contains a table to list the job applications and a dialog to show the details of a job application.
- * The component also handles the status change of a job application.
+ * Page for recruiters to view and manage job applications.
+ * Handles all data fetching — both the application list and the competence profile
+ * for the selected application — and passes data down to child components as props.
  */
 const Recruiter = () => {
     const [applications, setApplications] = useState<ApplicationRecord[]>([]);
     const [selectedApplication, setSelectedApplication] = useState<ApplicationRecord | null>(null);
+    const [competenceProfile, setCompetenceProfile] = useState<CompetenceEntry[]>([]);
 
     const { t } = useTranslation();
     const { startLoading, stopLoading } = useLoading();
@@ -45,7 +46,24 @@ const Recruiter = () => {
         void loadApplications();
     }, [startLoading, stopLoading, showApiError]);
 
-    const handleRowClick = (app: ApplicationRecord) => setSelectedApplication(app);
+    const handleRowClick = async (app: ApplicationRecord) => {
+        setSelectedApplication(app);
+        setCompetenceProfile([]);
+        try {
+            startLoading();
+            const competence = await recruiterService.getUserCompetence(app.userId);
+            setCompetenceProfile(competence);
+        } catch (error) {
+            showApiError(error);
+        } finally {
+            stopLoading();
+        }
+    };
+
+    const handleClose = () => {
+        setSelectedApplication(null);
+        setCompetenceProfile([]);
+    };
 
     const handleStatusChange = async (status: ApplicationStatus, expectedStatus: ApplicationStatus) => {
         if (!selectedApplication) return;
@@ -82,12 +100,13 @@ const Recruiter = () => {
                         setRowsPerPage(rows);
                         setPage(0);
                     }}
-                    onRowClick={handleRowClick}
+                    onRowClick={(app) => void handleRowClick(app)}
                 />
 
                 <ApplicationDetailsDialog
                     application={selectedApplication}
-                    onClose={() => setSelectedApplication(null)}
+                    competenceProfile={competenceProfile}
+                    onClose={handleClose}
                     onStatusChange={(status) =>
                         selectedApplication && void handleStatusChange(status, selectedApplication.status)
                     }

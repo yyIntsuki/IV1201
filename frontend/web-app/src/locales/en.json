@@ -93,6 +93,7 @@
                     "lotteries": "Lotteries",
                     "roller coaster operation": "Roller coaster operation"
                 },
+                "noCompetence": "No competence found.",
                 "yearsOfExperience": "{{count}} year(s)",
                 "availability": "Availability",
                 "fromTo": "{{from}} → {{to}}",
