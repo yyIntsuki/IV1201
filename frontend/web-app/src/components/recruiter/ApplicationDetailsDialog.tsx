@@ -34,6 +34,46 @@ const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = ({
     if (!application) return null;
     const { competenceProfile, availability, fullName, status } = application;
 
+    const renderCompetenceList = () => {
+        if (competenceProfile === null) {
+            return (
+                <ListItem>
+                    <ListItemText primary={t("recruiter.applications.dialog.competenceUnavailable")} />
+                </ListItem>
+            );
+        }
+        if (competenceProfile.length === 0) {
+            return (
+                <ListItem>
+                    <ListItemText primary={t("recruiter.applications.dialog.noCompetence")} />
+                </ListItem>
+            );
+        }
+        return competenceProfile.map((e) => (
+            <ListItem key={e.competence}>
+                <ListItemText
+                    primary={t(`recruiter.applications.dialog.competence.${e.competence}`)}
+                    secondary={t("recruiter.applications.dialog.yearsOfExperience", { count: e.yearsOfExperience })}
+                />
+            </ListItem>
+        ));
+    };
+
+    const renderAvailabilityList = () => {
+        if (availability.length === 0) {
+            return (
+                <ListItem>
+                    <ListItemText primary={t("recruiter.applications.dialog.noAvailability")} />
+                </ListItem>
+            );
+        }
+        return availability.map((a, i) => (
+            <ListItem key={i}>
+                <ListItemText primary={t("recruiter.applications.dialog.fromTo", { from: a.fromDate, to: a.toDate })} />
+            </ListItem>
+        ));
+    };
+
     return (
         <Dialog open={Boolean(application)} onClose={onClose} fullWidth>
             <DialogTitle>
@@ -45,36 +85,12 @@ const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = ({
 
             <DialogContent dividers>
                 <Typography variant="h6">{t("recruiter.applications.dialog.expertise")}</Typography>
-                <List dense>
-                    {competenceProfile.length === 0 ?
-                        <ListItem>
-                            <ListItemText primary={t("recruiter.applications.dialog.noCompetence")} />
-                        </ListItem>
-                    :   competenceProfile.map((e) => (
-                            <ListItem key={e.competence}>
-                                <ListItemText
-                                    primary={t(`recruiter.applications.dialog.competence.${e.competence}`)}
-                                    secondary={t("recruiter.applications.dialog.yearsOfExperience", {
-                                        count: e.yearsOfExperience,
-                                    })}
-                                />
-                            </ListItem>
-                        ))
-                    }
-                </List>
+                <List dense>{renderCompetenceList()}</List>
 
                 <Divider sx={{ my: 2 }} />
 
                 <Typography variant="h6">{t("recruiter.applications.dialog.availability")}</Typography>
-                <List dense>
-                    {availability.map((a, i) => (
-                        <ListItem key={i}>
-                            <ListItemText
-                                primary={t("recruiter.applications.dialog.fromTo", { from: a.fromDate, to: a.toDate })}
-                            />
-                        </ListItem>
-                    ))}
-                </List>
+                <List dense>{renderAvailabilityList()}</List>
             </DialogContent>
 
             <DialogActions>

@@ -99,6 +99,8 @@
                     "roller coaster operation": "Roller coaster operation"
                 },
                 "noCompetence": "No competence found.",
+                "competenceUnavailable": "Expertise could not be loaded.",
+                "noAvailability": "No availabilities found.",
                 "yearsOfExperience": "{{count}} year(s)",
                 "availability": "Availability",
                 "fromTo": "{{from}} → {{to}}",
