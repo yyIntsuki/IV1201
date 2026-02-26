@@ -171,6 +171,12 @@ All endpoints are prefixed with `/api/v1`. Endpoints marked 🔒 require a valid
 | `GET` | `/api/v1/availabilities` 🔒 | Fetch all submitted applications (recruiter use) |
 | `POST` | `/api/v1/availabilities/{id}/status` 🔒 | Update the status of an application |
 
+### Competence
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `POST` | `/api/v1/competence/{user_id}` 🔒 | Get competence from a specific user |
+ 
 The full interactive API reference with request/response schemas is available at **http://localhost:8000/docs** when the backend is running.
 
 ---

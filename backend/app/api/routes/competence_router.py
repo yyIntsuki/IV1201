@@ -14,7 +14,7 @@ competence_service = CompetenceService()
 
 
 @router.get(
-    "/users/{user_id}/competence",
+    "/competence/{user_id}",
     response_model=list[CompetenceProfileOutput],
     status_code=status.HTTP_200_OK,
     dependencies=[Depends(require_recruiter)],
