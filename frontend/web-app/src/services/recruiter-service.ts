@@ -39,11 +39,12 @@ const recruiterService = {
         const payload: AvailabilityStatusPayload = { status, expected_status: expectedStatus };
         await updateAvailabilityStatusApi(applicationId, payload);
     },
+
     /**
-   * Fetches the competence profile for a specific user.
-   * @param userId The ID of the user whose competence profile to fetch.
-   * @returns Promise resolving to an array of competence profile entries.
-   */
+     * Fetches the competence profile for a specific user.
+     * @param userId The ID of the user whose competence profile to fetch.
+     * @returns Promise resolving to an array of competence profile entries.
+     */
     getUserCompetence: async (userId: number): Promise<CompetenceProfileEntry[]> => {
         return fetchUserCompetenceApi(userId);
     },

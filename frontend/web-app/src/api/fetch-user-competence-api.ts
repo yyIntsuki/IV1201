@@ -1,8 +1,8 @@
 import apiRequest from "./client";
 
 export interface CompetenceProfileEntry {
-  competence: string;
-  years_of_experience: number;
+    competence: string;
+    years_of_experience: number;
 }
 
 /**
@@ -11,5 +11,5 @@ export interface CompetenceProfileEntry {
  * @returns Promise resolving to an array of competence profile entries.
  */
 export async function fetchUserCompetenceApi(userId: number): Promise<CompetenceProfileEntry[]> {
-  return apiRequest<CompetenceProfileEntry[]>(`/api/v1/users/${userId}/competence`, { method: "GET" });
+    return apiRequest<CompetenceProfileEntry[]>(`/api/v1/users/${userId}/competence`, { method: "GET" });
 }

@@ -5,7 +5,6 @@ import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
 import type { CompetenceProfileEntry } from "@/api/fetch-user-competence-api";
 import ApplicationStatusChip from "./ApplicationStatusChip";
-import competenceService from "@/services/competence-service";
 
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -18,6 +17,7 @@ import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import recruiterService from "@/services/recruiter-service";
 
 interface ApplicationDetailsDialogProps {
     application: ApplicationRecord | null;
@@ -29,13 +29,15 @@ interface ApplicationDetailsDialogProps {
  * Component that handles job application details in the recruiter page.
  */
 
-const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = (props) => {
-    const { application, onClose, onStatusChange } = props;
+const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = ({
+    application,
+    onClose,
+    onStatusChange,
+}) => {
     const { t } = useTranslation();
     const { startLoading, stopLoading } = useLoading();
     const { showApiError } = useError();
 
-    // State for competence profile
     const [competenceProfile, setCompetenceProfile] = useState<CompetenceProfileEntry[]>([]);
 
     useEffect(() => {
@@ -43,7 +45,7 @@ const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = (props
             if (!application) return;
             try {
                 startLoading();
-                const competence = await competenceService.getUserCompetence(application.userId);
+                const competence = await recruiterService.getUserCompetence(application.userId);
                 setCompetenceProfile(competence);
             } catch (error) {
                 showApiError(error);
@@ -52,8 +54,8 @@ const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = (props
             }
         };
         void fetchCompetenceProfile();
-    }, [application]);
-    
+    }, [startLoading, stopLoading, showApiError, application]);
+
     if (!application) return null;
     const { availability, fullName, status } = application;
 
@@ -68,15 +70,17 @@ const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = (props
 
             <DialogContent dividers>
                 <Typography variant="h6">{t("recruiter.applications.dialog.expertise")}</Typography>
-                {(
+                {
                     <List dense>
-                        {competenceProfile.length === 0 ? (
+                        {competenceProfile.length === 0 ?
                             <ListItem>
-                                <ListItemText primary={t("recruiter.applications.dialog.noCompetence", "No competence found.")} />
+                                <ListItemText
+                                    primary={t("recruiter.applications.dialog.noCompetence", "No competence found.")}
+                                />
                             </ListItem>
-                        ) : (
-                            competenceProfile.map((e) => {
-                                const competenceKey = typeof e.competence === "string" ? e.competence : String(e.competence);
+                        :   competenceProfile.map((e) => {
+                                const competenceKey =
+                                    typeof e.competence === "string" ? e.competence : String(e.competence);
                                 return (
                                     <ListItem key={competenceKey}>
                                         <ListItemText
@@ -88,9 +92,9 @@ const ApplicationDetailsDialog: React.FC<ApplicationDetailsDialogProps> = (props
                                     </ListItem>
                                 );
                             })
-                        )}
+                        }
                     </List>
-                )}
+                }
 
                 <Divider sx={{ my: 2 }} />
 
