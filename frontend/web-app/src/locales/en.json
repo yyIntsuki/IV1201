@@ -16,7 +16,12 @@
         "registration": {
             "emailExists": "An account with this email already exists.",
             "usernameExists": "This username is already taken.",
-            "pnrExists": "An account with this personal number already exists."
+            "pnrExists": "An account with this personal number already exists.",
+            "invalidName": "Name must contain only letters, spaces, and hyphens.",
+            "invalidUsername": "Username must be at least 4 characters and contain only letters, digits, underscores, or hyphens.",
+            "invalidPnr": "Personal number must be in the format YYYYMMDD-XXXX with a valid date.",
+            "invalidPassword": "Password must be at least 8 characters.",
+            "invalidEmail": "Please enter a valid email address."
         }
     },
     "loading": {

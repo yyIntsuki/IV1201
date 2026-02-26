@@ -10,12 +10,14 @@ interface UseErrorResult {
 }
 
 /**
- * Hook providing error handling functionality.
- * Returns an object containing showError and showApiError functions.
- * showError directly triggers the error toast with the provided message.
- * showApiError takes an error object and an optional scope string, and determines the appropriate error message based on the error type.
- * getApiErrorMessage is a helper function that determines the appropriate error message based on the error type.
- * Use within an ErrorProvider component to properly display errors to the user.
+ * Retrieves the error context, throwing an error if used outside of an ErrorProvider.
+ *
+ * The context returned contains the following properties:
+ *   - showError: a function that displays an error message to the user
+ *   - showApiError: a function that handles API errors by determining the appropriate message and displaying it
+ *   - getApiErrorMessage: a function that determines the appropriate error message based on the error type
+ *
+ * @returns The error context
  */
 const useError = (): UseErrorResult => {
     const context = useContext(ErrorContext);
@@ -34,9 +36,21 @@ const useError = (): UseErrorResult => {
                 if (error.status === 400 && scope === "register") {
                     const msg = error.message?.toLowerCase() ?? "";
 
-                    if (msg.includes("email")) return t("errors.registration.emailExists");
-                    if (msg.includes("username")) return t("errors.registration.usernameExists");
-                    if (msg.includes("personal")) return t("errors.registration.pnrExists");
+                    /*
+                     * Conflict errors, i.e. the value is valid but already taken.
+                     * Checked first and require "already" to avoid mismatching validation errors whose messages also contain
+                     * field names like "email" or "username".
+                     */
+                    if (msg.includes("already") && msg.includes("email")) return t("errors.registration.emailExists");
+                    if (msg.includes("already") && msg.includes("username")) return t("errors.registration.usernameExists");
+                    if (msg.includes("already") && msg.includes("personal")) return t("errors.registration.pnrExists");
+
+                    /* Validation errors, i.e. the submitted value is malformed */
+                    if (msg.includes("name")) return t("errors.registration.invalidName");
+                    if (msg.includes("username")) return t("errors.registration.invalidUsername");
+                    if (msg.includes("personal") || msg.includes("pnr")) return t("errors.registration.invalidPnr");
+                    if (msg.includes("password")) return t("errors.registration.invalidPassword");
+                    if (msg.includes("email")) return t("errors.registration.invalidEmail");
                 }
 
                 if (error.status === 401)

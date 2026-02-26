@@ -16,7 +16,12 @@
         "registration": {
             "emailExists": "Ett konto med denna e-postadress finns redan.",
             "usernameExists": "Detta användarnamn är redan upptaget.",
-            "pnrExists": "Ett konto med detta personnummer finns redan."
+            "pnrExists": "Ett konto med detta personnummer finns redan.",
+            "invalidName": "Namnet får endast innehålla bokstäver, mellanslag och bindestreck.",
+            "invalidUsername": "Användarnamnet måste vara minst 4 tecken och får endast innehålla bokstäver, siffror, understreck eller bindestreck.",
+            "invalidPnr": "Personnumret måste ha formatet ÅÅÅÅMMDD-XXXX med ett giltigt datum.",
+            "invalidPassword": "Lösenordet måste vara minst 8 tecken.",
+            "invalidEmail": "Ange en giltig e-postadress."
         }
     },
     "loading": {
