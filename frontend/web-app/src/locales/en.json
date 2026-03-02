@@ -151,6 +151,46 @@
             "invalidCompetence": "One or more of your selected expertise is invalid. Please review and try again."
         }
     },
+    "completion": {
+        "title": "Completion",
+        "subtitle": "Fill in the missing information to complete your account setup",
+        "submit": "Complete Account",
+        "verifying": "Verifying your access link...",
+        "prefilledInfo": "You only need to complete the remaining fields.",
+        "successTitle": "Account Completed!",
+        "successMessage": "Your account has been completed successfully. Redirecting you now...",
+        "fields": {
+            "firstName": {
+                "label": "First name",
+                "placeholder": "Jane"
+            },
+            "lastName": {
+                "label": "Last name",
+                "placeholder": "Doe"
+            },
+            "email": {
+                "label": "Email address",
+                "placeholder": "jane.doe@example.com"
+            },
+            "personNumber": {
+                "label": "Person number",
+                "placeholder": "YYYYMMDD-XXXX"
+            },
+            "username": {
+                "label": "Username",
+                "placeholder": "Enter your username"
+            },
+            "password": {
+                "label": "Password",
+                "placeholder": "••••••••"
+            }
+        },
+        "errors": {
+            "noToken": "No access token found. Please use the link from your email.",
+            "invalidToken": "Invalid or expired access link.",
+            "completionFailed": "Failed to complete account setup. Please try again."
+        }
+    },
     "notFound": {
         "title": "Page Not Found",
         "message": "Sorry, the page you are looking for does not exist.",

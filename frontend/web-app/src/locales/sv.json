@@ -151,6 +151,46 @@
             "invalidCompetence": "En eller flera av de valda kompetenserna är ogiltiga. Kontrollera och försök igen."
         }
     },
+    "completion": {
+        "title": "Komplettering",
+        "subtitle": "Fyll i de saknade information för att slutföra din konto",
+        "submit": "Komplettera konto",
+        "verifying": "Verifierar din åtkomstlänk...",
+        "prefilledInfo": "Du behöver endast fylla i de återstående fälten.",
+        "successTitle": "Kontokomplettering slutförd!",
+        "successMessage": "Ditt konto har updaterats successivt. Omdirigerar dig nu...",
+        "fields": {
+            "firstName": {
+                "label": "Förnamn",
+                "placeholder": "Jane"
+            },
+            "lastName": {
+                "label": "Efternamn",
+                "placeholder": "Doe"
+            },
+            "email": {
+                "label": "E-postadress",
+                "placeholder": "jane.doe@example.com"
+            },
+            "personNumber": {
+                "label": "Personnummer",
+                "placeholder": "ÅÅÅÅMMDD-XXXX"
+            },
+            "username": {
+                "label": "Användarnamn",
+                "placeholder": "Ange ditt användarnamn"
+            },
+            "password": {
+                "label": "Lösenord",
+                "placeholder": "••••••••"
+            }
+        },
+        "errors": {
+            "noToken": "Ingen åtkomsttoken hittades. Vänligen använd länken från din e-post.",
+            "invalidToken": "Ogiltig eller utgången åtkomstlänk.",
+            "completionFailed": "Kunde inte slutföra kontoinställningen. Vänligen försök igen."
+        }
+    },
     "notFound": {
         "title": "Sidan kunde inte hittas",
         "message": "Tyvärr, sidan du letar efter finns inte.",

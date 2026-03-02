@@ -8,6 +8,7 @@ import Register from "@/pages/Register";
 import Applicant from "@/pages/Applicant";
 import Recruiter from "@/pages/Recruiter";
 import NotFound from "@/pages/NotFound";
+import CompleteAccount from "@/pages/CompleteAccount";
 
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import PublicRoute from "@/routes/PublicRoute";
@@ -26,6 +27,7 @@ function Router() {
                         <Route index element={<Home />} />
                         <Route path={ROUTES.LOGIN} element={<Login />} />
                         <Route path={ROUTES.REGISTER} element={<Register />} />
+                        <Route path={ROUTES.COMPLETE_ACCOUNT} element={<CompleteAccount />} />
                     </Route>
 
                     <Route element={<ProtectedRoute allowedRoles={["applicant"]} />}>

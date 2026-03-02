@@ -15,10 +15,13 @@ interface RegisterFormProps {
     handleBlur: (field: keyof Account) => void;
     handleSubmit: (e: React.FormEvent) => void | Promise<void>;
     isFormValid: boolean;
+    readOnlyFields?: (keyof Account)[];
+    mode?: "register" | "completion";
 }
 
 /**
- * Component that handles register input in the register page.
+ * Component that handles register/account completion input. Can be used in both register and account completion flows.
+ * When readOnlyFields are provided, those fields will be disabled and marked as verified.
  */
 const RegisterForm: React.FC<RegisterFormProps> = ({
     data,
@@ -28,12 +31,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     handleBlur,
     handleSubmit,
     isFormValid,
+    readOnlyFields = [],
+    mode = "register",
 }) => {
     const { t } = useTranslation();
-
     const { loading } = useLoading();
 
     const fields: (keyof Account)[] = ["firstName", "lastName", "email", "personNumber", "username", "password"];
+
+    const isFieldReadOnly = (field: keyof Account) => readOnlyFields.includes(field);
 
     return (
         <Box
@@ -43,26 +49,30 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             noValidate
             onSubmit={(e) => void handleSubmit(e)}>
             <Grid container spacing={2} columns={6}>
-                {fields.map((field) => (
-                    <Grid key={field} size={{ sm: 3 }}>
-                        <TextField
-                            required
-                            slotProps={{ inputLabel: { required: false } }}
-                            type={field === "password" ? "password" : "text"}
-                            label={t(`register.fields.${field}.label`)}
-                            placeholder={t(`register.fields.${field}.placeholder`)}
-                            value={data[field]}
-                            onChange={(e) => handleChange(field, e.target.value)}
-                            onBlur={() => handleBlur(field)}
-                            error={touched[field] && Boolean(fieldErrors[field])}
-                            helperText={touched[field] && fieldErrors[field] ? fieldErrors[field] : " "}
-                            fullWidth
-                        />
-                    </Grid>
-                ))}
+                {fields.map((field) => {
+                    const readOnly = isFieldReadOnly(field);
+                    return (
+                        <Grid key={field} size={{ sm: 3 }}>
+                            <TextField
+                                required
+                                slotProps={{ inputLabel: { required: false } }}
+                                type={field === "password" ? "password" : "text"}
+                                label={t(`${mode}.fields.${field}.label`)}
+                                placeholder={t(`${mode}.fields.${field}.placeholder`)}
+                                value={data[field]}
+                                onChange={(e) => handleChange(field, e.target.value)}
+                                onBlur={() => handleBlur(field)}
+                                disabled={readOnly}
+                                error={!readOnly && touched[field] && Boolean(fieldErrors[field])}
+                                helperText={touched[field] && fieldErrors[field] ? fieldErrors[field] : " "}
+                                fullWidth
+                            />
+                        </Grid>
+                    );
+                })}
             </Grid>
             <Button variant="contained" type="submit" disabled={!isFormValid || loading}>
-                {t("register.submit")}
+                {t(`${mode}.submit`)}
             </Button>
         </Box>
     );
