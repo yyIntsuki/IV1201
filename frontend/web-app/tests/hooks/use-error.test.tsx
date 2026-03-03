@@ -20,6 +20,10 @@ const createWrapper =
 describe("useError hook", () => {
     const mockShowError = vi.fn() as (msg: string) => void;
 
+    beforeEach(() => {
+        vi.clearAllMocks();
+    });
+
     /**
      * Throws if useError is used outside of an ErrorProvider,
      * ensuring that the hook is properly used within the expected context.
@@ -56,7 +60,40 @@ describe("useError hook", () => {
     });
 
     /**
-     * Returns specific messages for 401 errors based on scope,
+     * Returns the same registration error messages for completion scope,
+     * since completion and registration use identical validation rules.
+     */
+    it("returns registration errors for completion scope (reuses same messages)", () => {
+        const { result } = renderHook(() => useError(), { wrapper: createWrapper(mockShowError) });
+
+        const usernameError: ApiError = createApiError("Username taken", { status: 400 });
+
+        // Completion scope uses the same error keys as registration
+        expect(result.current.getApiErrorMessage(usernameError, "completion")).toBe(
+            "errors.registration.usernameExists",
+        );
+    });
+
+    /**
+     * Returns validation error messages for invalid data format,
+     * ensuring field-specific validation errors are identified correctly.
+     */
+    it("returns validation errors for invalid field formats", () => {
+        const { result } = renderHook(() => useError(), { wrapper: createWrapper(mockShowError) });
+
+        const nameError: ApiError = createApiError("Name contains invalid characters", { status: 400 });
+        const usernameError: ApiError = createApiError("Username too short", { status: 400 });
+        const emailError: ApiError = createApiError("Email format invalid", { status: 400 });
+
+        expect(result.current.getApiErrorMessage(nameError, "register")).toBe("errors.registration.invalidName");
+        expect(result.current.getApiErrorMessage(usernameError, "register")).toBe(
+            "errors.registration.invalidUsername",
+        );
+        expect(result.current.getApiErrorMessage(emailError, "register")).toBe("errors.registration.invalidEmail");
+    });
+
+    /**
+     * Returns correct message for 401 errors based on scope,
      * ensuring that authentication issues are clearly communicated to the user.
      */
     it("returns correct message for 401 errors", () => {

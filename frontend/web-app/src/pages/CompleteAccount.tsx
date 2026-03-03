@@ -107,7 +107,7 @@ const CompleteAccount = () => {
                     void navigate(role ? getRoute(role) : ROUTES.LOGIN);
                 }, 2000);
             } catch (error) {
-                showApiError(error, "completion");
+                showApiError(error, "register");
             } finally {
                 stopLoading();
             }

@@ -33,24 +33,42 @@ const useError = (): UseErrorResult => {
             if (isApiError(error)) {
                 if (error.isNetworkError) return t("errors.network");
 
-                if (error.status === 400 && scope === "register") {
+                /* Handle registration and account completion errors (both use same messages) */
+                if (error.status === 400 && (scope === "register" || scope === "completion")) {
                     const msg = error.message?.toLowerCase() ?? "";
 
                     /*
                      * Conflict errors, i.e. the value is valid but already taken.
-                     * Checked first and require "already" to avoid mismatching validation errors whose messages also contain
-                     * field names like "email" or "username".
+                     * Check for "already", "exists", or "taken" keywords to identify conflicts.
                      */
-                    if (msg.includes("already") && msg.includes("email")) return t("errors.registration.emailExists");
-                    if (msg.includes("already") && msg.includes("username")) return t("errors.registration.usernameExists");
-                    if (msg.includes("already") && msg.includes("personal")) return t("errors.registration.pnrExists");
+                    if (
+                        (msg.includes("already") || msg.includes("exists") || msg.includes("taken")) &&
+                        msg.includes("email")
+                    ) {
+                        return t("errors.registration.emailExists");
+                    }
+                    if (
+                        (msg.includes("already") || msg.includes("exists") || msg.includes("taken")) &&
+                        msg.includes("username")
+                    ) {
+                        return t("errors.registration.usernameExists");
+                    }
+                    if (
+                        (msg.includes("already") || msg.includes("exists") || msg.includes("taken")) &&
+                        (msg.includes("personal") || msg.includes("pnr"))
+                    ) {
+                        return t("errors.registration.pnrExists");
+                    }
 
-                    /* Validation errors, i.e. the submitted value is malformed */
-                    if (msg.includes("name")) return t("errors.registration.invalidName");
+                    /*
+                     * Validation errors, i.e. the submitted value is malformed.
+                     * Check more specific fields first (username, personNumber) before generic ones (name).
+                     */
                     if (msg.includes("username")) return t("errors.registration.invalidUsername");
                     if (msg.includes("personal") || msg.includes("pnr")) return t("errors.registration.invalidPnr");
                     if (msg.includes("password")) return t("errors.registration.invalidPassword");
                     if (msg.includes("email")) return t("errors.registration.invalidEmail");
+                    if (msg.includes("name")) return t("errors.registration.invalidName");
                 }
 
                 if (error.status === 401)
