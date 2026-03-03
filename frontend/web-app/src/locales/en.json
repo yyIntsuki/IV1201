@@ -32,6 +32,8 @@
         "subtitle": "Please log in to access the application",
         "submit": "Log in",
         "noAccount": "Don't have an account? Please <1>register</1>.",
+        "or": "OR",
+        "backToLogin": "Back to login",
         "fields": {
             "identifier": {
                 "label": "Username or email",
@@ -40,6 +42,21 @@
             "password": {
                 "label": "Password",
                 "placeholder": "••••••••"
+            }
+        },
+        "passwordReset": {
+            "title": "Reset",
+            "subtitle": "Request password reset",
+            "submit": "Send reset link",
+            "switchButton": "Reset Password",
+            "successMessage": "Check your email for the access link!",
+            "successSubtitle": "We've sent a secure link to your registered email address.",
+            "infoMessage": "We'll send you a secure link to reset your password.",
+            "fields": {
+                "identifier": {
+                    "label": "Email address",
+                    "placeholder": "jane.doe@example.com"
+                }
             }
         }
     },

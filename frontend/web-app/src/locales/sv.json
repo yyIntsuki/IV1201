@@ -32,6 +32,8 @@
         "subtitle": "Vänligen logga in för att komma åt applikationen",
         "submit": "Logga in",
         "noAccount": "Har inget konto? Vänligen <1>registrera</1>.",
+        "or": "ELLER",
+        "backToLogin": "Tillbaka till inloggning",
         "fields": {
             "identifier": {
                 "label": "Användarnamn eller e-postadress",
@@ -40,6 +42,21 @@
             "password": {
                 "label": "Lösenord",
                 "placeholder": "••••••••"
+            }
+        },
+        "passwordReset": {
+            "title": "Återställ",
+            "subtitle": "Begär lösenordsåterställning",
+            "submit": "Skicka återställningslänk",
+            "switchButton": "Återställ lösenord",
+            "successMessage": "Kontrollera din e-post för återställningslänken!",
+            "successSubtitle": "Vi har skickat en säker länk till din e-postadress.",
+            "infoMessage": "Vi skickar dig en säker länk för att återställa ditt lösenord.",
+            "fields": {
+                "identifier": {
+                    "label": "E-postadress",
+                    "placeholder": "jane.doe@example.com"
+                }
             }
         }
     },

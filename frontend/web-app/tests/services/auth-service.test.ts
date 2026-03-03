@@ -4,13 +4,16 @@ import STORAGE_KEYS from "@/constants/storage-keys";
 const loginApiMock = vi.hoisted(() => vi.fn());
 vi.mock("@/api/login-api", () => ({ default: loginApiMock }));
 
+const resetPasswordApiMock = vi.hoisted(() => vi.fn());
+vi.mock("@/api/reset-password-api", () => ({ default: resetPasswordApiMock }));
+
 const isJwtExpiredMock = vi.hoisted(() => vi.fn());
 vi.mock("@/utils/jwt-decoder", () => ({ isJwtExpired: isJwtExpiredMock }));
 
 /**
- * Tests for authService module, covering token retrieval, login, and logout functionality.
+ * Tests for authService module, covering token retrieval, login, logout, and password reset functionality.
  *
- * Mocks loginApi and jwtDecoder to isolate authService behavior.
+ * Mocks loginApi, resetPasswordApi, and jwtDecoder to isolate authService behavior.
  */
 describe("authService", () => {
     beforeEach(() => {
@@ -81,6 +84,28 @@ describe("authService", () => {
             authService.logout();
 
             expect(localStorage.getItem(STORAGE_KEYS.TOKEN)).toBeNull();
+        });
+    });
+
+    /**
+     * Tests for password reset method.
+     */
+    describe("resetPassword", () => {
+        it("calls resetPasswordApi and returns success message", async () => {
+            const fakeResponse = { message: "Login link sent to your email" };
+
+            resetPasswordApiMock.mockResolvedValueOnce(fakeResponse);
+
+            const result = await authService.resetPassword("user@example.com");
+
+            expect(resetPasswordApiMock).toHaveBeenCalledWith("user@example.com");
+            expect(result).toBe("Login link sent to your email");
+        });
+
+        it("throws error when API call fails", async () => {
+            resetPasswordApiMock.mockRejectedValueOnce(new Error("Account not found"));
+
+            await expect(authService.resetPassword("invalid@example.com")).rejects.toThrow("Account not found");
         });
     });
 });

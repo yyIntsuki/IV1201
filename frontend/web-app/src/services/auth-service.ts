@@ -1,4 +1,5 @@
 import loginApi from "@/api/login-api";
+import resetPasswordApi from "@/api/reset-password-api";
 import STORAGE_KEYS from "@/constants/storage-keys";
 import { isJwtExpired } from "@/utils/jwt-decoder";
 
@@ -33,6 +34,18 @@ const authService = {
      */
     logout: () => {
         localStorage.removeItem(STORAGE_KEYS.TOKEN);
+    },
+
+    /**
+     * Requests a password reset.
+     * Sends a magic link to the user's registered email address.
+     *
+     * @param {string} identifier The email address of the user
+     * @returns {Promise<string>} A promise that resolves with a success message
+     */
+    resetPassword: async (identifier: string): Promise<string> => {
+        const response = await resetPasswordApi(identifier);
+        return response.message;
     },
 };
 

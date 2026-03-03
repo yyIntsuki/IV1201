@@ -6,3 +6,10 @@ export interface LoginData {
     identifier: string;
     password: string;
 }
+
+/**
+ * Represents password-reset login data used in Login.
+ */
+export interface PasswordResetData {
+    identifier: string;
+}
