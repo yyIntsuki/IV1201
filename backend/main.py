@@ -4,6 +4,7 @@ This file configures the application and includes all routers.
 """
 
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
@@ -76,7 +77,7 @@ app.include_router(competence_router.router, prefix="/api/v1", tags=["competence
 @app.get("/")
 async def root():
     """Root endpoint to verify the API is running."""
-    return {"message": "IV1201 API is running", "version": "1.0.0"}
+    return RedirectResponse(url="/docs")
 
 
 @app.get("/health")

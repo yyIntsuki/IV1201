@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 interface UseFormOptions<T> {
     initialValues: T;
@@ -36,6 +36,10 @@ function markAllFieldsTouched<T extends { [K in keyof T]: string }>(data: T): Re
     return Object.fromEntries(Object.keys(data).map((k) => [k, true])) as Record<keyof T, boolean>;
 }
 
+function markAllFieldsUntouched<T extends { [K in keyof T]: string }>(data: T): Record<keyof T, boolean> {
+    return Object.fromEntries(Object.keys(data).map((k) => [k, false])) as Record<keyof T, boolean>;
+}
+
 /**
  * A React hook that manages form state, validation, and submission.
  *
@@ -69,12 +73,17 @@ const useForm = <T extends { [K in keyof T]: string }>({ initialValues, validato
     const [formData, setFormData] = useState<T>(initialValues);
 
     /* Tracks which fields have been touched (blurred) */
-    const [touched, setTouched] = useState<Record<keyof T, boolean>>(
-        Object.fromEntries(Object.keys(initialValues).map((k) => [k, false])) as Record<keyof T, boolean>,
-    );
+    const [touched, setTouched] = useState<Record<keyof T, boolean>>(markAllFieldsUntouched(initialValues));
 
     /* Tracks validation errors for each field */
     const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof T, string>>>({});
+
+    // Keep form state in sync when initialValues are updated asynchronously.
+    useEffect(() => {
+        setFormData(initialValues);
+        setTouched(markAllFieldsUntouched(initialValues));
+        setFieldErrors({});
+    }, [initialValues]);
 
     /**
      * Updates the value of a field and clears its previous error.

@@ -3,13 +3,16 @@ User service - Business Logic Layer.
 Contains business logic and coordinates between presentation and data layers.
 """
 from typing import List, Optional, Dict
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 import hashlib
 import re
 import logging
+import jose
 
 from app.database.repositories.user_repository import UserRepository
 from app.api.schemas.user_schemas import UserCreate, UserResponse, UserUpdate, Users
+from app.utils.mail import send_magic_link_email
+from app.security.jwt import JWT_SECRET_KEY, ALGORITHM, decode_access_token
 
 
 class UserService:
@@ -193,12 +196,15 @@ class UserService:
         user = await self.repository.get_by_id(user_id)
         if user:
             user_data = dict(user)
-            return Users(
-                name=user_data.get("name") or "",
-                surname=user_data.get("surname") or "",
-                pnr=user_data.get("pnr") or None,
-                email=user_data.get("email") or None,
-            )
+            # Map backend fields to frontend Account shape
+            return {
+                "firstName": user_data.get("name") or "",
+                "lastName": user_data.get("surname") or "",
+                "personNumber": user_data.get("pnr") or "",
+                "email": user_data.get("email") or "",
+                "username": user_data.get("username") or "",
+                "password": "",
+            }
         return None
 
     async def get_all_users(self) -> List[Users]:
@@ -222,7 +228,7 @@ class UserService:
             )
         return response
 
-    async def update_user(self, user_id: int, user_data: UserUpdate) -> Optional[UserResponse]:
+    async def update_user(self, user_id: int, user_data: UserUpdate) -> bool:
         """
         Update a user with business logic validation.
 
@@ -231,12 +237,16 @@ class UserService:
             user_data: Update data
 
         Returns:
-            Updated user or None if not found
+            True if updated, False if not found
 
         Raises:
             ValueError: If validation fails
         """
         # Business logic: Validate fields if provided
+        existing_user = await self.repository.get_by_id(user_id)
+        if not existing_user:
+            raise ValueError("User not found")
+        
         if user_data.email and not self._validate_email(user_data.email):
             raise ValueError("Invalid email format")
 
@@ -258,17 +268,17 @@ class UserService:
         # Business logic: Check for email conflicts
         if user_data.email:
             existing_user = await self.repository.get_by_email(user_data.email)
-            if existing_user and existing_user["id"] != user_id:
+            if existing_user and int(existing_user["id"]) != int(user_id):
                 raise ValueError("Email already in use by another user")
 
         if user_data.username:
             existing_username = await self.repository.get_by_username(user_data.username)
-            if existing_username and existing_username["id"] != user_id:
+            if existing_username and int(existing_username["id"]) != int(user_id):
                 raise ValueError("Username already in use by another user")
 
         if user_data.pnr:
             existing_pnr = await self.repository.get_by_pnr(user_data.pnr)
-            if existing_pnr and existing_pnr["id"] != user_id:
+            if existing_pnr and int(existing_pnr["id"]) != int(user_id):
                 raise ValueError("Personal number already in use by another user")
 
         # Prepare update data
@@ -289,10 +299,9 @@ class UserService:
             update_data["password"] = self._hash_password(user_data.password)
 
         # Call database layer to update
-        user = await self.repository.update(user_id, **update_data)
-        if user:
-            return UserResponse(**dict(user))
-        return None
+        response = await self.repository.update(user_id, **update_data)
+
+        return response
 
     async def delete_user(self, user_id: int) -> bool:
         """
@@ -313,15 +322,17 @@ class UserService:
         Authenticate a user by username and password.
 
         Args:
-            username: User's username
+            username: User's username or email
             password: Plain text password
         Returns:
             Role ID if authenticated, or None if credentials are invalid
         """
         user = await self.repository.get_by_username(username)
         if not user:
-            logging.info(f"Authentication failed: User '{username}' not found.")
-            return None
+            user = await self.repository.get_by_email(username)
+            if not user:
+                logging.info(f"Authentication failed: User '{username}' not found.")
+                return None
 
         hashed_input_password = self._hash_password(password)
         if user["password"] != hashed_input_password:
@@ -329,7 +340,53 @@ class UserService:
             return None
 
         response = {
-            "user_id": user["person_id"],
+            "user_id": user["id"],
             "role_id": user["role_id"],
         }
         return response
+
+    async def send_email_with_link(self, email: str) -> bool:
+        """
+        Send an email with a magic login link.
+
+        Args:
+            email: User's email address
+
+        Returns:
+            True if email sent, False if user not found
+        """
+        user = await self.repository.get_by_email(email)
+        if not user:
+            logging.info(f"Magic link request failed: Email '{email}' not found.")
+            return False
+        user_id = user["id"]
+        role_id = user["role_id"]
+
+        # Create JWT token with user ID and role
+        token_data = {
+            "user_id": user_id,
+            "role_id": role_id,
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=60),  # Token expires in 15 minutes
+        }
+        token = jose.jwt.encode(token_data, JWT_SECRET_KEY, algorithm=ALGORITHM)
+
+        magic_link = f"http://localhost:5173/complete-account?token={token}"
+        send_magic_link_email(to_email=email, magic_link=magic_link)
+        return True
+    
+    async def verify_magic_token(self, token: str) -> Optional[Dict[str, int]]:
+        """
+        Verify a magic login token and return user info if valid.
+
+        Args:
+            token: JWT token from magic link
+        Returns:
+            User info if token is valid, None otherwise
+        """
+        try:
+            payload = decode_access_token(token)
+            user_id = payload["user_id"]
+            role_id = payload["role_id"]
+            return {"user_id": user_id, "role_id": role_id}
+        except Exception:
+            return None

@@ -38,6 +38,10 @@ The backend is written in Python using FastAPI. Python does not require a compil
 
 Both team members use **Visual Studio Code**. No IDE-specific configuration is committed to the repository beyond the `.prettierrc` formatting file, so other editors remain fully compatible.
 
+### Testing on different browsers
+
+After each major update, the application will be tested on three different browsers, namely "Google Chrome","FireFox" and "Microsoft Edge", to assure stability across all browsers.
+
 ### Deployment
 
 The application is intended for deployment on **Render**. The frontend is built into a set of static files which are served independently. The backend exposes a REST API, and CORS must be configured to allow the frontend's origin. See the backend README for CORS configuration details.

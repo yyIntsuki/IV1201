@@ -13,10 +13,15 @@ const authService = {
      * @returns {string | null} The authentication token if it exists and is not expired, null otherwise
      */
     getToken: (): string | null => {
-        const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
+        let token = localStorage.getItem(STORAGE_KEYS.TOKEN);
         if (!token || isJwtExpired(token)) {
             localStorage.removeItem(STORAGE_KEYS.TOKEN);
-            return null;
+            // Try sessionStorage if localStorage token is invalid
+            token = sessionStorage.getItem(STORAGE_KEYS.COMPLETION_TOKEN);
+            if (!token || isJwtExpired(token)) {
+                sessionStorage.removeItem(STORAGE_KEYS.COMPLETION_TOKEN);
+                return null;
+            }
         }
         return token;
     },

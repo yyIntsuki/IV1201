@@ -1,11 +1,6 @@
 import apiRequest from "./client";
 import type { Account } from "@/types/account";
 
-interface CompleteAccountResponse {
-    access_token: string;
-    token_type: string;
-}
-
 /**
  * Completes a user's account by filling in missing information.
  * Requires a valid session token from the verify-token endpoint.
@@ -13,17 +8,20 @@ interface CompleteAccountResponse {
  *
  * @param {Partial<Account>} accountData The account data to update
  * @param {string} sessionToken The short-lived session token from verify-token
- * @returns {Promise<CompleteAccountResponse>} A promise that resolves with authentication token
+ * @param {number} userId The ID of the user to update
+ * @returns {Promise<boolean>} A promise that resolves with true on success
  */
-const completeAccountApi = async (
+const userUpdateApi = async (
     accountData: Partial<Account>,
     sessionToken: string,
-): Promise<CompleteAccountResponse> => {
-    return apiRequest<CompleteAccountResponse>("/api/v1/users/complete", {
-        method: "PATCH",
+    userId: number,
+): Promise<boolean> => {
+    await apiRequest(`/api/v1/users/${userId}`, {
+        method: "PUT",
         data: accountData,
         headers: { Authorization: `Bearer ${sessionToken}` },
     });
+    return true;
 };
 
-export default completeAccountApi;
+export default userUpdateApi;

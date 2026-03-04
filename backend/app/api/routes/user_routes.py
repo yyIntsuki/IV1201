@@ -13,7 +13,10 @@ from app.api.schemas.user_schemas import (
     UserUpdate,
     TokenResponse,
     LoginRequest,
-    Users
+    Users,
+    ForgetPasswordRequest,
+    VerifyTokenRequest,
+    VerifyTokenResponse,
 )
 from app.services.user_service import UserService
 from app.security.jwt import create_access_token
@@ -102,7 +105,7 @@ async def get_user(user_id: int):
 
 @router.put(
     "/users/{user_id}",
-    response_model=UserResponse,
+    response_model=bool,
     dependencies=[Depends(get_current_user)],
 )
 async def update_user(user_id: int, user_data: UserUpdate):
@@ -112,12 +115,7 @@ async def update_user(user_id: int, user_data: UserUpdate):
     Demonstrates update operation flow through all layers.
     """
     try:
-        user = await user_service.update_user(user_id, user_data)
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
-            )
-        return user
+        return await user_service.update_user(user_id, user_data)
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except HTTPException:
@@ -188,3 +186,43 @@ async def login_user(credentials: LoginRequest):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal server error",
         )
+
+@router.post(
+    "/forget-password",
+    status_code=status.HTTP_200_OK,
+)
+async def magic_login_request(payload: ForgetPasswordRequest):
+    """
+    Request a magic login link for users without a password.
+    """
+    email = payload.identifier
+    user = await user_service.repository.get_by_email(email)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This email address does not belong to any user")
+
+    await user_service.send_email_with_link(email)
+    return {"message": "Check your email for the login link"}
+
+@router.post(
+    "/magic-login/verify",
+    response_model=VerifyTokenResponse,
+    status_code=status.HTTP_200_OK,
+)
+async def magic_login_verify(payload: VerifyTokenRequest):
+    """
+    Verify magic login token and log user in.
+    """
+    try:
+        user_info = await user_service.verify_magic_token(payload.token)
+        if not user_info:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
+        user_id = user_info["user_id"]
+        user = await user_service.repository.get_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        # Issue a proper access token for frontend use
+        access_token = create_access_token({"role_id": user["role_id"], "user_id": user_id})
+        response = {"access_token": access_token, "token_type": "bearer", "user_id": user_id}
+        return VerifyTokenResponse(**response)
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")

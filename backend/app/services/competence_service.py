@@ -2,8 +2,6 @@
 Competence service - Business Logic Layer.
 Contains business logic and coordinates between presentation and data layers.
 """
-import logging
-
 from app.api.schemas.competence_schemas import CompetenceProfileOutput
 from app.database.repositories.competence_repository import CompetenceRepository
 

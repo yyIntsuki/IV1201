@@ -94,7 +94,8 @@ class UserRepository:
             User data or None if not found
         """
         query = """
-            SELECT * FROM person
+            SELECT person_id AS id, name, surname, pnr, email, password, role_id, username
+            FROM person
             WHERE username = :username
         """
         result = await database.fetch_one(query=query, values={"username": username})
@@ -133,7 +134,7 @@ class UserRepository:
         results = await database.fetch_all(query=query)
         return results
     
-    async def update(self, user_id: int, **kwargs) -> Optional[dict]:
+    async def update(self, user_id: int, **kwargs) -> bool:
         """
         Update a user's information.
         
@@ -142,7 +143,7 @@ class UserRepository:
             **kwargs: Fields to update
             
         Returns:
-            Updated user data or None if not found
+            True if updated, False if not found
         """
         # Build dynamic update query
         update_fields = []
@@ -162,9 +163,9 @@ class UserRepository:
             WHERE person_id = :user_id
             RETURNING person_id AS id, name, surname, pnr, email, role_id, username
         """
-        
-        result = await database.fetch_one(query=query, values=values)
-        return result
+
+        await database.execute(query=query, values=values)
+        return True
     
     async def delete(self, user_id: int) -> bool:
         """

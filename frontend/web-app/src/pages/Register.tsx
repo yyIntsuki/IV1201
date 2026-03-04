@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation, Trans } from "react-i18next";
 import useLoading from "@/hooks/use-loading";
@@ -30,8 +30,17 @@ const Register = () => {
     const { showApiError } = useError();
 
     const validator = formValidator(t);
+    const registerInitialValues = useMemo(() => ({
+        firstName: "",
+        lastName: "",
+        email: "",
+        personNumber: "",
+        username: "",
+        password: "",
+    }), []);
+
     const { formData, touched, fieldErrors, handleChange, handleBlur, handleSubmit, isFormValid } = useForm<Account>({
-        initialValues: { firstName: "", lastName: "", email: "", personNumber: "", username: "", password: "" },
+        initialValues: registerInitialValues,
         validators: {
             firstName: validator.validateFirstName,
             lastName: validator.validateLastName,

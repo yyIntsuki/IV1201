@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTranslation, Trans } from "react-i18next";
 import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
@@ -36,8 +36,9 @@ const Login = () => {
 
     const validators = formValidator(t);
 
+    const loginInitialValues = useMemo(() => ({ identifier: "", password: "" }), []);
     const loginForm = useForm<LoginData>({
-        initialValues: { identifier: "", password: "" },
+        initialValues: loginInitialValues,
         validators: { identifier: validators.validateIdentifier, password: validators.validatePassword },
         onSubmit: async ({ identifier, password }) => {
             try {
@@ -51,8 +52,9 @@ const Login = () => {
         },
     });
 
+    const passwordResetInitialValues = useMemo(() => ({ identifier: "" }), []);
     const passwordResetForm = useForm<PasswordResetData>({
-        initialValues: { identifier: "" },
+        initialValues: passwordResetInitialValues,
         validators: { identifier: validators.validateIdentifier },
         onSubmit: async ({ identifier }) => {
             try {

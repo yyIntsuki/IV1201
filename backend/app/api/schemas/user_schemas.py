@@ -71,7 +71,23 @@ class LoginRequest(BaseModel):
 class Users(BaseModel):
     """Schema for list of users response."""
 
-    name: str
-    surname: str
-    pnr: Optional[str] = None
+    firstName: str
+    lastName: str
+    personNumber: Optional[str] = None
     email: Optional[EmailStr] = None
+    username: Optional[str] = None
+    password: Optional[str] = None
+
+
+class ForgetPasswordRequest(BaseModel):
+    identifier: str
+
+
+class VerifyTokenRequest(BaseModel):
+    token: str
+
+
+class VerifyTokenResponse(BaseModel):
+    access_token: str
+    token_type: str
+    user_id: int

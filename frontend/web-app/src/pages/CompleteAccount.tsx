@@ -1,15 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
-import useAuth from "@/hooks/use-auth";
 import useForm from "@/hooks/use-form";
 import ROUTES from "@/constants/routes";
 import type { Account } from "@/types/account";
 import completeAccountService from "@/services/complete-account-service";
 import formValidator from "@/utils/form-validator";
-import getRoute from "@/utils/route-navigator";
 import RegisterForm from "@/components/register/RegisterForm";
 
 import Typography from "@mui/material/Typography";
@@ -33,7 +31,6 @@ const CompleteAccount = () => {
     const { t } = useTranslation();
     const { startLoading, stopLoading } = useLoading();
     const { showApiError, showError } = useError();
-    const { role } = useAuth();
 
     const token = searchParams.get("token");
 
@@ -48,15 +45,17 @@ const CompleteAccount = () => {
             try {
                 startLoading();
                 const data = await completeAccountService.verifyToken(token);
+                console.log("Account data received for completion:", data);
 
                 /* Determine which fields are read-only (have values) */
                 const readOnly = (Object.keys(data) as (keyof Account)[]).filter(
-                    (key) => data[key] !== null && data[key] !== undefined && data[key] !== "",
+                    (key) => data[key] !== null && data[key] !== undefined && data[key] !== ""
                 );
 
                 setAccountData(data);
                 setReadOnlyFields(readOnly);
                 setTokenVerified(true);
+                console.log("accountData:", accountData);
             } catch (error) {
                 showApiError(error, "completion");
                 setTimeout(() => navigate(ROUTES.LOGIN), 3000);
@@ -73,15 +72,17 @@ const CompleteAccount = () => {
     }, [token, navigate, startLoading, stopLoading, showApiError, showError, t]);
 
     const validator = formValidator(t);
+    const initialValues = useMemo(() => ({
+        firstName: accountData?.firstName || "",
+        lastName: accountData?.lastName || "",
+        email: accountData?.email || "",
+        personNumber: accountData?.personNumber || "",
+        username: accountData?.username || "",
+        password: accountData?.password || "",
+    }), [accountData]);
+
     const { formData, touched, fieldErrors, handleChange, handleBlur, handleSubmit, isFormValid } = useForm<Account>({
-        initialValues: {
-            firstName: accountData?.firstName || "",
-            lastName: accountData?.lastName || "",
-            email: accountData?.email || "",
-            personNumber: accountData?.personNumber || "",
-            username: accountData?.username || "",
-            password: accountData?.password || "",
-        },
+        initialValues,
         validators: {
             firstName: validator.validateFirstName,
             lastName: validator.validateLastName,
@@ -94,17 +95,12 @@ const CompleteAccount = () => {
             try {
                 startLoading();
 
-                /* Only send fields that are not read-only */
-                const fieldsToUpdate = (Object.keys(data) as (keyof Account)[]).reduce((acc, key) => {
-                    if (!readOnlyFields.includes(key)) acc[key] = data[key];
-                    return acc;
-                }, {} as Partial<Account>);
-
-                await completeAccountService.completeAccount(fieldsToUpdate);
+                // Send all fields, including read-only ones
+                await completeAccountService.completeAccount(data);
                 setSuccess(true);
 
                 setTimeout(() => {
-                    void navigate(role ? getRoute(role) : ROUTES.LOGIN);
+                    void navigate(ROUTES.LOGIN);
                 }, 2000);
             } catch (error) {
                 showApiError(error, "register");
