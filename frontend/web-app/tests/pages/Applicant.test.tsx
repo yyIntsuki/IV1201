@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Applicant from "@/pages/Applicant";
-import type { Competence, Availability } from "@/types/application";
+import type { CompetenceEntry, AvailabilityEntry } from "@/types/application";
 
 vi.mock("react-i18next", () => ({ useTranslation: () => ({ t: (key: string) => key }) }));
 
@@ -29,8 +29,8 @@ vi.mock("@/components/applicant/CompetenceInput", () => ({
         onChange,
         onValidityChange,
     }: {
-        value: Competence[];
-        onChange: (val: Competence[]) => void;
+        value: CompetenceEntry[];
+        onChange: (val: CompetenceEntry[]) => void;
         onValidityChange?: (valid: boolean) => void;
     }) {
         React.useEffect(() => {
@@ -46,8 +46,8 @@ vi.mock("@/components/applicant/AvailabilityInput", () => ({
         onChange,
         onValidityChange,
     }: {
-        value: Availability[];
-        onChange: (val: Availability[]) => void;
+        value: AvailabilityEntry[];
+        onChange: (val: AvailabilityEntry[]) => void;
         onValidityChange?: (valid: boolean) => void;
     }) {
         React.useEffect(() => {
