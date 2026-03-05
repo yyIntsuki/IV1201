@@ -24,7 +24,6 @@ const completeAccountService = {
 
         const accountData = await fetchUserDataApi(loginResponse.user_id);
         console.log("Fetched account data:", accountData);
-        // Return accountData directly if it contains the needed fields
         return accountData as Partial<Account>;
     },
 

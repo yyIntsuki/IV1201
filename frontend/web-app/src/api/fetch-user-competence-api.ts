@@ -7,8 +7,9 @@ interface UserCompetenceResponse {
 
 /**
  * Fetches the competence profile for a specific user by userId.
- * @param userId The ID of the user whose competence profile to fetch.
- * @returns Promise resolving to an array of competence profile entries.
+ *
+ * @param userId The ID of the user whose competence profile to fetch
+ * @returns Promise resolving to an array of competence profile entries
  */
 const fetchUserCompetenceApi = async (userId: number): Promise<UserCompetenceResponse[]> => {
     return apiRequest<UserCompetenceResponse[]>(`/api/v1/competence/${userId}`, { method: "GET" });

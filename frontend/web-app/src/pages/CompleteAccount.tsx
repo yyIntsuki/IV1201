@@ -45,17 +45,15 @@ const CompleteAccount = () => {
             try {
                 startLoading();
                 const data = await completeAccountService.verifyToken(token);
-                console.log("Account data received for completion:", data);
 
                 /* Determine which fields are read-only (have values) */
                 const readOnly = (Object.keys(data) as (keyof Account)[]).filter(
-                    (key) => data[key] !== null && data[key] !== undefined && data[key] !== ""
+                    (key) => data[key] !== null && data[key] !== undefined && data[key] !== "",
                 );
 
                 setAccountData(data);
                 setReadOnlyFields(readOnly);
                 setTokenVerified(true);
-                console.log("accountData:", accountData);
             } catch (error) {
                 showApiError(error, "completion");
                 setTimeout(() => navigate(ROUTES.LOGIN), 3000);
@@ -72,14 +70,17 @@ const CompleteAccount = () => {
     }, [token, navigate, startLoading, stopLoading, showApiError, showError, t]);
 
     const validator = formValidator(t);
-    const initialValues = useMemo(() => ({
-        firstName: accountData?.firstName || "",
-        lastName: accountData?.lastName || "",
-        email: accountData?.email || "",
-        personNumber: accountData?.personNumber || "",
-        username: accountData?.username || "",
-        password: accountData?.password || "",
-    }), [accountData]);
+    const initialValues = useMemo(
+        () => ({
+            firstName: accountData?.firstName || "",
+            lastName: accountData?.lastName || "",
+            email: accountData?.email || "",
+            personNumber: accountData?.personNumber || "",
+            username: accountData?.username || "",
+            password: accountData?.password || "",
+        }),
+        [accountData],
+    );
 
     const { formData, touched, fieldErrors, handleChange, handleBlur, handleSubmit, isFormValid } = useForm<Account>({
         initialValues,
@@ -94,8 +95,6 @@ const CompleteAccount = () => {
         onSubmit: async (data) => {
             try {
                 startLoading();
-
-                // Send all fields, including read-only ones
                 await completeAccountService.completeAccount(data);
                 setSuccess(true);
 
