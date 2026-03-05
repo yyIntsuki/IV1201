@@ -12,15 +12,19 @@ import type { Account } from "@/types/account";
  * @returns {Promise<boolean>} A promise that resolves with true on success
  */
 const userUpdateApi = async (accountData: Partial<Account>, sessionToken: string, userId: number): Promise<boolean> => {
+    const payload: Record<string, unknown> = {
+        name: accountData.firstName,
+        surname: accountData.lastName,
+        pnr: accountData.personNumber,
+        email: accountData.email,
+        username: accountData.username,
+    };
+    if (accountData.password && accountData.password.trim()) {
+        payload.password = accountData.password;
+    }
     await apiRequest(`/api/v1/users/${userId}`, {
         method: "PUT",
-        data: {
-            name: accountData.firstName,
-            surname: accountData.lastName,
-            pnr: accountData.personNumber,
-            email: accountData.email,
-            username: accountData.username,
-        },
+        data: payload,
         headers: { Authorization: `Bearer ${sessionToken}` },
     });
     return true;

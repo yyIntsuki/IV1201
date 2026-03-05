@@ -243,6 +243,7 @@ class UserService:
         Raises:
             ValueError: If validation fails
         """
+        logging.info(f"user_data.password: {user_data.password}")
         # Validate fields if provided
         existing_user = await self.repository.get_by_id(user_id)
         if not existing_user:
@@ -298,7 +299,7 @@ class UserService:
             update_data["username"] = user_data.username
         if user_data.password:
             update_data["password"] = self._hash_password(user_data.password)
-
+        logging.info(f"update_data.password: {update_data.get('password')}")
         # Update
         response = await self.repository.update(user_id, **update_data)
 

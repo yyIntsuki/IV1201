@@ -59,7 +59,10 @@ const CompleteAccount = () => {
 
                 /* Determine which fields are read-only (have existing values) */
                 const readOnly = (Object.keys(data) as (keyof Account)[]).filter((key) => !!data[key]);
-                if (!canEditPassword && !readOnly.includes("password")) {
+                if (canEditPassword) {
+                    const passwordIndex = readOnly.indexOf("password");
+                    if (passwordIndex >= 0) readOnly.splice(passwordIndex, 1);
+                } else if (!readOnly.includes("password")) {
                     readOnly.push("password");
                 }
 
@@ -89,7 +92,7 @@ const CompleteAccount = () => {
             email: accountData?.email || "",
             personNumber: accountData?.personNumber || "",
             username: accountData?.username || "",
-            password: canEditPassword ? accountData?.password || "" : "",
+            password: "",
         }),
         [accountData, canEditPassword],
     );
