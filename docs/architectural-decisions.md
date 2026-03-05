@@ -122,6 +122,15 @@ Two route guard components enforce access control:
 
 This approach means that access control is declared at the route level and is always enforced, regardless of how a user reaches a URL.
 
+#### Special routes
+
+**CompleteAccount (`/complete-account`)** is a special route that exists outside both PublicRoute and ProtectedRoute guards. This is necessary because users can arrive in two states:
+
+1. **Unauthenticated with magic link token** — token in URL query parameter
+2. **Authenticated but with incomplete profile** — redirected by ProtectedRoute
+
+The page handles both cases by checking for a URL token first, then falling back to the authenticated user's token if present.
+
 ### Authentication
 
 Authentication state is managed by `AuthProvider` in `src/auth/`. On login, the backend returns a JWT which is stored in `localStorage` under the key defined in `src/constants/storage-keys.ts`. The token is decoded client-side using `src/utils/jwt-decoder.ts` to derive `isLoggedIn` and `role` — these are never stored separately, they are always derived from the token on each render.
@@ -131,6 +140,17 @@ A `setTimeout` is registered when a valid token is present, triggering automatic
 All API requests that require authentication have the token injected automatically by `src/api/client.ts` via the `Authorization: Bearer <token>` header, meaning individual API modules do not need to handle authentication themselves.
 
 JWTs are validated server-side. A user cannot escalate privileges by modifying client-side data — for example, an applicant cannot grant themselves recruiter access by tampering with the token or local storage.
+
+#### Password reset & Magic links
+
+In addition to password-based authentication, the application supports passwordless access via magic links. Users can request a password reset link, which sends a one-time token to their registered email address. This token can be exchanged for a temporary session token that allows account completion.
+
+The magic link flow is implemented via:
+
+- `/api/v1/forget-password` — sends email with token
+- `/api/v1/magic-login/verify` — validates token and issues JWT
+
+Magic link tokens are single-use and time-limited (backend-enforced). They follow the same JWT structure as regular authentication tokens but are stored in `sessionStorage` rather than `localStorage` until account completion.
 
 ### API client
 

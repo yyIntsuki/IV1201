@@ -152,6 +152,7 @@ All endpoints are prefixed with `/api/v1`. Endpoints marked 🔒 require a valid
 | Method | Path | Description |
 | --- | --- | --- |
 | `POST` | `/api/v1/login` | Authenticate a user, returns a JWT |
+| `POST` | `/api/v1/magic-login/verify` | Verify magic link token |
 
 ### Users
 
@@ -162,6 +163,7 @@ All endpoints are prefixed with `/api/v1`. Endpoints marked 🔒 require a valid
 | `GET` | `/api/v1/users/{id}` 🔒 | Get a user by ID |
 | `PUT` | `/api/v1/users/{id}` 🔒 | Update a user |
 | `DELETE` | `/api/v1/users/{id}` 🔒 | Delete a user |
+| `POST` | `/api/v1/forget-password` | Request password reset link |
 
 ### Applications
 
@@ -188,6 +190,8 @@ The application supports two user roles:
 **Applicant** — registers an account, then submits a job application consisting of a competence profile (areas of expertise with years of experience) and one or more availability periods.
 
 **Recruiter** — views all submitted applications in a paginated table, opens individual applications to review details, and sets the status of each to `accepted`, `rejected`, or `unhandled`. Status updates use an optimistic concurrency check — if another recruiter has changed the status since the page was loaded, the update is rejected with a 409 to prevent conflicting overwrites.
+
+Users who forget their password can request a magic link via email. The magic link grants temporary access and redirects them to complete any missing account information before gaining full access to the application.
 
 ---
 

@@ -14,6 +14,7 @@ This is the React frontend for the IV1201 recruitment application. It communicat
   - [Environment Variables](#environment-variables)
   - [Routing \& Access Control](#routing--access-control)
   - [Authentication](#authentication)
+    - [Account Completion Flow](#account-completion-flow)
   - [Error \& Loading Handling](#error--loading-handling)
   - [Localization](#localization)
   - [Styling](#styling)
@@ -140,6 +141,8 @@ Two route guard components control access:
 - **`PublicRoute`** — redirects authenticated users away from pages like Login and Register, sending them to their role-specific page instead.
 - **`ProtectedRoute`** — redirects unauthenticated users to Login. Also enforces role-based access, preventing e.g. an applicant from visiting the recruiter page.
 
+**CompleteAccount Route** — accessible to both authenticated and unauthenticated users. Users arriving via magic link are in a temporary session state. Logged-in users with incomplete profiles are redirected here automatically by ProtectedRoute.
+
 To add a new route, see [Add a new page](#add-a-new-page).
 
 ---
@@ -151,6 +154,23 @@ Authentication state is managed by `AuthProvider` (`src/auth/`). On login, the b
 A `setTimeout` is set to automatically log the user out when the JWT expires, using the token's `exp` claim.
 
 All API requests that require authentication have the token injected automatically by `src/api/client.ts` via the `Authorization: Bearer <token>` header.
+
+---
+
+### Account Completion Flow
+
+Users with incomplete profiles (missing firstName, lastName, email, personNumber, or username) are automatically redirected to `/complete-account` when attempting to access protected pages.
+
+**Entry Points:**
+
+- Magic link from password reset email
+- Automatic redirect from ProtectedRoute for incomplete profiles
+
+**Session Management:**
+During account completion, a temporary session token is stored in `sessionStorage` under `COMPLETION_TOKEN`. Upon successful completion, this token is elevated to `localStorage` as the main authentication token.
+
+**Required Fields:**
+All of: firstName, lastName, email, personNumber, username
 
 ---
 
