@@ -199,9 +199,15 @@ async def magic_login_request(payload: ForgetPasswordRequest):
     user = await user_service.repository.get_by_email(email)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="This email address does not belong to any user")
-
-    await user_service.send_email_with_link(email)
-    return {"message": "Check your email for the login link"}
+    try:
+        await user_service.send_email_with_link(email)
+        return {"message": "Check your email for the login link"}
+    except Exception:
+        logging.exception("Failed to send magic login link to %s", email)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error",
+        )
 
 @router.post(
     "/magic-login/verify",
@@ -225,4 +231,5 @@ async def magic_login_verify(payload: VerifyTokenRequest):
         response = {"access_token": access_token, "token_type": "bearer", "user_id": user_id}
         return VerifyTokenResponse(**response)
     except Exception:
+        logging.exception("Failed to verify magic login token")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")

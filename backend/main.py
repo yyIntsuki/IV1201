@@ -53,7 +53,7 @@ async def log_unhandled_exceptions(request, call_next):
 
 # Configure CORS for frontend communication
 cors_origins = os.getenv(
-    "CORS_ORIGINS",
+    "FRONTEND_URL",
     "http://localhost:5173",
 )
 logging.info(f"Configuring CORS with allowed origins: {cors_origins}")

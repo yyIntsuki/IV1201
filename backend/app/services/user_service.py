@@ -8,12 +8,14 @@ import hashlib
 import re
 import logging
 import jose
+import os
 
 from app.database.repositories.user_repository import UserRepository
 from app.api.schemas.user_schemas import UserCreate, UserResponse, UserUpdate, Users
 from app.utils.mail import send_magic_link_email
 from app.security.jwt import JWT_SECRET_KEY, ALGORITHM, decode_access_token
 
+FRONTEND_URL = os.getenv("FRONTEND_URL")  # This should come from environment variables in production
 
 class UserService:
     """
@@ -134,11 +136,11 @@ class UserService:
         Raises:
             ValueError: If validation fails or user already exists
         """
-        # Business logic: Validate email format
+        # Validate email format
         if not self._validate_email(user_data.email):
             raise ValueError("Invalid email format")
 
-        # Business logic: Validate names
+        # Validate names
         if not self._validate_name(user_data.name):
             raise ValueError("Invalid name format")
 
@@ -154,7 +156,7 @@ class UserService:
         if not self._validate_password(user_data.password):
             raise ValueError("Password must be at least 8 characters")
 
-        # Business logic: Check if user already exists
+        # Check if user already exists
         existing_user = await self.repository.get_by_email(user_data.email)
         if existing_user:
             raise ValueError("User with this email already exists")
@@ -167,10 +169,10 @@ class UserService:
         if existing_pnr:
             raise ValueError("User with this personal number already exists")
 
-        # Business logic: Hash password
+        # Hash password
         password_hash = self._hash_password(user_data.password)
 
-        # Call database layer to create user
+        # Create user
         user = await self.repository.create(
             name=user_data.name,
             surname=user_data.surname,
@@ -196,7 +198,6 @@ class UserService:
         user = await self.repository.get_by_id(user_id)
         if user:
             user_data = dict(user)
-            # Map backend fields to frontend Account shape
             return {
                 "firstName": user_data.get("name") or "",
                 "lastName": user_data.get("surname") or "",
@@ -242,7 +243,7 @@ class UserService:
         Raises:
             ValueError: If validation fails
         """
-        # Business logic: Validate fields if provided
+        # Validate fields if provided
         existing_user = await self.repository.get_by_id(user_id)
         if not existing_user:
             raise ValueError("User not found")
@@ -265,7 +266,7 @@ class UserService:
         if user_data.password and not self._validate_password(user_data.password):
             raise ValueError("Password must be at least 8 characters")
 
-        # Business logic: Check for email conflicts
+        # Check for email conflicts
         if user_data.email:
             existing_user = await self.repository.get_by_email(user_data.email)
             if existing_user and int(existing_user["id"]) != int(user_id):
@@ -298,7 +299,7 @@ class UserService:
         if user_data.password:
             update_data["password"] = self._hash_password(user_data.password)
 
-        # Call database layer to update
+        # Update
         response = await self.repository.update(user_id, **update_data)
 
         return response
@@ -313,8 +314,6 @@ class UserService:
         Returns:
             True if deleted, False if not found
         """
-        # Additional business logic could be added here
-        # For example: check if user has related records, soft delete, etc.
         return await self.repository.delete(user_id)
 
     async def authenticate_user(self, username: str, password: str) -> Dict[str, int]:
@@ -362,15 +361,14 @@ class UserService:
         user_id = user["id"]
         role_id = user["role_id"]
 
-        # Create JWT token with user ID and role
         token_data = {
             "user_id": user_id,
             "role_id": role_id,
-            "exp": datetime.now(timezone.utc) + timedelta(minutes=60),  # Token expires in 15 minutes
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=15),
         }
         token = jose.jwt.encode(token_data, JWT_SECRET_KEY, algorithm=ALGORITHM)
-
-        magic_link = f"http://localhost:5173/complete-account?token={token}"
+        
+        magic_link = f"{FRONTEND_URL}/complete-account?token={token}"
         send_magic_link_email(to_email=email, magic_link=magic_link)
         return True
     
