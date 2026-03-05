@@ -73,7 +73,7 @@ class UserService:
         Returns:
             True if valid, False otherwise
         """
-        return bool(re.match(r"^[a-zA-Z0-9_\-]+$", username)) and len(username.strip()) > 4
+        return bool(re.match(r"^[a-zA-Z0-9_\-]+$", username)) and len(username.strip()) >= 4
 
     def _validate_pnr(self, pnr: str) -> bool:
         """
