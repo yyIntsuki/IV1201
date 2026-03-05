@@ -58,11 +58,14 @@ createdb iv1201_db
 cd backend
 
 python -m venv .venv
-source .venv/bin/activate       # Windows: .venv\Scripts\activate
+source .venv/bin/activate       
+# Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
 cp .env.example .env
 # Edit .env — set DATABASE_URL and JWT_SECRET_KEY at minimum
+
+uvicorn main:app --reload
 ```
 
 Key environment variables (see `backend/.env.example` for the full list):
@@ -90,6 +93,10 @@ cp .env.example .env
 # Edit .env — set VITE_API_BASE_URL to the backend URL
 
 npm run dev
+# Run frontend server
+
+npm run test
+# Run tests
 ```
 
 Frontend runs at **http://localhost:5173**.
