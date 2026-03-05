@@ -3,7 +3,6 @@ Magic link email utility for sending login links.
 """
 import os
 import smtplib
-import logging
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
 
