@@ -61,6 +61,9 @@ const completeAccountService = {
         const success = await userUpdateApi(accountData, sessionToken, parsedUserId);
         if (!success) throw new Error("Failed to update account. Please try again.");
 
+        /* Elevate the token once account is completed */
+        localStorage.setItem(STORAGE_KEYS.TOKEN, sessionToken);
+
         sessionStorage.removeItem(STORAGE_KEYS.COMPLETION_TOKEN);
         sessionStorage.removeItem(STORAGE_KEYS.COMPLETION_UID);
     },
