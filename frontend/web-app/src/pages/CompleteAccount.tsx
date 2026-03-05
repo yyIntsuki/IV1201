@@ -8,10 +8,7 @@ import useForm from "@/hooks/use-form";
 import ROUTES from "@/constants/routes";
 import type { Account } from "@/types/account";
 import completeAccountService from "@/services/complete-account-service";
-import fetchUserDataApi from "@/api/fetch-user-data-api";
 import formValidator from "@/utils/form-validator";
-import { getUserIdFromJwt } from "@/utils/jwt-decoder";
-import STORAGE_KEYS from "@/constants/storage-keys";
 import RegisterForm from "@/components/register/RegisterForm";
 
 import Typography from "@mui/material/Typography";
@@ -51,14 +48,7 @@ const CompleteAccount = () => {
                     data = await completeAccountService.verifyToken(magicToken);
                 } else if (isLoggedIn && authToken) {
                     /* Logged-in user redirected here (e.g., from ProtectedRoute) */
-                    const userId = getUserIdFromJwt(authToken);
-                    if (!userId) throw new Error("Invalid session. Please log in again.");
-
-                    /* Set completion storage manually so the service works as expected */
-                    sessionStorage.setItem(STORAGE_KEYS.COMPLETION_TOKEN, authToken);
-                    sessionStorage.setItem(STORAGE_KEYS.COMPLETION_UID, userId.toString());
-
-                    data = await fetchUserDataApi(userId);
+                    data = await completeAccountService.getAccountDataForLoggedInUser(authToken);
                 } else {
                     /* Neither flow: Missing token and not logged in */
                     showError(t("completion.errors.noToken"));
