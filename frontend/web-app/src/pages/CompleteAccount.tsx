@@ -35,6 +35,7 @@ const CompleteAccount = () => {
     const { showApiError, showError } = useError();
 
     const magicToken = searchParams.get("token");
+    const canEditPassword = Boolean(magicToken);
     const redirectTo = searchParams.get("redirect");
 
     useEffect(() => {
@@ -58,6 +59,9 @@ const CompleteAccount = () => {
 
                 /* Determine which fields are read-only (have existing values) */
                 const readOnly = (Object.keys(data) as (keyof Account)[]).filter((key) => !!data[key]);
+                if (!canEditPassword && !readOnly.includes("password")) {
+                    readOnly.push("password");
+                }
 
                 setAccountData(data);
                 setReadOnlyFields(readOnly);
@@ -85,9 +89,9 @@ const CompleteAccount = () => {
             email: accountData?.email || "",
             personNumber: accountData?.personNumber || "",
             username: accountData?.username || "",
-            password: accountData?.password || "",
+            password: canEditPassword ? accountData?.password || "" : "",
         }),
-        [accountData],
+        [accountData, canEditPassword],
     );
 
     const { formData, touched, fieldErrors, handleChange, handleBlur, handleSubmit, isFormValid } = useForm<Account>({
@@ -98,13 +102,14 @@ const CompleteAccount = () => {
             email: validator.validateEmail,
             personNumber: validator.validatePersonNumber,
             username: validator.validateUsername,
-            password: validator.validatePassword,
+            password: canEditPassword ? validator.validatePassword : () => null,
         },
         onSubmit: async (data) => {
             try {
                 startLoading();
 
-                await completeAccountService.completeAccount(data);
+                const submitData = canEditPassword ? data : { ...data, password: "" };
+                await completeAccountService.completeAccount(submitData);
                 setSuccess(true);
 
                 setTimeout(() => {
