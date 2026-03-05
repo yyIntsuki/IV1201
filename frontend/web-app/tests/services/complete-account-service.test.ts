@@ -5,14 +5,17 @@ import type { Account } from "@/types/account";
 const verifyTokenApiMock = vi.hoisted(() => vi.fn());
 vi.mock("@/api/verify-token-api", () => ({ default: verifyTokenApiMock }));
 
-const completeAccountApiMock = vi.hoisted(() => vi.fn());
-vi.mock("@/api/complete-account-api", () => ({ default: completeAccountApiMock }));
+const fetchUserDataApiMock = vi.hoisted(() => vi.fn());
+vi.mock("@/api/fetch-user-data-api", () => ({ default: fetchUserDataApiMock }));
+
+const userUpdateApiMock = vi.hoisted(() => vi.fn());
+vi.mock("@/api/update-user-api", () => ({ default: userUpdateApiMock }));
 
 /**
  * Tests for completeAccountService module.
  *
- * These tests ensure the service correctly handles token verification, account completion, and session management with
- * sessionStorage and localStorage.
+ * These tests ensure the service correctly handles token verification, account completion,
+ * and session management with sessionStorage and localStorage.
  */
 describe("completeAccountService", () => {
     beforeEach(() => {
@@ -29,30 +32,32 @@ describe("completeAccountService", () => {
      * Tests for verifyToken method.
      */
     describe("verifyToken", () => {
-        it("calls verifyTokenApi and stores session data in sessionStorage", async () => {
-            const mockResponse = {
-                session_token: "session-jwt-token",
-                user_id: 123,
-                account_data: { email: "user@example.com", personNumber: "19900101-1234", username: "", password: "" },
+        it("calls verifyTokenApi, fetchUserDataApi and stores session data in sessionStorage", async () => {
+            const mockLoginResponse = { access_token: "session-jwt-token", user_id: 123 };
+
+            const mockUserData = {
+                user_data: { email: "user@example.com", personNumber: "19900101-1234", username: "", password: "" },
             };
 
-            verifyTokenApiMock.mockResolvedValueOnce(mockResponse);
+            verifyTokenApiMock.mockResolvedValueOnce(mockLoginResponse);
+            fetchUserDataApiMock.mockResolvedValueOnce(mockUserData);
 
             const result = await completeAccountService.verifyToken("magic-link-token");
 
             expect(verifyTokenApiMock).toHaveBeenCalledWith("magic-link-token");
+            expect(fetchUserDataApiMock).toHaveBeenCalledWith(123);
 
             expect(sessionStorage.getItem(STORAGE_KEYS.COMPLETION_TOKEN)).toBe("session-jwt-token");
             expect(sessionStorage.getItem(STORAGE_KEYS.COMPLETION_UID)).toBe("123");
 
-            expect(result).toEqual(mockResponse.account_data);
+            expect(result).toEqual(mockUserData);
         });
 
         it("returns account data with all fields", async () => {
-            const mockResponse = {
-                session_token: "session-token",
-                user_id: 456,
-                account_data: {
+            const mockLoginResponse = { access_token: "session-token", user_id: 456 };
+
+            const mockUserData = {
+                user_data: {
                     firstName: "John",
                     lastName: "Doe",
                     email: "",
@@ -62,13 +67,13 @@ describe("completeAccountService", () => {
                 },
             };
 
-            verifyTokenApiMock.mockResolvedValueOnce(mockResponse);
+            verifyTokenApiMock.mockResolvedValueOnce(mockLoginResponse);
+            fetchUserDataApiMock.mockResolvedValueOnce(mockUserData);
 
             const result = await completeAccountService.verifyToken("token");
 
-            expect(result).toEqual(mockResponse.account_data);
-            expect(result).toHaveProperty("firstName");
-            expect(result).toHaveProperty("lastName");
+            expect(result).toEqual(mockUserData);
+            expect(result).toHaveProperty("user_data");
         });
     });
 
@@ -76,8 +81,9 @@ describe("completeAccountService", () => {
      * Tests for completeAccount method.
      */
     describe("completeAccount", () => {
-        it("calls completeAccountApi with account data and session token", async () => {
+        it("calls userUpdateApi with account data, session token, and user ID", async () => {
             const sessionToken = "session-jwt-token";
+            const userId = "123";
             const accountData: Partial<Account> = {
                 firstName: "Jane",
                 lastName: "Smith",
@@ -85,18 +91,14 @@ describe("completeAccountService", () => {
                 password: "securepass123",
             };
 
-            const mockResponse = { access_token: "full-auth-token", token_type: "bearer" };
-
             sessionStorage.setItem(STORAGE_KEYS.COMPLETION_TOKEN, sessionToken);
-            sessionStorage.setItem(STORAGE_KEYS.COMPLETION_UID, "123");
+            sessionStorage.setItem(STORAGE_KEYS.COMPLETION_UID, userId);
 
-            completeAccountApiMock.mockResolvedValueOnce(mockResponse);
+            userUpdateApiMock.mockResolvedValueOnce(true);
 
             await completeAccountService.completeAccount(accountData);
 
-            expect(completeAccountApiMock).toHaveBeenCalledWith(accountData, sessionToken);
-
-            expect(localStorage.getItem(STORAGE_KEYS.TOKEN)).toBe("full-auth-token");
+            expect(userUpdateApiMock).toHaveBeenCalledWith(accountData, sessionToken, 123);
 
             expect(sessionStorage.getItem(STORAGE_KEYS.COMPLETION_TOKEN)).toBeNull();
             expect(sessionStorage.getItem(STORAGE_KEYS.COMPLETION_UID)).toBeNull();
@@ -105,25 +107,67 @@ describe("completeAccountService", () => {
         it("throws error when no session token is found", async () => {
             const accountData: Partial<Account> = { username: "testuser", password: "password" };
 
+            sessionStorage.setItem(STORAGE_KEYS.COMPLETION_UID, "123");
+
             await expect(completeAccountService.completeAccount(accountData)).rejects.toThrow(
-                "No session token found. Please restart the account completion process.",
+                "No session token or user ID found. Please restart the account completion process.",
             );
 
-            expect(completeAccountApiMock).not.toHaveBeenCalled();
+            expect(userUpdateApiMock).not.toHaveBeenCalled();
         });
 
-        it("cleans up session storage even if API call fails", async () => {
+        it("throws error when no user ID is found", async () => {
+            const accountData: Partial<Account> = { username: "testuser", password: "password" };
+
+            sessionStorage.setItem(STORAGE_KEYS.COMPLETION_TOKEN, "session-token");
+
+            await expect(completeAccountService.completeAccount(accountData)).rejects.toThrow(
+                "No session token or user ID found. Please restart the account completion process.",
+            );
+
+            expect(userUpdateApiMock).not.toHaveBeenCalled();
+        });
+
+        it("throws error when user ID is invalid", async () => {
+            const accountData: Partial<Account> = { username: "testuser", password: "password" };
+
+            sessionStorage.setItem(STORAGE_KEYS.COMPLETION_TOKEN, "session-token");
+            sessionStorage.setItem(STORAGE_KEYS.COMPLETION_UID, "invalid");
+
+            await expect(completeAccountService.completeAccount(accountData)).rejects.toThrow(
+                "Invalid user ID. Please restart the account completion process.",
+            );
+
+            expect(userUpdateApiMock).not.toHaveBeenCalled();
+        });
+
+        it("throws error when API returns false", async () => {
+            const accountData: Partial<Account> = { username: "testuser" };
+
+            sessionStorage.setItem(STORAGE_KEYS.COMPLETION_TOKEN, "session-token");
+            sessionStorage.setItem(STORAGE_KEYS.COMPLETION_UID, "123");
+
+            userUpdateApiMock.mockResolvedValueOnce(false);
+
+            await expect(completeAccountService.completeAccount(accountData)).rejects.toThrow(
+                "Failed to update account. Please try again.",
+            );
+        });
+
+        it("does NOT clean up session storage when API call fails", async () => {
             const sessionToken = "session-token";
+            const userId = "999";
             const accountData: Partial<Account> = { username: "test" };
 
             sessionStorage.setItem(STORAGE_KEYS.COMPLETION_TOKEN, sessionToken);
-            sessionStorage.setItem(STORAGE_KEYS.COMPLETION_UID, "999");
+            sessionStorage.setItem(STORAGE_KEYS.COMPLETION_UID, userId);
 
-            completeAccountApiMock.mockRejectedValueOnce(new Error("API Error"));
+            userUpdateApiMock.mockRejectedValueOnce(new Error("API Error"));
 
             await expect(completeAccountService.completeAccount(accountData)).rejects.toThrow("API Error");
 
             expect(sessionStorage.getItem(STORAGE_KEYS.COMPLETION_TOKEN)).toBe(sessionToken);
+            expect(sessionStorage.getItem(STORAGE_KEYS.COMPLETION_UID)).toBe(userId);
         });
     });
 
@@ -151,7 +195,6 @@ describe("completeAccountService", () => {
 
             completeAccountService.clearSession();
 
-            // localStorage should remain unchanged
             expect(localStorage.getItem(STORAGE_KEYS.TOKEN)).toBe("some-token");
         });
     });
@@ -161,27 +204,33 @@ describe("completeAccountService", () => {
      */
     describe("full completion flow", () => {
         it("completes the entire account setup flow", async () => {
-            const verifyResponse = {
-                session_token: "temp-session-token",
-                user_id: 789,
-                account_data: { email: "test@example.com", personNumber: "19850505-5555", username: "", password: "" },
+            const verifyResponse = { access_token: "temp-session-token", user_id: 789 };
+
+            const userData = {
+                user_data: { email: "test@example.com", personNumber: "19850505-5555", username: "", password: "" },
             };
 
             verifyTokenApiMock.mockResolvedValueOnce(verifyResponse);
+            fetchUserDataApiMock.mockResolvedValueOnce(userData);
 
             const accountData = await completeAccountService.verifyToken("magic-token");
 
-            expect(accountData.email).toBe("test@example.com");
+            expect(accountData).toEqual(userData);
             expect(sessionStorage.getItem(STORAGE_KEYS.COMPLETION_TOKEN)).toBe("temp-session-token");
+            expect(sessionStorage.getItem(STORAGE_KEYS.COMPLETION_UID)).toBe("789");
 
-            const completeResponse = { access_token: "final-auth-token", token_type: "bearer" };
-
-            completeAccountApiMock.mockResolvedValueOnce(completeResponse);
+            userUpdateApiMock.mockResolvedValueOnce(true);
 
             await completeAccountService.completeAccount({ username: "newuser", password: "newpass" });
 
-            expect(localStorage.getItem(STORAGE_KEYS.TOKEN)).toBe("final-auth-token");
+            expect(userUpdateApiMock).toHaveBeenCalledWith(
+                { username: "newuser", password: "newpass" },
+                "temp-session-token",
+                789,
+            );
+
             expect(sessionStorage.getItem(STORAGE_KEYS.COMPLETION_TOKEN)).toBeNull();
+            expect(sessionStorage.getItem(STORAGE_KEYS.COMPLETION_UID)).toBeNull();
         });
     });
 });

@@ -21,8 +21,7 @@ vi.mock("react-router", async () => {
     return { ...actual, useNavigate: () => navigateMock };
 });
 
-const roleMock = "applicant";
-vi.mock("@/hooks/use-auth", () => ({ default: () => ({ role: roleMock }) }));
+vi.mock("@/hooks/use-auth", () => ({ default: () => ({ role: "applicant" }) }));
 
 const verifyTokenMock = vi.hoisted(() => vi.fn());
 const completeAccountMock = vi.hoisted(() => vi.fn());
@@ -57,7 +56,7 @@ const renderWithRouter = (token?: string) => {
  * Unit tests for the CompleteAccount page component.
  *
  * These tests ensure that the CompleteAccount page correctly verifies tokens, handles account data,
- * identifies read-only fields, submits only editable fields, and handles errors appropriately.
+ * identifies read-only fields, submits data, and handles errors appropriately.
  */
 describe("CompleteAccount page", () => {
     beforeEach(() => {
@@ -136,9 +135,9 @@ describe("CompleteAccount page", () => {
     });
 
     /**
-     * Form submission - the most critical test.
+     * Form submission - sends ALL fields (backend handles filtering).
      */
-    it("submits only non-read-only fields on form submission", async () => {
+    it("submits all fields on form submission (including read-only fields)", async () => {
         verifyTokenMock.mockResolvedValue({
             firstName: "",
             lastName: "",
@@ -150,7 +149,14 @@ describe("CompleteAccount page", () => {
 
         renderWithRouter("valid-token");
 
-        await waitFor(() => screen.getByText("completion.title"));
+        await waitFor(() => {
+            expect(screen.getByText("completion.title")).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            const emailInput = screen.getByLabelText("completion.fields.email.label");
+            expect((emailInput as HTMLInputElement).value).toBe("user@example.com");
+        });
 
         const submitButton = screen.getByRole("button", { name: "completion.submit" });
         fireEvent.click(submitButton);
@@ -159,14 +165,22 @@ describe("CompleteAccount page", () => {
             expect(completeAccountMock).toHaveBeenCalled();
         });
 
-        const submittedData = completeAccountMock.mock.calls[0][0] as Account;
-        expect(submittedData).not.toHaveProperty("email");
-        expect(submittedData).not.toHaveProperty("personNumber");
+        const submittedData: Partial<Account> = completeAccountMock.mock.calls[0][0] as Account;
 
+        expect(submittedData).toHaveProperty("email");
+        expect(submittedData).toHaveProperty("personNumber");
         expect(submittedData).toHaveProperty("firstName");
         expect(submittedData).toHaveProperty("lastName");
         expect(submittedData).toHaveProperty("username");
         expect(submittedData).toHaveProperty("password");
+
+        expect(submittedData.email).toBe("user@example.com");
+        expect(submittedData.personNumber).toBe("19900101-1234");
+
+        expect(submittedData.firstName).toBe("");
+        expect(submittedData.lastName).toBe("");
+        expect(submittedData.username).toBe("");
+        expect(submittedData.password).toBe("");
     });
 
     it("shows success message after successful completion", async () => {
