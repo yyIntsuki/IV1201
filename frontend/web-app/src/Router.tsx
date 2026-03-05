@@ -23,11 +23,12 @@ function Router() {
         <BrowserRouter>
             <Routes>
                 <Route element={<MainLayout />}>
+                    <Route path={ROUTES.COMPLETE_ACCOUNT} element={<CompleteAccount />} />
+
                     <Route element={<PublicRoute />}>
                         <Route index element={<Home />} />
                         <Route path={ROUTES.LOGIN} element={<Login />} />
                         <Route path={ROUTES.REGISTER} element={<Register />} />
-                        <Route path={ROUTES.COMPLETE_ACCOUNT} element={<CompleteAccount />} />
                     </Route>
 
                     <Route element={<ProtectedRoute allowedRoles={["applicant"]} />}>

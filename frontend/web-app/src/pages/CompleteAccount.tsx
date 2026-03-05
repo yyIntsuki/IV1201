@@ -3,11 +3,15 @@ import { useNavigate, useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import useLoading from "@/hooks/use-loading";
 import useError from "@/hooks/use-error";
+import useAuth from "@/hooks/use-auth";
 import useForm from "@/hooks/use-form";
 import ROUTES from "@/constants/routes";
 import type { Account } from "@/types/account";
 import completeAccountService from "@/services/complete-account-service";
+import fetchUserDataApi from "@/api/fetch-user-data-api";
 import formValidator from "@/utils/form-validator";
+import { getUserIdFromJwt } from "@/utils/jwt-decoder";
+import STORAGE_KEYS from "@/constants/storage-keys";
 import RegisterForm from "@/components/register/RegisterForm";
 
 import Typography from "@mui/material/Typography";
@@ -29,27 +33,41 @@ const CompleteAccount = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { isLoggedIn, token: authToken } = useAuth();
     const { startLoading, stopLoading } = useLoading();
     const { showApiError, showError } = useError();
 
-    const token = searchParams.get("token");
+    const magicToken = searchParams.get("token");
+    const redirectTo = searchParams.get("redirect");
 
     useEffect(() => {
-        if (!token) {
-            showError(t("completion.errors.noToken"));
-            setTimeout(() => navigate(ROUTES.LOGIN), 2000);
-            return;
-        }
-
-        const verifyTokenAndLoadData = async () => {
+        const loadAccountData = async () => {
             try {
                 startLoading();
-                const data = await completeAccountService.verifyToken(token);
+                let data: Partial<Account>;
 
-                /* Determine which fields are read-only (have values) */
-                const readOnly = (Object.keys(data) as (keyof Account)[]).filter(
-                    (key) => data[key] !== null && data[key] !== undefined && data[key] !== "",
-                );
+                if (magicToken) {
+                    /* User arrived via magic link token from email */
+                    data = await completeAccountService.verifyToken(magicToken);
+                } else if (isLoggedIn && authToken) {
+                    /* Logged-in user redirected here (e.g., from ProtectedRoute) */
+                    const userId = getUserIdFromJwt(authToken);
+                    if (!userId) throw new Error("Invalid session. Please log in again.");
+
+                    /* Set completion storage manually so the service works as expected */
+                    sessionStorage.setItem(STORAGE_KEYS.COMPLETION_TOKEN, authToken);
+                    sessionStorage.setItem(STORAGE_KEYS.COMPLETION_UID, userId.toString());
+
+                    data = await fetchUserDataApi(userId);
+                } else {
+                    /* Neither flow: Missing token and not logged in */
+                    showError(t("completion.errors.noToken"));
+                    setTimeout(() => navigate(ROUTES.LOGIN), 2000);
+                    return;
+                }
+
+                /* Determine which fields are read-only (have existing values) */
+                const readOnly = (Object.keys(data) as (keyof Account)[]).filter((key) => !!data[key]);
 
                 setAccountData(data);
                 setReadOnlyFields(readOnly);
@@ -62,12 +80,12 @@ const CompleteAccount = () => {
             }
         };
 
-        void verifyTokenAndLoadData();
+        void loadAccountData();
 
         return () => {
             completeAccountService.clearSession();
         };
-    }, [token, navigate, startLoading, stopLoading, showApiError, showError, t]);
+    }, [magicToken, isLoggedIn, authToken, navigate, startLoading, stopLoading, showApiError, showError, t]);
 
     const validator = formValidator(t);
     const initialValues = useMemo(
@@ -95,11 +113,16 @@ const CompleteAccount = () => {
         onSubmit: async (data) => {
             try {
                 startLoading();
+
                 await completeAccountService.completeAccount(data);
                 setSuccess(true);
 
                 setTimeout(() => {
-                    void navigate(ROUTES.LOGIN);
+                    if (isLoggedIn && redirectTo) {
+                        void navigate(redirectTo);
+                    } else {
+                        void navigate(ROUTES.LOGIN);
+                    }
                 }, 2000);
             } catch (error) {
                 showApiError(error, "register");
