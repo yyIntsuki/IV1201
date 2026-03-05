@@ -13,17 +13,18 @@ const authService = {
      * @returns {string | null} The authentication token if it exists and is not expired, null otherwise
      */
     getToken: (): string | null => {
-        let token = localStorage.getItem(STORAGE_KEYS.TOKEN);
-        if (!token || isJwtExpired(token)) {
-            localStorage.removeItem(STORAGE_KEYS.TOKEN);
-            // Try sessionStorage if localStorage token is invalid
-            token = sessionStorage.getItem(STORAGE_KEYS.COMPLETION_TOKEN);
-            if (!token || isJwtExpired(token)) {
-                sessionStorage.removeItem(STORAGE_KEYS.COMPLETION_TOKEN);
-                return null;
-            }
-        }
-        return token;
+        const getValidToken = (key: string, storage: Storage) => {
+            const token = storage.getItem(key);
+            if (token && !isJwtExpired(token)) return token;
+            storage.removeItem(key); // Cleanup invalid/expired tokens
+            return null;
+        };
+
+        /* Checks local storage first, then session storage */
+        return (
+            getValidToken(STORAGE_KEYS.TOKEN, localStorage) ||
+            getValidToken(STORAGE_KEYS.COMPLETION_TOKEN, sessionStorage)
+        );
     },
 
     /**
@@ -39,6 +40,7 @@ const authService = {
      */
     logout: () => {
         localStorage.removeItem(STORAGE_KEYS.TOKEN);
+        sessionStorage.removeItem(STORAGE_KEYS.COMPLETION_TOKEN);
     },
 
     /**
