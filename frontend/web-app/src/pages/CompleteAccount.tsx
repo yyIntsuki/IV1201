@@ -82,7 +82,18 @@ const CompleteAccount = () => {
         return () => {
             completeAccountService.clearSession();
         };
-    }, [magicToken, isLoggedIn, authToken, navigate, startLoading, stopLoading, showApiError, showError, t]);
+    }, [
+        magicToken,
+        canEditPassword,
+        isLoggedIn,
+        authToken,
+        navigate,
+        startLoading,
+        stopLoading,
+        showApiError,
+        showError,
+        t,
+    ]);
 
     const validator = formValidator(t);
     const initialValues = useMemo(
@@ -94,7 +105,7 @@ const CompleteAccount = () => {
             username: accountData?.username || "",
             password: "",
         }),
-        [accountData, canEditPassword],
+        [accountData],
     );
 
     const { formData, touched, fieldErrors, handleChange, handleBlur, handleSubmit, isFormValid } = useForm<Account>({
