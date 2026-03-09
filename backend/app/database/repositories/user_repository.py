@@ -166,20 +166,4 @@ class UserRepository:
 
         await database.execute(query=query, values=values)
         return True
-    
-    async def delete(self, user_id: int) -> bool:
-        """
-        Delete a user from the database.
-        
-        Args:
-            user_id: The user's ID
-            
-        Returns:
-            True if deleted, False if not found
-        """
-        query = """
-            DELETE FROM person
-            WHERE person_id = :user_id
-        """
-        result = await database.execute(query=query, values={"user_id": user_id})
-        return result > 0
+

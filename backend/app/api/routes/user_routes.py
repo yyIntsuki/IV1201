@@ -128,33 +128,6 @@ async def update_user(user_id: int, user_data: UserUpdate):
         )
 
 
-@router.delete(
-    "/users/{user_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(get_current_user)],
-)
-async def delete_user(user_id: int):
-    """
-    Delete a user.
-
-    Demonstrates delete operation flow through all layers.
-    """
-    try:
-        success = await user_service.delete_user(user_id)
-        if not success:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
-            )
-    except HTTPException:
-        raise
-    except Exception:
-        logging.exception("Failed to delete user %s", user_id)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Internal server error",
-        )
-
-
 @router.post(
     "/login",
     response_model=TokenResponse,

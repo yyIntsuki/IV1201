@@ -73,7 +73,6 @@ The API will be available at `http://localhost:8000`
 - `GET /api/v1/users` - Get all users
 - `GET /api/v1/users/{user_id}` - Get a specific user
 - `PUT /api/v1/users/{user_id}` - Update a user
-- `DELETE /api/v1/users/{user_id}` - Delete a user
 
 ### Example Request
 

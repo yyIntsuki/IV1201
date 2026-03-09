@@ -40,7 +40,7 @@ Both team members use **Visual Studio Code**. No IDE-specific configuration is c
 
 ### Testing on different browsers
 
-After each major update, the application will be tested on three different browsers, namely "Google Chrome","FireFox" and "Microsoft Edge", to assure stability across all browsers.
+After each major update, the application will be tested on three different browsers, namely "Google Chrome", "Firefox", "Brave" and "Microsoft Edge", to assure stability across all browsers.
 
 ### Deployment
 

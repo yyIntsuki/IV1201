@@ -169,7 +169,6 @@ All endpoints are prefixed with `/api/v1`. Endpoints marked 🔒 require a valid
 | `GET` | `/api/v1/users` 🔒 | Get all users |
 | `GET` | `/api/v1/users/{id}` 🔒 | Get a user by ID |
 | `PUT` | `/api/v1/users/{id}` 🔒 | Update a user |
-| `DELETE` | `/api/v1/users/{id}` 🔒 | Delete a user |
 | `POST` | `/api/v1/forget-password` | Request password reset link |
 
 ### Applications

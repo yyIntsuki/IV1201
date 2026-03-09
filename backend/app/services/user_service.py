@@ -199,12 +199,12 @@ class UserService:
         if user:
             user_data = dict(user)
             return {
-                "firstName": user_data.get("name") or "",
-                "lastName": user_data.get("surname") or "",
-                "personNumber": user_data.get("pnr") or "",
-                "email": user_data.get("email") or "",
-                "username": user_data.get("username") or "",
-                "password": "",
+                "firstName": user_data.get("name") or None,
+                "lastName": user_data.get("surname") or None,
+                "personNumber": user_data.get("pnr") or None,
+                "email": user_data.get("email") or None,
+                "username": user_data.get("username") or None,
+                "password": None,
             }
         return None
 
@@ -219,14 +219,13 @@ class UserService:
         response = []
         for user in users:
             user_data = dict(user)
-            response.append(
-                Users(
-                    name=user_data.get("name") or "",
-                    surname=user_data.get("surname") or "",
-                    pnr=user_data.get("pnr") or None,
-                    email=user_data.get("email") or None,
-                )
-            )
+            user = {
+                "firstName": user_data.get("name") or None,
+                "lastName": user_data.get("surname") or None,
+                "personNumber": user_data.get("pnr") or None,
+                "email": user_data.get("email") or None,
+            }
+            response.append(user)
         return response
 
     async def update_user(self, user_id: int, user_data: UserUpdate) -> bool:
@@ -302,18 +301,6 @@ class UserService:
         response = await self.repository.update(user_id, **update_data)
 
         return response
-
-    async def delete_user(self, user_id: int) -> bool:
-        """
-        Delete a user.
-
-        Args:
-            user_id: User ID
-
-        Returns:
-            True if deleted, False if not found
-        """
-        return await self.repository.delete(user_id)
 
     async def authenticate_user(self, username: str, password: str) -> Dict[str, int]:
         """
